@@ -1,15 +1,20 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Client\JsonRpcClient;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
+    protected $authService;
+
+    public function __construct(AuthService $authService)
+    {
+        $this->authService = $authService;
+    }
+
     public function login(Request $request)
     {
-        $params = $request->only(['login', 'password']);
-        $client = new JsonRpcClient();
-        $client->send('User/login', $params);
+       return $this->authService->login($request);
     }
 }

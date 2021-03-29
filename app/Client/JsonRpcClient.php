@@ -1,5 +1,8 @@
 <?php
+
 namespace App\Client;
+
+use App\Exceptions\JsonRpcException;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 
@@ -29,16 +32,30 @@ class JsonRpcClient
 
     public function send($method, array $params)
     {
-        $response = $this->client
-            ->post(self::METHOD_URI, [
-                RequestOptions::JSON => [
-                    'jsonrpc' => self::JSON_RPC_VERSION,
-                    'id' => time(),
-                    'method' => $method,
-                    'params' => $params
-                ]
-            ])->getBody()->getContents();
-        dd(json_decode($response, true));
-        return json_encode($response, true);
+        try {
+            $response = $this->client
+                ->post(self::METHOD_URI, [
+                    RequestOptions::JSON => [
+                        'jsonrpc' => self::JSON_RPC_VERSION,
+                        'id' => time(),
+                        'method' => $method,
+                        'params' => $params
+                    ]
+                ])->getBody()->getContents();
+            $resp = json_decode($response);
+
+            if (isset($resp->error)) {
+                $error = $resp->error;
+                throw new JsonRpcException($error->message, $error->code);
+            } else {
+                return $resp->result;
+            }
+        } catch (JsonRpcException $exception) {
+            return (object) [
+                'message' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+                'error' => $exception->getCode()
+            ];
+        }
     }
 }
