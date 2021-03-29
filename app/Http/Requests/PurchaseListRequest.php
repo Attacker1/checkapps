@@ -4,8 +4,19 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRequest extends FormRequest
+class PurchaseListRequest extends FormRequest
 {
+    protected function prepareForValidation()
+    {
+        if (!$this->has('page')) {
+            $this->merge(['page' => 1]);
+        }
+        if (!$this->has('limit')) {
+            $this->merge(['limit' => 10]);
+        }
+    }
+
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -14,8 +25,9 @@ class UserRequest extends FormRequest
     public function rules()
     {
         return [
-            'login' => 'required',
-            'password' => 'required',
+            'token_id' => 'required',
+            'page' => 'numeric',
+            'limit' => 'numeric',
         ];
     }
 

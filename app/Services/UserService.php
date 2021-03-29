@@ -23,11 +23,11 @@ class UserService
 
     public function storeUpdate($response)
     {
-        $user = User::byUserId($response->user_id);
+        $user = User::byUserId($response->user_id)->first();
         if ($user) {
-            return $this->updateUser($response, $user);
+            return $this->updateUser((array)$response, $user);
         } else {
-            return $this->storeUser($response);
+            return $this->storeUser((array)$response);
         }
     }
 }

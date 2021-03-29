@@ -29,4 +29,9 @@ class User extends Model
     {
         return $query->where('user_id', $userId);
     }
+
+    public function scopeByTokenId($query, $tokenId)
+    {
+        return $query->where('token_id', $tokenId);
+    }
 }

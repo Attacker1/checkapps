@@ -400,5 +400,11 @@
     <input type="password" name="password">
     <button type="submit">Войти</button>
 </form>
+
+<form action="{{ route('check-list') }}" method="post">
+    @csrf
+    <input name="token_id" type="text">
+    <button type="submit">Загрузить чеки</button>
+</form>
 </body>
 </html>

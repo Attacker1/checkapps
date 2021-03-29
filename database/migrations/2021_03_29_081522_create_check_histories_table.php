@@ -15,6 +15,12 @@ class CreateCheckHistoriesTable extends Migration
     {
         Schema::create('check_histories', function (Blueprint $table) {
             $table->id();
+            $table->bigInteger('user_id');
+            $table->foreign('user_id')->references('user_id')->on('users');
+            $table->bigInteger('check_id')->unique();
+            $table->string('status');
+            $table->text('comment')->nullable();
+            $table->text('image');
             $table->timestamps();
         });
     }

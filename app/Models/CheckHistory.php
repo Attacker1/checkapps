@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class CheckHistory extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'check_id',
+        'status',
+        'comment',
+        'image'
+    ];
 }

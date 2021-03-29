@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CheckController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,3 +20,4 @@ Route::get('/', function () {
 });
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/purchase-list', [CheckController::class, 'getPurchaseList'])->name('check-list');

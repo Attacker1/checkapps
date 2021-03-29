@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Requests\UserRequest;
 use App\Services\AuthService;
-use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
@@ -13,7 +13,7 @@ class AuthController extends Controller
         $this->authService = $authService;
     }
 
-    public function login(Request $request)
+    public function login(UserRequest $request)
     {
        return $this->authService->login($request);
     }

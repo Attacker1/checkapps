@@ -23,20 +23,20 @@ class AuthService
 
     public function login($request)
     {
-        $params = $request->only(['login', 'password']);
+        $params = $request->all();
         $response = $this->client->send('User/login', $params);
 
         if (isset($response->error)) {
-            return json_encode($response);
+            return response()->json($response);
         } else {
             $userToken = $response->token_id;
             $userInfo = $response->info;
             $result = (object)array_merge((array)$userInfo, (array)['token_id' => $userToken]);
 
             $user = $this->userService->storeUpdate($result);
-            dd($user);
-
-            return $user;
+            $attributes = $user->getAttributes();
+            unset($attributes['created_at'], $attributes['updated_at'], $attributes['id']);
+            return response()->json($attributes);
         }
     }
 }
