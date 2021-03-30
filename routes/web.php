@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckController;
+use App\Http\Controllers\SpaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,9 +16,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/{any}', [SpaController::class, 'index'])->where('any', '.*');
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/purchase-list', [CheckController::class, 'getPurchaseList'])->name('check-list');

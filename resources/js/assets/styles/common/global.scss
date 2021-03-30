@@ -1,0 +1,65 @@
+input:focus::-webkit-input-placeholder {
+  color: transparent !important;
+}
+
+input:focus::-moz-placeholder {
+  color: transparent !important;
+}
+
+input:focus:-moz-placeholder {
+  color: transparent !important;
+}
+
+input:focus:-ms-input-placeholder {
+  color: transparent !important;
+}
+
+textarea:focus::-webkit-input-placeholder {
+  color: transparent !important;
+}
+
+textarea:focus::-moz-placeholder {
+  color: transparent !important;
+}
+
+textarea:focus:-moz-placeholder {
+  color: transparent !important;
+}
+
+textarea:focus:-ms-input-placeholder {
+  color: transparent !important;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: border-box;
+}
+
+* {
+  font-family: $font;
+}
+
+p, h1, h2, h3, h4 {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 910px;
+  margin-left: auto;
+  margin-right: auto;
+
+  @media screen and (max-width: 930px) {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
