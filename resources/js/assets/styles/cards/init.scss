@@ -1,0 +1,21 @@
+.card {
+  &_shadow {
+    box-shadow: 0 14px 12px rgba(0, 0, 0, 0.01)
+  }
+
+  &_r {
+    &-12 {
+      border-radius: 12px;
+    }
+
+    &-8 {
+      border-radius: 8px;
+    }
+  }
+
+  &_bg {
+    &-light {
+      background-color: white;
+    }
+  }
+}
