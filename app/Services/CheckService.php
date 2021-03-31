@@ -62,11 +62,11 @@ class CheckService
         }
     }
 
-    public function getPurchaseList($request)
+    public function getPurchaseListItem($request)
     {
         $params = $request->all();
         $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
-        return response()->json($list);
+        return response()->json($list->items[0]);
     }
 
     private function addToRejectHistory(CheckRejectRequest $request)

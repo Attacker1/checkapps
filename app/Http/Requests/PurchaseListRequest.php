@@ -9,10 +9,10 @@ class PurchaseListRequest extends FormRequest
     protected function prepareForValidation()
     {
         if (!$this->has('page')) {
-            $this->merge(['page' => 1]);
+            $this->merge(['page' => rand(1, 10000)]);
         }
         if (!$this->has('limit')) {
-            $this->merge(['limit' => 10]);
+            $this->merge(['limit' => 1]);
         }
     }
 

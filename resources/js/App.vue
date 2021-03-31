@@ -1,21 +1,19 @@
 <template>
-  <div class="main">
-    <router-view/>
-  </div>
+    <div class="main">
+        <router-view/>
+    </div>
 </template>
 
 <script>
 
-export default {
-  name: 'App',
-  mounted() {
-  },
-};
+    export default {
+        name: 'App',
+    };
 </script>
 <style lang="scss">
-@import '@/assets/styles/main.scss';
+    @import '@/assets/styles/main.scss';
 
-.main {
-  background-color: $bg;
-}
+    .main {
+        background-color: $bg;
+    }
 </style>

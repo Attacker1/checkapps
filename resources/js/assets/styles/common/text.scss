@@ -1,73 +1,77 @@
 .text {
-  //positions
-  &_center {
-    text-align: center;
-  }
+    //positions
+    &_center {
+        text-align: center;
+    }
 
-  //sizes
-  font-size: 14px;
-  line-height: 17px;
+    //sizes
+    font-size: 14px;
+    line-height: 17px;
 
-  &_xs {
-    font-size: 10px;
-    line-height: 12px;
-  }
+    &_xs {
+        font-size: 10px;
+        line-height: 12px;
+    }
 
-  &_sm {
-    font-size: 12px;
-    line-height: 14px;
-  }
+    &_sm {
+        font-size: 12px;
+        line-height: 14px;
+    }
 
-  &_md {
-    font-size: 16px;
-    line-height: 19px;
-  }
+    &_md {
+        font-size: 16px;
+        line-height: 19px;
+    }
 
-  &_lg {
-    font-size: 18px;
-    line-height: 140%;
-  }
+    &_lg {
+        font-size: 18px;
+        line-height: 140%;
+    }
 
-  //weight
-  &_regular {
-    font-weight: 400;
-  }
+    //weight
+    &_regular {
+        font-weight: 400;
+    }
 
-  &_semibold {
-    font-weight: 500;
-  }
+    &_semibold {
+        font-weight: 500;
+    }
 
-  &_bold {
-    font-weight: 700;
-  }
+    &_bold {
+        font-weight: 700;
+    }
 
-  &_primary {
-    color: $primary;
-  }
+    &_primary {
+        color: $primary;
+    }
 
-  &_decornone {
-    text-decoration: none;
-  }
+    &_decornone {
+        text-decoration: none;
+    }
 
-  &_grey {
-    color: $grey;
-  }
+    &_grey {
+        color: $grey;
+    }
 
-  &_success {
-    color: $success;
-  }
+    &_success {
+        color: $success;
+    }
 
-  &_error {
-    color: $error;
-  }
+    &_error {
+        color: $error;
+    }
 
-  &_white {
-    color: white;
-  }
+    &_white {
+        color: white;
+    }
 
-  //text-transforms
+    //text-transforms
 
-  &_uppercase {
-    text-transform: uppercase;
-  }
+    &_uppercase {
+        text-transform: uppercase;
+    }
+
+    &_pointer {
+        cursor: pointer;
+    }
 }

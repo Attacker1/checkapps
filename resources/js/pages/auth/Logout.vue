@@ -1,11 +1,13 @@
 <template>
-  <div>Логоут</div>
+    <div>Логоут</div>
 </template>
 
 <script>
-export default {
-  name: "Logout"
-}
+    import {mapActions} from "vuex";
+
+    export default {
+        name: "Logout",
+    }
 </script>
 
 <style scoped>

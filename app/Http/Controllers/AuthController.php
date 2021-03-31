@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Requests\UserLogoutRequest;
 use App\Http\Requests\UserRequest;
 use App\Services\AuthService;
 
@@ -15,6 +17,11 @@ class AuthController extends Controller
 
     public function login(UserRequest $request)
     {
-       return $this->authService->login($request);
+        return $this->authService->login($request);
+    }
+
+    public function logout(UserLogoutRequest $request)
+    {
+        return $this->authService->logout($request);
     }
 }

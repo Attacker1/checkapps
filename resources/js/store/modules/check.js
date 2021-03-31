@@ -1,20 +1,15 @@
+import {getStorageItem, setStorageItem} from "@/utils/localStorage";
+import axios from "axios";
+
 export default {
     namespaced: true,
     state: {
-        reject: null,
-        approve: null,
-        purchaseList: null,
+        check: getStorageItem('check'),
     },
 
     mutations: {
-        setApprove: (state, payload) => {
-            state.approve = payload
-        },
-        setReject: (state, payload) => {
-            state.reject = payload
-        },
-        setPurchaseList: (state, payload) => {
-            state.purchaseList = payload
+        setCheck: (state, payload) => {
+            setStorageItem('check', state, payload);
         }
     },
 
@@ -25,8 +20,15 @@ export default {
         sendReject({commit}) {
             commit('setReject');
         },
-        fetchPurchaseList({commit}) {
-            commit('setReject');
+        async fetchCheckItem({commit, rootGetters}) {
+            await axios.post('purchase-item', {token_id: rootGetters['auth/token_id']})
+                .then(res => {
+                    commit('setCheck', res.data)
+                })
+                .catch(err => console.log(err))
         }
     },
+    getters: {
+        check: state => state.check,
+    }
 }

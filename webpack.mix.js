@@ -25,7 +25,7 @@ mix.js('resources/js/main.js', 'public/js')
                     test: /\.scss$/,
                     loader: "sass-loader",
                     options: {
-                        additionalData: '@import "resources/js/assets/styles/common/vars.scss";'
+                        data: '@import "@/assets/styles/common/vars.scss";'
                     }
                 },
             ]
