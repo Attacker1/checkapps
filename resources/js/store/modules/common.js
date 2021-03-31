@@ -1,7 +1,6 @@
 export default {
     namespaced: true,
     state: {
-        windowSize: null,
         loader: false,
     },
 

@@ -1,21 +1,28 @@
 .card {
-  &_shadow {
-    box-shadow: 0 14px 12px rgba(0, 0, 0, 0.01)
-  }
-
-  &_r {
-    &-12 {
-      border-radius: 12px;
+    &_shadow {
+        box-shadow: 0 14px 12px rgba(0, 0, 0, 0.01)
     }
 
-    &-8 {
-      border-radius: 8px;
-    }
-  }
+    &_r {
+        &-12 {
+            border-radius: 12px;
+        }
 
-  &_bg {
-    &-light {
-      background-color: white;
+        &-8 {
+            border-radius: 8px;
+        }
     }
-  }
+
+    &_bg {
+        &-light {
+            background-color: white;
+        }
+    }
+}
+
+.reject-modal {
+    .modal-wrapper {
+        max-width: 540px;
+        width: 100%;
+    }
 }

@@ -1,32 +1,65 @@
+import {getStorageItem, setStorageItem} from "@/utils/localStorage";
+import axios from "axios";
+import Vue from "vue";
+
 export default {
     namespaced: true,
     state: {
-        reject: null,
-        approve: null,
-        purchaseList: null,
+        check: getStorageItem('check'),
     },
 
     mutations: {
-        setApprove: (state, payload) => {
-            state.approve = payload
-        },
-        setReject: (state, payload) => {
-            state.reject = payload
-        },
-        setPurchaseList: (state, payload) => {
-            state.purchaseList = payload
+        setCheck: (state, payload) => {
+            setStorageItem('check', state, payload);
         }
     },
 
     actions: {
-        sendApprove({commit}) {
-            commit('setApprove');
+        async sendApprove({getters, rootGetters}) {
+            const data = {
+                token_id: rootGetters['auth/token_id'],
+                id: getters.check.id,
+                image: getters.check.receipt
+            }
+            await axios.post('approve', data)
+                .then(res => {
+                    if (res.data.success) {
+                        Vue.prototype.$flashStorage.flash(res.data.message, 'success');
+                    } else {
+                        Vue.prototype.$flashStorage.flash(res.data.message, 'error');
+                    }
+                })
+                .catch(err => console.log(err))
         },
-        sendReject({commit}) {
-            commit('setReject');
+        async sendReject({getters, rootGetters}, comment) {
+            const data = {
+                token_id: rootGetters['auth/token_id'],
+                id: getters.check.id,
+                comment,
+                image: getters.check.receipt
+            }
+            await axios.post('reject', data)
+                .then(res => {
+                    if (res.data.success) {
+                        Vue.prototype.$flashStorage.flash(res.data.message, 'success');
+                    } else {
+                        Vue.prototype.$flashStorage.flash(res.data.message, 'error');
+                    }
+                })
+                .catch(err => console.log(err))
+
         },
-        fetchPurchaseList({commit}) {
-            commit('setReject');
+        async fetchCheckItem({commit, rootGetters}) {
+            commit('common/setLoader', null, {root: true})
+            await axios.post('purchase-item', {token_id: rootGetters['auth/token_id']})
+                .then(res => {
+                    commit('setCheck', res.data)
+                })
+                .catch(err => console.log(err))
+            commit('common/removeLoader', null, {root: true})
         }
     },
+    getters: {
+        check: state => state.check,
+    }
 }

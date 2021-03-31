@@ -1,35 +1,104 @@
 <template>
-  <div class="check-view">
-    <CheckImage/>
-    <CheckData :check="check"/>
-  </div>
+    <div class="check-view" v-if="check">
+        <Loader v-if="loader"/>
+        <CheckImage :receipt="check.receipt"/>
+        <div class="check-data">
+            <div class="table">
+                <div class="table__item">
+                    <p class="text_grey">Дата добавления покупки</p>
+                    <p class="text_semibold">{{ check.dt | moment('DD.MM.YYYY, hh:mm') }}</p>
+                </div>
+                <div class="table__item">
+                    <p class="text_grey">Дата совершения покупки</p>
+                    <p class="text_semibold">{{ check.dt_purchase | moment('DD.MM.YYYY, hh:mm')}}</p>
+                </div>
+                <div class="table__item">
+                    <p class="text_grey">Сумма покупки в CFR</p>
+                    <p class="text_semibold">{{ check.amount }} CFR</p>
+                </div>
+                <div class="table__item">
+                    <p class="text_grey">Валюта</p>
+                    <p class="text_semibold">{{ check.currency }}</p>
+                </div>
+                <div class="table__item">
+                    <p class="text_grey">Сумма покупки в указанной валюте</p>
+                    <p class="text_semibold">{{ check.amount_in_currency }}</p>
+                </div>
+            </div>
+            <CheckActions/>
+        </div>
+    </div>
 </template>
 
 <script>
-import CheckImage from '@/components/check/CheckImage';
-import CheckData from '@/components/check/CheckData';
+    import {mapActions, mapGetters} from "vuex";
+    import CheckActions from "@/components/check/CheckActions";
+    import IconZoom from "@/assets/icons/IconZoom";
+    import Modal from "@/components/modal/Modal";
+    import CheckImage from "@/components/check/CheckImage";
+    import Loader from "@/components/loader/Loader";
 
-export default {
-  name: "CheckView",
-  components: {CheckData, CheckImage},
-  data: () => ({
-    check: {
-      id: 2,
-      dt: '29.08.2020, 12:20',
-      dt_purchase: '27.08.2020, 13:22',
-      amount: 129,
-      amount_in_currency: 672,
-      currency: 'RUB',
+    export default {
+        name: "CheckView",
+        components: {Loader, CheckImage, Modal, IconZoom, CheckActions},
+        computed: {
+            ...mapGetters({
+                check: 'check/check',
+                loader: 'common/loader'
+            })
+        },
+        methods: {
+            ...mapActions({
+                checkItem: 'check/fetchCheckItem',
+            }),
+        },
+        async mounted() {
+            await this.checkItem();
+        }
     }
-  })
-}
 </script>
 
 <style lang="scss" scoped>
-.check-view {
-  display: grid;
-  grid-template-columns: 1fr 1.1fr;
-  grid-gap: 24px;
-  grid-template-rows: 600px;
-}
+    .check-view {
+        display: grid;
+        grid-template-columns: 1fr 1.1fr;
+        grid-gap: 24px;
+        grid-template-rows: 600px;
+
+        @media screen and (max-width: 767px) {
+            grid-template-columns: 1fr;
+            grid-gap: 12px;
+        }
+    }
+
+    .check-data {
+        border: 0.5px solid rgba(0, 0, 0, 0.08);
+        box-sizing: border-box;
+        border-radius: 6px;
+        background-color: white;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .table {
+        &__item {
+            padding: 16px 13px;
+            grid-gap: 20px;
+            display: grid;
+            align-items: center;
+            grid-template-columns: 1fr 1fr;
+            min-height: 53px;
+
+            &:nth-child(2n + 2) {
+                background-color: #FAFAFA;
+            }
+
+            @media screen and (max-width: 567px) {
+                grid-template-columns: 1fr;
+                grid-gap: 8px;
+            }
+        }
+    }
 </style>

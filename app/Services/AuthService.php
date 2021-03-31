@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Client\JsonRpcClient;
+use App\Models\User;
 
 class AuthService
 {
@@ -37,6 +38,23 @@ class AuthService
             $attributes = $user->getAttributes();
             unset($attributes['created_at'], $attributes['updated_at'], $attributes['id']);
             return response()->json($attributes);
+        }
+    }
+
+    public function logout($request)
+    {
+        $user = User::byTokenId($request->token_id)->first();
+        if ($user) {
+            $user->setAttribute('token_id', null);
+            $user->save();
+
+            return response()->json([
+                'success' => (bool)true
+            ]);
+        } else {
+            return response()->json([
+                'success' => (bool)false
+            ]);
         }
     }
 }
