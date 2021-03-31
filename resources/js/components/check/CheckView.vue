@@ -1,5 +1,6 @@
 <template>
     <div class="check-view" v-if="check">
+        <Loader v-if="loader"/>
         <CheckImage :receipt="check.receipt"/>
         <div class="check-data">
             <div class="table">
@@ -34,14 +35,16 @@
     import CheckActions from "@/components/check/CheckActions";
     import IconZoom from "@/assets/icons/IconZoom";
     import Modal from "@/components/modal/Modal";
-    import CheckImage from "./CheckImage";
+    import CheckImage from "@/components/check/CheckImage";
+    import Loader from "@/components/loader/Loader";
 
     export default {
         name: "CheckView",
-        components: {CheckImage, Modal, IconZoom, CheckActions},
+        components: {Loader, CheckImage, Modal, IconZoom, CheckActions},
         computed: {
             ...mapGetters({
                 check: 'check/check',
+                loader: 'common/loader'
             })
         },
         methods: {
@@ -49,8 +52,8 @@
                 checkItem: 'check/fetchCheckItem',
             }),
         },
-        mounted() {
-            this.checkItem();
+        async mounted() {
+            await this.checkItem();
         }
     }
 </script>
@@ -64,8 +67,6 @@
 
         @media screen and (max-width: 767px) {
             grid-template-columns: 1fr;
-            margin-top: 80px;
-            margin-bottom: 50px;
             grid-gap: 12px;
         }
     }

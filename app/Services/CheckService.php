@@ -27,18 +27,18 @@ class CheckService
     public function checkReject(CheckRejectRequest $request)
     {
         $requestParams = $request->except('image');
+        $result = (bool)$this->client->send('Cashback/Moderator/reject', $requestParams);
 
-        $result = (bool)$this->client->send('Cashback/Moderator/accept', $requestParams);
         if ($result) {
             $this->addToRejectHistory($request);
             return response()->json([
                 'message' => 'Чек отправлен в неисправные',
-                'success' => true
+                'success' => (bool)true
             ]);
         } else {
             return response()->json([
                 'message' => 'Что-то пошло не так, попробуйте позже',
-                'success' => false
+                'success' => (bool)false
             ]);
         }
     }
@@ -52,12 +52,12 @@ class CheckService
             $this->addToApproveHistory($request);
             return response()->json([
                 'message' => 'Чек отправлен в исправные',
-                'success' => true
+                'success' => (bool)true
             ]);
         } else {
             return response()->json([
                 'message' => 'Что-то пошло не так, попробуйте позже',
-                'success' => false
+                'success' => (bool)false
             ]);
         }
     }
@@ -69,16 +69,15 @@ class CheckService
         return response()->json($list->items[0]);
     }
 
-    private function addToRejectHistory(CheckRejectRequest $request)
+    private function addToRejectHistory($request)
     {
-        $user = User::byTokenId($request->only('token_id'));
-
+        $user = User::byTokenId($request->token_id)->first();
         $result = [
             'user_id' => $user->user_id,
-            'check_id' => $request->only('id'),
+            'check_id' => $request->id,
             'status' => 'REJECTED',
-            'comment' => $request->only('comment'),
-            'image' => $request->only('image'),
+            'comment' => $request->comment,
+            'image' => $request->image,
         ];
         $check = new CheckHistory($result);
         $check->save();
@@ -86,13 +85,13 @@ class CheckService
 
     private function addToApproveHistory(CheckApproveRequest $request)
     {
-        $user = User::byTokenId($request->only('token_id'));
+        $user = User::byTokenId($request->only('token_id'))->first();
 
         $result = [
             'user_id' => $user->user_id,
-            'check_id' => $request->only('id'),
+            'check_id' => $request->id,
             'status' => 'APPROVED',
-            'image' => $request->only('image'),
+            'image' => $request->image,
         ];
         $check = new CheckHistory($result);
         $check->save();

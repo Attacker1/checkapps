@@ -29,5 +29,10 @@
 
     .content {
         width: 100%;
+
+        @media screen and (max-width: 767px) {
+            margin-top: 80px;
+            margin-bottom: 50px;
+        }
     }
 </style>

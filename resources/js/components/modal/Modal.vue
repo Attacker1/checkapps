@@ -1,6 +1,6 @@
 <template>
     <transition name="fade">
-        <div class="modal-mask" @click="$emit('close')">
+        <div class="modal-mask" >
             <div class="modal-wrapper">
                 <slot name="default"/>
             </div>
@@ -25,7 +25,16 @@
         background-color: rgba(0, 0, 0, 0.5);
         display: flex;
         align-items: center;
-        justify-items: center;
+        justify-content: center;
+    }
+
+    .modal-wrapper {
+        position: relative;
+        height: calc(100% - 20px);
+        width: calc(100% - 15px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .modal-enter-active, .modal-leave-active {

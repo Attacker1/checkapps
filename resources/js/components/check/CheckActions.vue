@@ -1,28 +1,33 @@
 <template>
     <div class="d-flex justify-center pa-20 mb-25">
         <div class="check-actions">
-            <Modal v-if="modal"/>
             <div>
                 <div class="circle check-navigation check-navigation_left">
-                    <IconArrowLeft/>
+                    <div @click="prevCheck">
+                        <IconArrowLeft/>
+                    </div>
                     <IconArrowLeftSm class="shortkey shortkey_nav"/>
                 </div>
             </div>
             <div>
                 <div class="circle circle_lg check-action check-action_dislike">
-                    <div @click><IconDislike/></div>
+                    <CheckReject/>
                     <p class="shortkey text_xs text_grey">Пробел</p>
                 </div>
             </div>
             <div>
                 <div class="circle circle_lg check-action check-action_like">
-                    <IconLike/>
+                    <div @click="sendToApprove">
+                        <IconLike/>
+                    </div>
                     <p class="shortkey text_xs text_grey">Enter</p>
                 </div>
             </div>
             <div>
                 <div class="circle check-navigation check-navigation_right">
-                    <IconArrowRight/>
+                    <div @click="nextCheck">
+                        <IconArrowRight/>
+                    </div>
                     <IconArrowRightSm class="shortkey shortkey_nav"/>
                 </div>
             </div>
@@ -38,13 +43,30 @@
     import IconArrowLeftSm from '@/assets/icons/IconArrowLeftSm.vue';
     import IconArrowRightSm from '@/assets/icons/IconArrowRightSm.vue';
     import Modal from "@/components/modal/Modal";
+    import CheckReject from "@/components/check/CheckReject";
+    import {mapActions} from 'vuex';
 
     export default {
         name: "CheckActions",
-        components: {Modal, IconArrowRightSm, IconArrowLeftSm, IconDislike, IconLike, IconArrowRight, IconArrowLeft},
-        data: () => ({
-            modal: false,
-        })
+        components: {
+            CheckReject,
+            Modal, IconArrowRightSm, IconArrowLeftSm, IconDislike, IconLike, IconArrowRight, IconArrowLeft
+        },
+        methods: {
+            ...mapActions({
+                approve: 'check/sendApprove',
+                nextPrev: 'check/fetchCheckItem'
+            }),
+            sendToApprove() {
+                this.approve();
+            },
+            nextCheck() {
+                this.nextPrev()
+            },
+            prevCheck() {
+                this.nextPrev()
+            }
+        }
     }
 </script>
 
