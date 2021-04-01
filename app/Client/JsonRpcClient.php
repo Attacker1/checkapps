@@ -19,6 +19,7 @@ class JsonRpcClient
         $this->client = new Client([
             'headers' => [
                 'Content-Type' => 'application/json',
+                'Accept' => 'Application/json',
                 'X-API-key' => env('APP_FINIKO_API_KEY'),
                 'Accept-Language' => 'en',
                 'Access-Control-Allow-Headers' => 'Authorization',
@@ -42,7 +43,9 @@ class JsonRpcClient
                         'method' => $method,
                         'params' => $params
                     ]
-                ])->getBody()->getContents();
+                ]);
+
+                dd($response);
 
             $resp = json_decode($response);
 
