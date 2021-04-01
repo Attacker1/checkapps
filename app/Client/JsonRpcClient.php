@@ -45,8 +45,6 @@ class JsonRpcClient
                     ]
                 ])->getBody()->getContents();
 
-            dd($response);
-
             $resp = json_decode($response);
 
             if (isset($resp->error)) {
