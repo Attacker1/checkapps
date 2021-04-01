@@ -15,7 +15,9 @@ export default {
     },
 
     actions: {
-        async sendApprove({getters, rootGetters}) {
+        async sendApprove({getters, rootGetters, commit, dispatch}) {
+            commit('common/setLoader', null, {root: true})
+
             const data = {
                 token_id: rootGetters['auth/token_id'],
                 id: getters.check.id,
@@ -30,8 +32,11 @@ export default {
                     }
                 })
                 .catch(err => console.log(err))
+            commit('common/removeLoader', null, {root: true})
+            dispatch('fetchCheckItem');
         },
-        async sendReject({getters, rootGetters}, comment) {
+        async sendReject({getters, rootGetters, commit, dispatch}, comment) {
+            commit('common/setLoader', null, {root: true})
             const data = {
                 token_id: rootGetters['auth/token_id'],
                 id: getters.check.id,
@@ -47,6 +52,8 @@ export default {
                     }
                 })
                 .catch(err => console.log(err))
+            commit('common/removeLoader', null, {root: true})
+            dispatch('fetchCheckItem');
 
         },
         async fetchCheckItem({commit, rootGetters}) {

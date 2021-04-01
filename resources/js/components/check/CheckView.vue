@@ -1,8 +1,8 @@
 <template>
-    <div class="check-view" v-if="check">
+    <div class="check-view">
         <Loader v-if="loader"/>
-        <CheckImage :receipt="check.receipt"/>
-        <div class="check-data">
+        <CheckImage v-if="check" :receipt="check.receipt"/>
+        <div class="check-data" v-if="check">
             <div class="table">
                 <div class="table__item">
                     <p class="text_grey">Дата добавления покупки</p>
