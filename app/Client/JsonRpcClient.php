@@ -27,6 +27,7 @@ class JsonRpcClient
             ],
             'base_uri' => env('APP_FINIKO_API_URL'),
             'verify' => false,
+            'timeout'  => 2.0,
         ]);
     }
 
