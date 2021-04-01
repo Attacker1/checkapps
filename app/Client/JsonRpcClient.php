@@ -28,22 +28,21 @@ class JsonRpcClient
             ],
             'base_uri' => env('APP_FINIKO_API_URL'),
             'verify' => true,
-            'timeout'  => 200,
+            'timeout' => 200,
         ]);
     }
 
     public function send($method, array $params)
     {
         try {
-            $response = $this->client
-                ->post(self::METHOD_URI, [
-                    RequestOptions::JSON => [
-                        'jsonrpc' => self::JSON_RPC_VERSION,
-                        'id' => time(),
-                        'method' => $method,
-                        'params' => $params
-                    ]
-                ])->getBody()->getContents();
+            $response = $this->client->post(self::METHOD_URI, [
+                RequestOptions::JSON => [
+                    'jsonrpc' => self::JSON_RPC_VERSION,
+                    'id' => time(),
+                    'method' => $method,
+                    'params' => $params
+                ]
+            ])->getBody()->getContents();
 
             $resp = json_decode($response);
 
@@ -54,7 +53,7 @@ class JsonRpcClient
                 return $resp->result;
             }
         } catch (JsonRpcException $exception) {
-            return (object) [
+            return (object)[
                 'message' => $exception->getMessage(),
                 'code' => $exception->getCode(),
                 'error' => $exception->getCode()
