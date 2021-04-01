@@ -43,9 +43,9 @@ class JsonRpcClient
                         'method' => $method,
                         'params' => $params
                     ]
-                ]);
+                ])->getBody()->getContents();
 
-                dd($response);
+            dd($response);
 
             $resp = json_decode($response);
 
