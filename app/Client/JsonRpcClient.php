@@ -44,7 +44,7 @@ class JsonRpcClient
                     ]
                 ])->getBody()->getContents();
             $resp = json_decode($response);
-
+            dd($resp);
             if (isset($resp->error)) {
                 $error = $resp->error;
                 throw new JsonRpcException($error->message, $error->code);
