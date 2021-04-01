@@ -12,7 +12,6 @@ const path = require('path');
  */
 
 mix.js('resources/js/main.js', 'public/js')
-    .version()
     .sourceMaps()
     .webpackConfig({
         resolve: {
@@ -39,5 +38,4 @@ mix.js('resources/js/main.js', 'public/js')
         proxy: process.env.APP_URL,
     })
     .sass('resources/js/assets/styles/main.scss', 'public/css')
-    .version()
     .sourceMaps();
