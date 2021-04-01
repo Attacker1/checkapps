@@ -1,0 +1,9 @@
+stages:
+  - deploy
+
+deploy:
+  stage: deploy
+  script:
+      - sudo su - chekapps.com -c "sh /var/www/chekapps.com/data/www/chekapps.com/deploy.sh"
+  only:
+    - master
