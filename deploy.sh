@@ -7,7 +7,7 @@ cd /var/www/$SITENAME/data/www/$SITENAME;
 
 cd /var/www/$SITENAME/data/www/$SITENAME;
 git pull;
-composer install --ignore-platform-reqs=php;
+composer install --optimize-autoloader --no-dev;
 php artisan migrate;
 php artisan config:cache;
 php artisan route:cache;
