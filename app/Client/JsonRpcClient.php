@@ -27,7 +27,7 @@ class JsonRpcClient
             ],
             'base_uri' => env('APP_FINIKO_API_URL'),
             'verify' => false,
-            'timeout'  => 20000,
+            'timeout'  => 200,
         ]);
     }
 
@@ -43,8 +43,9 @@ class JsonRpcClient
                         'params' => $params
                     ]
                 ])->getBody()->getContents();
+
             $resp = json_decode($response);
-            dd($response);
+
             if (isset($resp->error)) {
                 $error = $resp->error;
                 throw new JsonRpcException($error->message, $error->code);
