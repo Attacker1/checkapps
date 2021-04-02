@@ -10,6 +10,9 @@ export default {
         },
         removeLoader: (state) => {
             state.loader = false
+        },
+        resetState(state) {
+            Object.assign(state, null)
         }
     },
 
@@ -19,7 +22,11 @@ export default {
         },
         loaderOff({commit}) {
             commit('removeLoader');
-        }
+        },
+        resetStore({commit}) {
+            commit('resetState')
+        },
+
     },
     getters: {
         loader: s => s.loader

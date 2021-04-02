@@ -10,7 +10,7 @@
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Дата совершения покупки</p>
-                    <p class="text_semibold">{{ check.dt_purchase | moment('DD.MM.YYYY, hh:mm')}}</p>
+                    <p class="text_semibold">{{ check.dt_purchase | moment('DD.MM.YYYY, hh:mm') }}</p>
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Сумма покупки в CFR</p>
@@ -31,74 +31,66 @@
 </template>
 
 <script>
-    import {mapActions, mapGetters} from "vuex";
-    import CheckActions from "@/components/check/CheckActions";
-    import IconZoom from "@/assets/icons/IconZoom";
-    import Modal from "@/components/modal/Modal";
-    import CheckImage from "@/components/check/CheckImage";
-    import Loader from "@/components/loader/Loader";
+import {mapGetters} from "vuex";
+import CheckActions from "@/components/check/CheckActions";
+import IconZoom from "@/assets/icons/IconZoom";
+import Modal from "@/components/modal/Modal";
+import CheckImage from "@/components/check/CheckImage";
+import Loader from "@/components/loader/Loader";
 
-    export default {
-        name: "CheckView",
-        components: {Loader, CheckImage, Modal, IconZoom, CheckActions},
-        computed: {
-            ...mapGetters({
-                check: 'check/check',
-                loader: 'common/loader'
-            })
-        },
-        methods: {
-            ...mapActions({
-                checkItem: 'check/fetchCheckItem',
-            }),
-        },
-        async mounted() {
-            await this.checkItem();
-        }
-    }
+export default {
+    name: "CheckView",
+    components: {Loader, CheckImage, Modal, IconZoom, CheckActions},
+    computed: {
+        ...mapGetters({
+            check: 'currentCheck/currentCheck',
+            loader: 'common/loader'
+        })
+    },
+}
 </script>
 
 <style lang="scss" scoped>
-    .check-view {
+.check-view {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    grid-gap: 24px;
+    grid-template-rows: 600px;
+
+    @media screen and (max-width: 767px) {
+        grid-template-columns: 1fr;
+        grid-gap: 12px;
+    }
+}
+
+.check-data {
+    border: 0.5px solid rgba(0, 0, 0, 0.08);
+    box-sizing: border-box;
+    border-radius: 6px;
+    background-color: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.table {
+    &__item {
+        padding: 16px 13px;
+        grid-gap: 20px;
         display: grid;
-        grid-template-columns: 1fr 1.1fr;
-        grid-gap: 24px;
-        grid-template-rows: 600px;
+        align-items: center;
+        grid-template-columns: 1fr 1fr;
+        min-height: 53px;
 
-        @media screen and (max-width: 767px) {
+        &:nth-child(2n + 2) {
+            background-color: #FAFAFA;
+        }
+
+        @media screen and (max-width: 567px) {
             grid-template-columns: 1fr;
-            grid-gap: 12px;
+            grid-gap: 8px;
         }
     }
-
-    .check-data {
-        border: 0.5px solid rgba(0, 0, 0, 0.08);
-        box-sizing: border-box;
-        border-radius: 6px;
-        background-color: white;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .table {
-        &__item {
-            padding: 16px 13px;
-            grid-gap: 20px;
-            display: grid;
-            align-items: center;
-            grid-template-columns: 1fr 1fr;
-            min-height: 53px;
-
-            &:nth-child(2n + 2) {
-                background-color: #FAFAFA;
-            }
-
-            @media screen and (max-width: 567px) {
-                grid-template-columns: 1fr;
-                grid-gap: 8px;
-            }
-        }
-    }
+}
 </style>

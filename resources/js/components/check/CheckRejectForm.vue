@@ -62,7 +62,7 @@
         },
         methods: {
             ...mapActions({
-                reject: 'check/sendReject'
+                reject: 'checkActions/sendReject'
             }),
             rejectCheck() {
                 this.$v.$touch();

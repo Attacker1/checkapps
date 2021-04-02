@@ -13,7 +13,7 @@
 
         <div class="check-actions">
             <div>
-                <div @click="prevCheck" class="circle check-navigation check-navigation_left">
+                <div class="circle check-navigation check-navigation_left">
                     <IconArrowLeft/>
                     <IconArrowLeftSm class="shortkey shortkey_nav"/>
                 </div>
@@ -31,7 +31,7 @@
                 </div>
             </div>
             <div>
-                <div @click="nextCheck" class="circle check-navigation check-navigation_right">
+                <div class="circle check-navigation check-navigation_right">
                     <IconArrowRight/>
                     <IconArrowRightSm class="shortkey shortkey_nav"/>
                 </div>
@@ -66,18 +66,11 @@ export default {
     }),
     methods: {
         ...mapActions({
-            approve: 'check/sendApprove',
-            nextPrev: 'check/fetchCheckItem'
+            approve: 'checkActions/sendApprove',
         }),
         sendToApprove() {
             this.approve();
         },
-        nextCheck() {
-            this.nextPrev()
-        },
-        prevCheck() {
-            this.nextPrev()
-        }
     }
 }
 </script>

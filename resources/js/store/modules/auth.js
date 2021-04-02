@@ -22,7 +22,7 @@ export default {
     },
 
     actions: {
-        async LogIn({commit}, User) {
+        async LogIn({commit, dispatch}, User) {
             const response = await axios.post('login', User)
                 .then(res => {
                     if (res.data.error) {
@@ -35,6 +35,7 @@ export default {
                 .catch((error) => console.log(error))
             if (response) {
                 await commit('setUser', response)
+                dispatch('checks/fetchChecks', null, {root: true})
                 router.push({name: 'Main'})
             }
         },
