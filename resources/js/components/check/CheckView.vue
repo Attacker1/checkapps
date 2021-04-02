@@ -14,7 +14,7 @@
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Сумма покупки в CFR</p>
-                    <p class="text_semibold">{{ check.amount }} CFR</p>
+                    <p class="text_semibold">{{ check.amount | curr }} CFR</p>
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Валюта</p>
@@ -22,7 +22,7 @@
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Сумма покупки в указанной валюте</p>
-                    <p class="text_semibold">{{ check.amount_in_currency }}</p>
+                    <p class="text_semibold">{{ check.amount_in_currency | curr }}</p>
                 </div>
             </div>
             <CheckActions/>
@@ -52,6 +52,7 @@ export default {
 
 <style lang="scss" scoped>
 .check-view {
+    position: relative;
     display: grid;
     grid-template-columns: 1fr 1.1fr;
     grid-gap: 24px;

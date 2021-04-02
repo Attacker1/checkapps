@@ -40,7 +40,7 @@ export default {
             }
         },
 
-        async LogOut({commit, getters}) {
+        async LogOut({commit, getters, dispatch}) {
             if (getters.token_id) {
                 await axios.post('logout', {token_id: getters.token_id})
                     .then(res => {
@@ -48,6 +48,7 @@ export default {
                             commit('logOut');
                             localStorage.clear();
                             router.push({name: 'Login'})
+                            dispatch('common/resetStore', null, {root: true})
                         }
                     })
                     .catch(err => console.log(err))
