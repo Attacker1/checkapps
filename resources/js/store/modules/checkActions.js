@@ -4,67 +4,57 @@ import Vue from "vue";
 
 export default {
     namespaced: true,
-    state: {
-        check: getStorageItem('check'),
-    },
-
-    mutations: {
-        setCheck: (state, payload) => {
-            setStorageItem('check', state, payload);
-        }
-    },
-
     actions: {
-        async sendApprove({getters, rootGetters, commit, dispatch}) {
+        async sendApprove({rootGetters, dispatch, commit}) {
             commit('common/setLoader', null, {root: true})
 
+            const currentCheck = rootGetters['currentCheck/currentCheck'];
             const data = {
                 token_id: rootGetters['auth/token_id'],
-                id: getters.check.id,
-                image: getters.check.receipt
+                id: currentCheck.id,
+                image: currentCheck.receipt
             }
             await axios.post('approve', data)
                 .then(res => {
                     if (res.data.success) {
                         Vue.noty.success(res.data.message);
+                        dispatch('currentCheck/removeFromChecks', null, {root: true})
                     } else {
                         Vue.noty.error(res.data.message);
                     }
                 })
                 .catch(err => console.log(err))
             commit('common/removeLoader', null, {root: true})
-            dispatch('fetchCheckItem');
         },
+
         async sendReject({getters, rootGetters, commit, dispatch}, comment) {
             commit('common/setLoader', null, {root: true})
+
+            const currentCheck = rootGetters['currentCheck/currentCheck'];
             const data = {
                 token_id: rootGetters['auth/token_id'],
-                id: getters.check.id,
+                id: currentCheck.id,
                 comment,
-                image: getters.check.receipt
+                image: currentCheck.receipt
             }
             await axios.post('reject', data)
                 .then(res => {
                     if (res.data.success) {
-                        Vue.noty.info(res.data.message);
+                        Vue.noty.error(res.data.message);
+                        dispatch('currentCheck/removeFromChecks', null, {root: true})
                     } else {
                         Vue.noty.error(res.data.message);
                     }
                 })
                 .catch(err => console.log(err))
-            commit('common/removeLoader', null, {root: true})
-            dispatch('fetchCheckItem');
 
-        },
-        async fetchCheckItem({commit, rootGetters}) {
-            commit('common/setLoader', null, {root: true})
-            await axios.post('purchase-item', {token_id: rootGetters['auth/token_id']})
-                .then(res => {
-                    commit('setCheck', res.data)
-                })
-                .catch(err => console.log(err))
             commit('common/removeLoader', null, {root: true})
-        }
+        },
+
+        skipCheck({dispatch}) {
+            Vue.noty.show('Чек пропущен');
+            dispatch('currentCheck/removeFromChecks', null, {root: true})
+        },
     },
     getters: {
         check: state => state.check,
