@@ -51,9 +51,9 @@ export default {
             commit('common/removeLoader', null, {root: true})
         },
 
-        skipCheck({dispatch}) {
-            Vue.noty.show('Чек пропущен');
+        async skipCheck({dispatch}) {
             dispatch('currentCheck/removeFromChecks', null, {root: true})
+            Vue.noty.show('Чек пропущен');
         },
     },
     getters: {
