@@ -23,7 +23,6 @@ export default {
                 return check.id !== state.currentCheck.id
             })
 
-            console.log(filteredChecks);
 
             if (filteredChecks.length) {
                 commit('checks/setChecks', filteredChecks, {root: true});

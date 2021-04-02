@@ -23,6 +23,7 @@
         flex-direction: column;
         position: relative;
         min-height: 100vh;
+        overflow-y: hidden;
 
         &-wrap {
             flex-grow: 1;
