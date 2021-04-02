@@ -26,9 +26,9 @@ export default {
             await axios.post('approve', data)
                 .then(res => {
                     if (res.data.success) {
-                        Vue.prototype.$flashStorage.flash(res.data.message, 'success');
+                        Vue.noty.success(res.data.message);
                     } else {
-                        Vue.prototype.$flashStorage.flash(res.data.message, 'error');
+                        Vue.noty.error(res.data.message);
                     }
                 })
                 .catch(err => console.log(err))
@@ -46,9 +46,9 @@ export default {
             await axios.post('reject', data)
                 .then(res => {
                     if (res.data.success) {
-                        Vue.prototype.$flashStorage.flash(res.data.message, 'success');
+                        Vue.noty.info(res.data.message);
                     } else {
-                        Vue.prototype.$flashStorage.flash(res.data.message, 'error');
+                        Vue.noty.error(res.data.message);
                     }
                 })
                 .catch(err => console.log(err))

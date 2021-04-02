@@ -32,7 +32,7 @@ class CheckService
         if ($result) {
             $this->addToRejectHistory($request);
             return response()->json([
-                'message' => 'Чек отправлен в неисправные',
+                'message' => 'Чек отклонен',
                 'success' => (bool)true
             ]);
         } else {
@@ -51,7 +51,7 @@ class CheckService
         if ($result) {
             $this->addToApproveHistory($request);
             return response()->json([
-                'message' => 'Чек отправлен в исправные',
+                'message' => 'Чек принят',
                 'success' => (bool)true
             ]);
         } else {

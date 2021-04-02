@@ -1,7 +1,6 @@
 <template>
     <div class="auth">
         <div class="container">
-            <flash-message class="flash-auth"></flash-message>
             <div class="auth-wrap">
                 <router-view/>
             </div>

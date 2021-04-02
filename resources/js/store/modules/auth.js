@@ -26,7 +26,7 @@ export default {
             const response = await axios.post('login', User)
                 .then(res => {
                     if (res.data.error) {
-                        Vue.prototype.$flashStorage.flash(res.data.message, 'error');
+                        Vue.noty.error(res.data.message);
                         return false;
                     } else {
                         return res.data;
