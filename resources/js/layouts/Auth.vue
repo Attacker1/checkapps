@@ -22,12 +22,11 @@
         justify-content: center;
         flex-direction: column;
         position: relative;
-        min-height: 100vh;
+        height: 100vh;
         overflow-y: hidden;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
 
         &-wrap {
             flex-grow: 1;
