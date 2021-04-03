@@ -42,7 +42,7 @@ export default {
             }
         },
 
-        async LogOut({dispatch}) {
+        LogOut({dispatch}) {
             dispatch('common/resetStore', null, {root: true})
             router.push({name: 'Login'})
         }
