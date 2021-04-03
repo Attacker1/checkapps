@@ -1,7 +1,7 @@
 import axios from 'axios';
 import Vue from 'vue';
 
-import {getStorageItem, setStorageItem} from '@/utils/localStorage';
+import {getStorageItem, setStorageItem, removeStorageItem} from '@/utils/localStorage';
 
 export default {
     namespaced: true,
@@ -18,6 +18,10 @@ export default {
         setExpiryTime: (state) => {
             const now = new Date();
             setStorageItem('expiry', state, now.getTime() + 1000 * 60 * 60)
+        },
+        removeChecks: (state) => {
+            removeStorageItem('checks', state)
+            removeStorageItem('expiry', state)
         }
     },
 

@@ -43,7 +43,7 @@ class AuthService
 
     public function logout($request)
     {
-        $user = User::byTokenId($request->token_id)->first();
+        $user = User::byUserId($request->user_id)->first();
         if ($user) {
             $user->setAttribute('token_id', null);
             $user->save();

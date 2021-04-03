@@ -1,5 +1,6 @@
 <template>
     <div class="auth">
+        <Loader v-if="loader"/>
         <div class="container">
             <div class="auth-wrap">
                 <router-view/>
@@ -10,8 +11,17 @@
 
 <script>
 
+    import Loader from "@/components/loader/Loader";
+    import {mapGetters} from "vuex";
+
     export default {
         name: 'AuthLayout',
+        components: {Loader},
+        computed: {
+            ...mapGetters({
+                loader: 'common/loader'
+            })
+        },
     }
 </script>
 

@@ -15,7 +15,7 @@ class UserLogoutRequest extends FormRequest
     public function rules()
     {
         return [
-            'token_id' => 'required',
+            'user_id' => 'required',
         ];
     }
 }

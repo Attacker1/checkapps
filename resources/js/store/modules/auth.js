@@ -15,18 +15,20 @@ export default {
             setStorageItem('user', state, payload)
             setStorageItem('token_id', state, payload.token_id)
         },
-        logOut: (state) => {
+        resetUser: (state) => {
             removeStorageItem('user', state);
             removeStorageItem('token_id', state);
-        }
+        },
     },
 
     actions: {
         async LogIn({commit, dispatch}, User) {
+            commit('common/setLoader', null, {root: true})
             const response = await axios.post('login', User)
                 .then(res => {
                     if (res.data.error) {
                         Vue.noty.error(res.data.message);
+                        commit('common/removeLoader', null, {root: true})
                         return false;
                     } else {
                         return res.data;
@@ -40,19 +42,9 @@ export default {
             }
         },
 
-        async LogOut({commit, getters, dispatch}) {
-            if (getters.token_id) {
-                await axios.post('logout', {token_id: getters.token_id})
-                    .then(res => {
-                        if (res.data.success) {
-                            commit('logOut');
-                            localStorage.clear();
-                            router.push({name: 'Login'})
-                            dispatch('common/resetStore', null, {root: true})
-                        }
-                    })
-                    .catch(err => console.log(err))
-            }
+        async LogOut({dispatch}) {
+            dispatch('common/resetStore', null, {root: true})
+            router.push({name: 'Login'})
         }
     },
 

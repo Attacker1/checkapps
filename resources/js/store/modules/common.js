@@ -11,9 +11,6 @@ export default {
         removeLoader: (state) => {
             state.loader = false
         },
-        resetState(state) {
-            Object.assign(state, null)
-        }
     },
 
     actions: {
@@ -24,7 +21,10 @@ export default {
             commit('removeLoader');
         },
         resetStore({commit}) {
-            commit('resetState')
+            commit('auth/resetUser', null, {root: true})
+            commit('currentCheck/resetCurrentCheck', null, {root: true})
+            commit('checks/removeChecks', null, {root: true})
+            localStorage.clear();
         },
 
     },
