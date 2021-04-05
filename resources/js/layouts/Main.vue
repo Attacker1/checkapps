@@ -3,7 +3,6 @@
         <Header/>
         <div class="content">
             <div class="container">
-                <flash-message class="flash-main"></flash-message>
                 <router-view/>
             </div>
         </div>

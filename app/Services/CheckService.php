@@ -32,7 +32,7 @@ class CheckService
         if ($result) {
             $this->addToRejectHistory($request);
             return response()->json([
-                'message' => 'Чек отправлен в неисправные',
+                'message' => 'Чек отклонен',
                 'success' => (bool)true
             ]);
         } else {
@@ -51,7 +51,7 @@ class CheckService
         if ($result) {
             $this->addToApproveHistory($request);
             return response()->json([
-                'message' => 'Чек отправлен в исправные',
+                'message' => 'Чек принят',
                 'success' => (bool)true
             ]);
         } else {
@@ -62,11 +62,11 @@ class CheckService
         }
     }
 
-    public function getPurchaseListItem($request)
+    public function getPurchaseListItems($request)
     {
         $params = $request->all();
         $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
-        return response()->json($list->items[0]);
+        return response()->json($list->items);
     }
 
     private function addToRejectHistory($request)

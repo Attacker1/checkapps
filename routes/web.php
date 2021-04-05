@@ -21,8 +21,7 @@ Route::get('/{any}', [SpaController::class, 'index'])->where('any', '.*');
 Route::group(['prefix' => 'api'], function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-    Route::post('/purchase-item', [CheckController::class, 'getPurchaseListItem'])->name('check-item');
+    Route::post('/purchase-items', [CheckController::class, 'getPurchaseListItems'])->name('check-items');
     Route::post('/reject', [CheckController::class, 'reject'])->name('reject');
     Route::post('/approve', [CheckController::class, 'approve'])->name('approve');
-
 });

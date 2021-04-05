@@ -41,20 +41,10 @@ class AuthService
         }
     }
 
-    public function logout($request)
+    public function logout()
     {
-        $user = User::byTokenId($request->token_id)->first();
-        if ($user) {
-            $user->setAttribute('token_id', null);
-            $user->save();
-
-            return response()->json([
-                'success' => (bool)true
-            ]);
-        } else {
-            return response()->json([
-                'success' => (bool)false
-            ]);
-        }
+        return response()->json([
+            'success' => (bool)true
+        ]);
     }
 }

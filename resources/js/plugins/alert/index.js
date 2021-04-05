@@ -1,11 +1,8 @@
-import Vue from 'vue';
-import VueFlashMessage from 'vue-flash-message';
+import Vue from 'vue'
+import VueNoty from 'vuejs-noty'
 
-Vue.use(VueFlashMessage, {
-    messageOptions: {
-        timeout: 2000,
-        important: true,
-        autoEmit: false,
-        pauseOnInteract: true
-    }
-});
+Vue.use(VueNoty, {
+    timeout: 4000,
+    progressBar: true,
+    layout: 'topCenter',
+})

@@ -10,7 +10,7 @@ export default {
         },
         removeLoader: (state) => {
             state.loader = false
-        }
+        },
     },
 
     actions: {
@@ -19,7 +19,14 @@ export default {
         },
         loaderOff({commit}) {
             commit('removeLoader');
-        }
+        },
+        resetStore({commit}) {
+            commit('auth/resetUser', null, {root: true})
+            commit('currentCheck/resetCurrentCheck', null, {root: true})
+            commit('checks/removeChecks', null, {root: true})
+            localStorage.clear();
+        },
+
     },
     getters: {
         loader: s => s.loader

@@ -70,6 +70,7 @@
         border-radius: 6px;
         position: relative;
         background-color: $bg_dark;
+        box-shadow: 15px 15px 20px -5px rgba(217,224,235,.5);
 
         &__zoom {
             bottom: 0;

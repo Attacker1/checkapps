@@ -13,15 +13,15 @@
 
         <div class="check-actions">
             <div>
-                <div @click="prevCheck" class="circle check-navigation check-navigation_left">
-                    <IconArrowLeft/>
-                    <IconArrowLeftSm class="shortkey shortkey_nav"/>
-                </div>
-            </div>
-            <div>
                 <div @click="rejectModal = true" class="circle circle_lg check-action check-action_dislike">
                     <IconDislike/>
                     <p class="shortkey text_xs text_grey">Пробел</p>
+                </div>
+            </div>
+            <div>
+                <div @click.prevent="skipCurrentCheck" class="circle circle_lg check-action">
+                    <IconSkip/>
+                    <p class="shortkey text_xs text_grey">Tab</p>
                 </div>
             </div>
             <div>
@@ -30,12 +30,7 @@
                     <p class="shortkey text_xs text_grey">Enter</p>
                 </div>
             </div>
-            <div>
-                <div @click="nextCheck" class="circle check-navigation check-navigation_right">
-                    <IconArrowRight/>
-                    <IconArrowRightSm class="shortkey shortkey_nav"/>
-                </div>
-            </div>
+
         </div>
     </div>
 </template>
@@ -50,12 +45,14 @@ import IconArrowRightSm from '@/assets/icons/IconArrowRightSm.vue';
 import Modal from "@/components/modal/Modal";
 import CheckReject from "@/components/check/CheckReject";
 import {mapActions} from 'vuex';
-import CheckRejectForm from './CheckRejectForm';
-import IconCross from '../../assets/icons/IconCross';
+import CheckRejectForm from '@/components/check/CheckRejectForm';
+import IconCross from '@/assets/icons/IconCross';
+import IconSkip from '@/assets/icons/IconSkip';
 
 export default {
     name: "CheckActions",
     components: {
+        IconSkip,
         IconCross,
         CheckRejectForm,
         CheckReject,
@@ -66,17 +63,15 @@ export default {
     }),
     methods: {
         ...mapActions({
-            approve: 'check/sendApprove',
-            nextPrev: 'check/fetchCheckItem'
+            approve: 'checkActions/sendApprove',
+            skipCheck: 'checkActions/skipCheck'
         }),
         sendToApprove() {
             this.approve();
         },
-        nextCheck() {
-            this.nextPrev()
-        },
-        prevCheck() {
-            this.nextPrev()
+
+        skipCurrentCheck() {
+            this.skipCheck()
         }
     }
 }
@@ -88,7 +83,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 252px;
+    width: 204px;
 }
 
 .circle {
@@ -97,11 +92,16 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.08), 0 2px 24px rgba(0, 0, 0, 0.08);
     background-color: white;
     width: 42px;
     cursor: pointer;
     height: 42px;
+    transition: box-shadow ease 200ms;
+
+    &:hover {
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.15), 0 2px 24px rgba(0, 0, 0, 0.15);
+    }
 
     &_lg {
         width: 52.5px;

@@ -31,8 +31,8 @@ class CheckController extends Controller
         return $this->checkService->checkApprove($request);
     }
 
-    public function getPurchaseListItem(PurchaseListRequest $request)
+    public function getPurchaseListItems(PurchaseListRequest $request)
     {
-        return $this->checkService->getPurchaseListItem($request);
+        return $this->checkService->getPurchaseListItems($request);
     }
 }

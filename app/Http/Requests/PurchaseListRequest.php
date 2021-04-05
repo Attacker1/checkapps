@@ -12,7 +12,7 @@ class PurchaseListRequest extends FormRequest
             $this->merge(['page' => rand(1, 10000)]);
         }
         if (!$this->has('limit')) {
-            $this->merge(['limit' => 1]);
+            $this->merge(['limit' => 50]);
         }
     }
 
