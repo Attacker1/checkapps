@@ -1,8 +1,8 @@
 <template>
-    <div class="d-flex justify-center pa-20 mb-25">
-        <Modal class="reject-modal" v-if="rejectModal" @close="rejectModal = false">
+    <div class="d-flex justify-center pa-20 mb-25" @mouseleave="unhoverRejected">
+        <Modal class="reject-modal" :class="{active: rejectModal}" v-if="isMobile() ? rejectModal : true" @close="rejectModal = false">
             <div class="container">
-                <div class="d-flex justify-end mb-5">
+                <div v-if="isMobile()" class="d-flex justify-end mb-5">
                     <div @click="rejectModal = false">
                         <IconCross i-color="white"/>
                     </div>
@@ -13,7 +13,8 @@
 
         <div class="check-actions">
             <div>
-                <div @click="rejectModal = true" class="circle circle_lg check-action check-action_dislike">
+                <div @click="clickRejected" @mouseover="hoverRejected"
+                     class="circle circle_lg check-action check-action_dislike">
                     <IconDislike/>
                     <p class="shortkey text_xs text_grey">Пробел</p>
                 </div>
@@ -30,97 +31,126 @@
                     <p class="shortkey text_xs text_grey">Enter</p>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
 
 <script>
-import IconArrowLeft from '@/assets/icons/IconArrowLeft.vue';
-import IconArrowRight from '@/assets/icons/IconArrowRight.vue';
-import IconLike from '@/assets/icons/IconLike.vue';
-import IconDislike from '@/assets/icons/IconDislike.vue';
-import IconArrowLeftSm from '@/assets/icons/IconArrowLeftSm.vue';
-import IconArrowRightSm from '@/assets/icons/IconArrowRightSm.vue';
-import Modal from "@/components/modal/Modal";
-import CheckReject from "@/components/check/CheckReject";
-import {mapActions} from 'vuex';
-import CheckRejectForm from '@/components/check/CheckRejectForm';
-import IconCross from '@/assets/icons/IconCross';
-import IconSkip from '@/assets/icons/IconSkip';
+    import IconArrowLeft from '@/assets/icons/IconArrowLeft.vue';
+    import IconArrowRight from '@/assets/icons/IconArrowRight.vue';
+    import IconLike from '@/assets/icons/IconLike.vue';
+    import IconDislike from '@/assets/icons/IconDislike.vue';
+    import IconArrowLeftSm from '@/assets/icons/IconArrowLeftSm.vue';
+    import IconArrowRightSm from '@/assets/icons/IconArrowRightSm.vue';
+    import Modal from "@/components/modal/Modal";
+    import CheckReject from "@/components/check/CheckReject";
+    import {mapActions, mapState} from 'vuex';
+    import CheckRejectForm from '@/components/check/CheckRejectForm';
+    import IconCross from '@/assets/icons/IconCross';
+    import IconSkip from '@/assets/icons/IconSkip';
 
-export default {
-    name: "CheckActions",
-    components: {
-        IconSkip,
-        IconCross,
-        CheckRejectForm,
-        CheckReject,
-        Modal, IconArrowRightSm, IconArrowLeftSm, IconDislike, IconLike, IconArrowRight, IconArrowLeft
-    },
-    data: () => ({
-        rejectModal: false,
-    }),
-    methods: {
-        ...mapActions({
-            approve: 'checkActions/sendApprove',
-            skipCheck: 'checkActions/skipCheck'
-        }),
-        sendToApprove() {
-            this.approve();
+    export default {
+        name: "CheckActions",
+        components: {
+            IconSkip,
+            IconCross,
+            CheckRejectForm,
+            CheckReject,
+            Modal, IconArrowRightSm, IconArrowLeftSm, IconDislike, IconLike, IconArrowRight, IconArrowLeft
         },
+        data: () => ({
+            rejectModal: false,
+        }),
+        methods: {
+            ...mapActions({
+                approve: 'checkActions/sendApprove',
+                skipCheck: 'checkActions/skipCheck'
+            }),
+            sendToApprove() {
+                this.approve();
+            },
 
-        skipCurrentCheck() {
-            this.skipCheck()
-        }
+            skipCurrentCheck() {
+                this.skipCheck()
+            },
+
+            clickRejected() {
+                if (this.windowSize < 1023) {
+                    this.rejectModal = true;
+                }
+            },
+
+            hoverRejected() {
+                if (this.windowSize > 1023) {
+                    this.rejectModal = true;
+                }
+            },
+
+            unhoverRejected() {
+                if (this.windowSize > 1023) {
+                    this.rejectModal = false;
+                }
+            },
+
+            isMobile() {
+                return this.windowSize < 1023;
+            },
+        },
+        computed: {
+            ...mapState('common', ['windowSize']),
+        },
     }
-}
 </script>
 
 <style lang="scss" scoped>
-.check-actions,
-.check-tooltips {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 204px;
-}
-
-.circle {
-    position: relative;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 0 2px rgba(0, 0, 0, 0.08), 0 2px 24px rgba(0, 0, 0, 0.08);
-    background-color: white;
-    width: 42px;
-    cursor: pointer;
-    height: 42px;
-    transition: box-shadow ease 200ms;
-
-    &:hover {
-        box-shadow: 0 0 2px rgba(0, 0, 0, 0.15), 0 2px 24px rgba(0, 0, 0, 0.15);
+    .check-actions,
+    .check-tooltips {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 204px;
     }
 
-    &_lg {
-        width: 52.5px;
-        height: 52.5px;
+    .circle {
+        position: relative;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 0 2px rgba(0, 0, 0, 0.08), 0 2px 24px rgba(0, 0, 0, 0.08);
+        background-color: white;
+        width: 42px;
+        cursor: pointer;
+        height: 42px;
+        transition: box-shadow ease 200ms;
+
+        &:hover {
+            box-shadow: 0 0 2px rgba(0, 0, 0, 0.15), 0 2px 24px rgba(0, 0, 0, 0.15);
+        }
+
+        &_lg {
+            width: 52.5px;
+            height: 52.5px;
+        }
     }
-}
 
-.shortkey {
-    position: absolute;
-    top: calc(100% + 10px);
+    .shortkey {
+        position: absolute;
+        top: calc(100% + 10px);
 
-    &_nav {
-        top: calc(100% + 16px);
+        &_nav {
+            top: calc(100% + 16px);
+        }
     }
-}
 
-.reject-form {
-    width: 100%;
-    margin: auto;
-}
+    .reject-form {
+        width: 100%;
+        margin: auto;
+
+        @media screen and (min-width: 1024px) {
+            height: 100%;
+            border-radius: 0;
+        }
+    }
 </style>
 
