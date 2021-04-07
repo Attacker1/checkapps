@@ -18,6 +18,7 @@ class CheckRejectRequest extends FormRequest
             'id' => 'required',
             'comment' => 'required',
             'image' => 'required',
+            'user_id' => 'required'
         ];
     }
 

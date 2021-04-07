@@ -12,7 +12,8 @@ export default {
             const data = {
                 token_id: rootGetters['auth/token_id'],
                 id: currentCheck.id,
-                image: currentCheck.receipt
+                image: currentCheck.receipt,
+                user_id: rootGetters['auth/user'].user_id
             }
             await axios.post('approve', data)
                 .then(res => {
@@ -35,7 +36,8 @@ export default {
                 token_id: rootGetters['auth/token_id'],
                 id: currentCheck.id,
                 comment,
-                image: currentCheck.receipt
+                image: currentCheck.receipt,
+                user_id: rootGetters['auth/user'].user_id
             }
             await axios.post('reject', data)
                 .then(res => {

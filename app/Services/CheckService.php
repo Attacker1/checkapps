@@ -26,7 +26,7 @@ class CheckService
 
     public function checkReject(CheckRejectRequest $request)
     {
-        $requestParams = $request->except('image');
+        $requestParams = $request->except(['image', 'user_id']);
         $result = (bool)$this->client->send('Cashback/Moderator/reject', $requestParams);
 
         if ($result) {
@@ -45,7 +45,7 @@ class CheckService
 
     public function checkApprove(CheckApproveRequest $request)
     {
-        $requestParams = $request->except('image');
+        $requestParams = $request->except(['image', 'user_id']);
 
         $result = (bool)$this->client->send('Cashback/Moderator/accept', $requestParams);
         if ($result) {
@@ -71,7 +71,7 @@ class CheckService
 
     private function addToRejectHistory($request)
     {
-        $user = User::byTokenId($request->token_id)->first();
+        $user = User::byUserId($request->user_id)->first();
         $result = [
             'user_id' => $user->user_id,
             'check_id' => $request->id,
@@ -85,7 +85,7 @@ class CheckService
 
     private function addToApproveHistory(CheckApproveRequest $request)
     {
-        $user = User::byTokenId($request->only('token_id'))->first();
+        $user = User::byUserId($request->user_id)->first();
 
         $result = [
             'user_id' => $user->user_id,
