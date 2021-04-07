@@ -21,6 +21,8 @@
 }
 
 .reject-modal {
+    transition: opacity 0.3s ease, visibility 0.3s ease, top 0.3s ease;
+
     .modal-wrapper {
         max-width: 540px;
         width: 100%;
