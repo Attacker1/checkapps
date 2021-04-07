@@ -1,18 +1,13 @@
 <template>
     <div class="check-image">
-<!--        <img :src="receipt" alt="">-->
-        <croppa v-model="myCroppa"
-                width="450"
-                height="600"
-                :disable-click-to-choose="true"
-                :disable-rotation="false"
-                :show-remove-button="false"
-        >
-            <img :src="receipt" slot="initial">
-        </croppa>
-        <div  @click.prevent="myCroppa.rotate()" class="check-zoom">
+        <!--        <img :src="receipt" alt="">-->
+        <viewer :options="options" @inited="inited" ref="viewer">
+            <img :src="receipt" alt="check" class="check">
+        </viewer>
+        <div @click="rotate" class="check-rotate">
             <IconTurn/>
         </div>
+<!--        <div @mouseover="zoom()" @mousemove="move" @mouseout="reset" class="check-zoom" ref="coordinates"></div>-->
         <!--<Modal class="check-modal" v-if="showModal">
             <div class="icon text_pointer" @click="showModal = false">
                 <IconCross i-color="white"/>
@@ -28,21 +23,44 @@
     import IconTurn from "@/assets/icons/IconTurn";
 
 
-
     export default {
         name: "CheckImage",
         components: {IconTurn, IconCross, Modal},
         data: () => ({
             showModal: false,
-            myCroppa: {},
+            x: 0,
+            y: 0,
+            rotation: 0,
+            options: {
+                inline: true, button: false, navbar: false,
+                title: false, toolbar: false, tooltip: false,
+                movable: true, zoomable: true, rotatable: true,
+                scalable: false, transition: false, fullscreen: true, keyboard: false}
         }),
         props: {
             receipt: null,
         },
-        methods: {
-            rotateImage() {
-                this.myCroppa.rotate();
+        watch: {
+            receipt: function (val) {
+                document.querySelector(".viewer-move").src = val;
+                this.$viewer.update();
+                console.log('changes');
             }
+        },
+        methods: {
+            inited (viewer) {
+                this.$viewer = viewer
+            },
+            rotate () {
+                this.$viewer.rotate(-90);
+            },
+            move (event) {
+                this.x = event.pageX - this.$refs.coordinates.getBoundingClientRect().left - 210;
+                this.y = event.clientY - this.$refs.coordinates.getBoundingClientRect().top - 300;
+                this.$viewer.move(-this.x * 0.05, -this.y * 0.05);
+                // this.$viewer.move(1, 1);
+                // console.log(this.x + ' : ' + this.y);
+            },
         }
     }
 </script>
@@ -70,26 +88,33 @@
         border-radius: 6px;
         position: relative;
         background-color: $bg_dark;
-        box-shadow: 15px 15px 20px -5px rgba(217,224,235,.5);
+        box-shadow: 15px 15px 20px -5px rgba(217, 224, 235, .5);
+        overflow: hidden;
 
-        &__zoom {
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            overflow: hidden;
-        }
-
-        .vh--message {
-            display: none !important;
+        .check {
+            display: none;
         }
     }
 
-    .check-zoom {
+    .check-rotate {
         position: absolute;
         bottom: 12px;
         right: 12px;
         cursor: pointer;
+        z-index: 1;
+    }
+
+    .check-zoom {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    .viewer-canvas {
+        .viewer-move {
+            object-fit: contain !important;
+        }
     }
 </style>

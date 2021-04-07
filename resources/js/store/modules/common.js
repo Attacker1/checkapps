@@ -2,6 +2,7 @@ export default {
     namespaced: true,
     state: {
         loader: false,
+        windowSize: null,
     },
 
     mutations: {
@@ -11,6 +12,9 @@ export default {
         removeLoader: (state) => {
             state.loader = false
         },
+        setWindowSize: (state, payLoad) => {
+            state.windowSize = payLoad;
+        }
     },
 
     actions: {
@@ -26,7 +30,9 @@ export default {
             commit('checks/removeChecks', null, {root: true})
             localStorage.clear();
         },
-
+        windowSize({commit}, size) {
+            commit('setWindowSize', size);
+        }
     },
     getters: {
         loader: s => s.loader
