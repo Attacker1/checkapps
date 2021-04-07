@@ -17,6 +17,7 @@ class CheckApproveRequest extends FormRequest
             'token_id' => 'required',
             'id' => 'required',
             'image' => 'required',
+            'user_id' => 'required'
         ];
     }
 
