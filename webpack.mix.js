@@ -11,13 +11,15 @@ const path = require('path');
  |
  */
 
-mix.js('resources/js/main.js', 'public/js')
+mix.ts('resources/js/main.ts', 'public/js')
     .sourceMaps()
     .webpackConfig({
         resolve: {
             alias: {
-                '@': path.join(__dirname, 'resources/js/')
-            }
+                // vue$: path.resolve('vue/dist/vue.runtime.esm.js'),
+                '@': path.resolve(__dirname, 'resources/js/'),
+            },
+            extensions: ["*", ".js", ".jsx", ".vue", ".ts", ".tsx"]
         },
         module: {
             rules: [
@@ -28,6 +30,12 @@ mix.js('resources/js/main.js', 'public/js')
                         data: '@import "@/assets/styles/common/vars.scss";'
                     }
                 },
+                {
+                    test: /\.tsx?$/,
+                    loader: 'ts-loader',
+                    options: {appendTsSuffixTo: [/\.vue$/]},
+                    exclude: /node_modules/,
+                }
             ]
         },
     })
