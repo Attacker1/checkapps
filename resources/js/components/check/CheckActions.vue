@@ -1,15 +1,17 @@
 <template>
     <div class="d-flex justify-center pa-20 mb-25">
-        <Modal class="reject-modal" v-if="rejectModal" @close="rejectModal = false">
-            <div class="container">
-                <div class="d-flex justify-end mb-5">
-                    <div @click="rejectModal = false">
-                        <IconCross i-color="white"/>
+        <transition name="fade">
+            <Modal class="reject-modal" v-if="rejectModal" @close="rejectModal = false">
+                <div class="container">
+                    <div class="d-flex justify-end mb-5">
+                        <div @click="rejectModal = false">
+                            <IconCross i-color="white"/>
+                        </div>
                     </div>
+                    <CheckRejectForm @closeRejectForm="rejectModal = false"/>
                 </div>
-                <CheckRejectForm @closeRejectForm="rejectModal = false"/>
-            </div>
-        </Modal>
+            </Modal>
+        </transition>
 
         <div class="check-actions">
             <div>
