@@ -9,7 +9,7 @@
                 :show-remove-button="false">
             <img :src="receipt" slot="initial">
         </croppa>
-        <div @click.prevent="myCroppa.rotate()" class="check-zoom">
+        <div @click="myCroppa.rotate()" class="check-zoom">
             <IconTurn/>
         </div>
         <!--        <transition name="fade">-->
@@ -78,19 +78,19 @@ export default {
     position: relative;
     background-color: $bg_dark;
 
-        &__zoom {
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            overflow: hidden;
-        }
-
-        .vh--message {
-            display: none !important;
-        }
+    &__zoom {
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        overflow: hidden;
     }
+
+    .vh--message {
+        display: none !important;
+    }
+}
 
 .check-zoom {
     position: absolute;
