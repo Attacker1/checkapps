@@ -1,17 +1,31 @@
 <template>
     <div class="check-image">
-        <img :src="receipt" alt="">
-        <div @click="showModal = true" class="check-zoom">
-            <IconZoom/>
+        <!--        <img :src="receipt" alt="">-->
+        <croppa v-model="myCroppa"
+                width="450"
+                height="600"
+                :disable-click-to-choose="true"
+                :disable-rotation="false"
+                :show-remove-button="false">
+            <img :src="receipt" slot="initial">
+        </croppa>
+        <div @click.prevent="myCroppa.rotate()" class="check-zoom">
+            <IconTurn/>
         </div>
-        <transition name="fade">
-            <Modal class="check-modal" v-if="showModal">
-                <div class="icon text_pointer" @click="showModal = false">
-                    <IconCross i-color="white"/>
-                </div>
-                <img :src="receipt" alt="">
-            </Modal>
-        </transition>
+        <!--        <transition name="fade">-->
+        <!--            <Modal class="check-modal" v-if="showModal">-->
+        <!--                <div class="icon text_pointer" @click="showModal = false">-->
+        <!--                    <IconCross i-color="white"/>-->
+        <!--                </div>-->
+        <!--                <img :src="receipt" alt="">-->
+        <!--            </Modal>-->
+        <!--        </transition>-->
+        <!--<Modal class="check-modal" v-if="showModal">
+            <div class="icon text_pointer" @click="showModal = false">
+                <IconCross i-color="white"/>
+            </div>
+            <img :src="receipt" alt="">
+        </Modal>-->
     </div>
 
 </template>
@@ -19,16 +33,23 @@
 <script>
 import Modal from "@/components/modal/Modal";
 import IconCross from "@/assets/icons/IconCross";
-import IconZoom from "@/assets/icons/IconZoom";
+import IconTurn from "@/assets/icons/IconTurn";
+
 
 export default {
     name: "CheckImage",
-    components: {IconZoom, IconCross, Modal},
+    components: {IconTurn, IconCross, Modal},
     data: () => ({
         showModal: false,
+        myCroppa: {},
     }),
     props: {
         receipt: null,
+    },
+    methods: {
+        rotateImage() {
+            this.myCroppa.rotate();
+        }
     }
 }
 </script>
@@ -56,17 +77,20 @@ export default {
     border-radius: 6px;
     position: relative;
     background-color: $bg_dark;
-    box-shadow: 15px 15px 20px -5px rgba(217, 224, 235, .5);
 
-    img {
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-        position: absolute;
+        &__zoom {
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            overflow: hidden;
+        }
+
+        .vh--message {
+            display: none !important;
+        }
     }
-}
 
 .check-zoom {
     position: absolute;
