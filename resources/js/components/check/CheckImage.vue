@@ -2,8 +2,8 @@
     <div class="check-image">
         <!--        <img :src="receipt" alt="">-->
         <croppa v-model="myCroppa"
-                width="450"
-                height="600"
+                :width="450"
+                :height="600"
                 :disable-click-to-choose="true"
                 :disable-rotation="false"
                 :show-remove-button="false">
