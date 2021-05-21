@@ -4,8 +4,8 @@
             <div class="d-flex align-center">
                 <IconProfile class="mr-20"/>
                 <div>
-                    <p class="text text_bold">{{ user.user_fio }}</p>
-                    <p class="text_sm text_grey">{{ user.user_email }}</p>
+                    <p class="text text_bold">{{ user.user.user_fio }}</p>
+                    <p class="text_sm text_grey">{{ user.user.user_email }}</p>
                 </div>
             </div>
             <div>

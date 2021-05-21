@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Laravel\Passport\HasApiTokens;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Model
+class User extends Authenticatable
 {
-    use HasFactory;
+    use HasFactory, Notifiable, HasApiTokens;
 
     /**
      * The attributes that are mass assignable.
@@ -22,7 +25,8 @@ class User extends Model
         'referer_user_id',
         'referer_user_fio',
         'career_id',
-        'token_id'
+        'token_id',
+        'password',
     ];
 
     public function scopeByUserId($query, $userId)
@@ -33,5 +37,10 @@ class User extends Model
     public function scopeByTokenId($query, $tokenId)
     {
         return $query->where('token_id', $tokenId);
+    }
+
+    public function scopeByEmail($query, $email)
+    {
+        return $query->where('user_email', $email);
     }
 }
