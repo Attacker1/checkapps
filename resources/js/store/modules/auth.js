@@ -13,7 +13,7 @@ export default {
     mutations: {
         setUser: (state, payload) => {
             setStorageItem('user', state, payload)
-            setStorageItem('token_id', state, payload.token_id)
+            setStorageItem('token_id', state, payload.user.token_id)
         },
         resetUser: (state) => {
             removeStorageItem('user', state);
@@ -27,7 +27,7 @@ export default {
             const response = await axios.post('login', User)
                 .then(res => {
                     if (res.data.error) {
-                        Vue.noty.error(res.data.message);
+                        Vue.noty.error(res.data.error);
                         commit('common/removeLoader', null, {root: true})
                         return false;
                     } else {
