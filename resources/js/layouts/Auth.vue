@@ -12,11 +12,12 @@
 <script>
 
     import Loader from "@/components/loader/Loader";
+    import CheckViewSkeleton from "@/components/skeleton/CheckViewSkeleton";
     import {mapGetters} from "vuex";
 
     export default {
         name: 'AuthLayout',
-        components: {Loader},
+        components: {Loader, CheckViewSkeleton},
         computed: {
             ...mapGetters({
                 loader: 'common/loader'
