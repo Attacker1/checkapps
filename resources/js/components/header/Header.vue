@@ -4,8 +4,8 @@
             <div class="d-flex align-center">
                 <IconProfile class="mr-20"/>
                 <div>
-                    <p class="text text_bold">{{ user.user.user_fio }}</p>
-                    <p class="text_sm text_grey">{{ user.user.user_email }}</p>
+                    <p class="text text_bold">{{ userInfo.user.user_fio }}</p>
+                    <p class="text_sm text_grey">{{ userInfo.user.user_email }}</p>
                 </div>
             </div>
             <div>
@@ -24,7 +24,7 @@
         name: 'Header',
         components: {IconProfile},
         computed: {
-            ...mapState('auth', ['user']),
+            ...mapState('auth', ['userInfo']),
         },
         methods: {
             ...mapActions({

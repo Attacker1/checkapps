@@ -6,7 +6,7 @@ import router from "@/router";
 export default {
     namespaced: true,
     state: {
-        user: getStorageItem('user'),
+        userInfo: getStorageItem('user'),
         token_id: getStorageItem('token_id'),
     },
 
@@ -49,8 +49,8 @@ export default {
     },
 
     getters: {
-        auth: state => !!state.user,
+        auth: state => !!state.userInfo,
         token_id: state => state.token_id,
-        user: state => state.user,
+        user: state => state.userInfo,
     }
 }

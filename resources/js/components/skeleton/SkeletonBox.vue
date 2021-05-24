@@ -1,5 +1,5 @@
 <template>
-    <span :style="{ height, width: computedWidth, borderRadius }" class="SkeletonBox">
+    <span :style="{ height, width, borderRadius }" class="SkeletonBox">
         <slot/>
     </span>
 </template>
@@ -22,8 +22,8 @@ export default {
             default: '1em'
         },
         width: {
-            type: String | null,
-            default: null
+            type: String,
+            default: '1em'
         },
         borderRadius: {
             type: String,
