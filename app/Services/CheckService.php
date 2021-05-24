@@ -36,35 +36,47 @@ class CheckService
         }
 
         if ($result) {
-            $this->addToRejectHistory($request);
-            return response()->json([
-                'message' => 'Чек отклонен',
-                'success' => (bool)true
-            ]);
+            $addedToReject = $this->addToRejectHistory($request);
+            if (!isset($addedToReject->error)) {
+                return (object)[
+                    'message' => 'Чек отклонен',
+                    'success' => (bool)true
+                ];
+            } else {
+                return $addedToReject;
+            }
         } else {
-            return response()->json([
+            return (object)[
                 'message' => 'Что-то пошло не так, попробуйте позже',
                 'success' => (bool)false
-            ]);
+            ];
         }
     }
 
     public function checkApprove(CheckApproveRequest $request)
     {
         $requestParams = $request->except(['image', 'user_id']);
-
         $result = (bool)$this->client->send('Cashback/Moderator/accept', $requestParams);
+
+        if (isset($result->error)) {
+            return $result;
+        }
+
         if ($result) {
-            $this->addToApproveHistory($request);
-            return response()->json([
-                'message' => 'Чек принят',
-                'success' => (bool)true
-            ]);
+            $addedToApprove = $this->addToApproveHistory($request);
+            if (!isset($addedToApprove->error)) {
+                return (object)[
+                    'message' => 'Чек принят',
+                    'success' => (bool)true
+                ];
+            } else {
+                return $addedToApprove;
+            }
         } else {
-            return response()->json([
+            return (object)[
                 'message' => 'Что-то пошло не так, попробуйте позже',
                 'success' => (bool)false
-            ]);
+            ];
         }
     }
 
