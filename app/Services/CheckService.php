@@ -31,6 +31,10 @@ class CheckService
         $requestParams = $request->except(['image', 'user_id']);
         $result = (bool)$this->client->send('Cashback/Moderator/reject', $requestParams);
 
+        if (isset($result->error)) {
+            return $result;
+        }
+
         if ($result) {
             $this->addToRejectHistory($request);
             return response()->json([
@@ -73,31 +77,53 @@ class CheckService
 
     private function addToRejectHistory($request)
     {
-        $user = User::find($request->user_id)->first();
-        $result = [
-            'user_id' => $user->user_id,
-            'check_id' => $request->id,
-            'status' => 'REJECTED',
-            'comment' => $request->comment,
-            'image' => $request->image,
-        ];
-        $check = new CheckHistory($result);
-        $check->save();
+        try {
+            $user = User::find($request->user_id)->first();
+            if (!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
+
+            $result = [
+                'user_id' => $user->user_id,
+                'check_id' => $request->id,
+                'status' => 'REJECTED',
+                'comment' => $request->comment,
+                'image' => $request->image,
+            ];
+
+            $check = new CheckHistory($result);
+            $check->save();
+
+        } catch (Exception $e) {
+            return (object)[
+                'message' => $e->getMessage(),
+                'error' => $e->getCode()
+            ];
+        }
     }
 
     private function addToApproveHistory(CheckApproveRequest $request)
     {
-        $user = User::find($request->user_id)->first();
+        try {
+            $user = User::find($request->user_id)->first();
+            if (!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
 
-
-        $result = [
-            'user_id' => $user->user_id,
-            'check_id' => $request->id,
-            'status' => 'APPROVED',
-            'image' => $request->image,
-        ];
-        $check = new CheckHistory($result);
-        $check->save();
+            $result = [
+                'user_id' => $user->user_id,
+                'check_id' => $request->id,
+                'status' => 'APPROVED',
+                'image' => $request->image,
+            ];
+            $check = new CheckHistory($result);
+            $check->save();
+        } catch (Exception $e) {
+            return (object)[
+                'message' => $e->getMessage(),
+                'error' => $e->getCode()
+            ];
+        }
     }
 
     public function addChecks($checks)
@@ -106,7 +132,6 @@ class CheckService
         //     if(!is_array($checks)) {
         //         throw new Exception('Переданный параметр не является массивом', 404);
         //     }
-
 
 
         //    return $checks;

@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('referer_user_fio')->nullable();
             $table->bigInteger('career_id')->nullable();
             $table->string('token_id')->nullable();
+            $table->bigInteger('balance')->nullable();
             $table->timestamps();
         });
     }
