@@ -14,6 +14,5 @@ class CheckHistory extends Model
         'check_id',
         'status',
         'comment',
-        'image'
     ];
 }
