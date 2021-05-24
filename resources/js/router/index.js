@@ -7,6 +7,7 @@ import Login from '@/pages/auth/Login';
 import Logout from '@/pages/auth/Logout';
 import MainLayout from '@/layouts/Main';
 import Main from '@/pages/main/Main';
+import History from '@/pages/history/History';
 
 Vue.use(VueRouter);
 
@@ -42,6 +43,11 @@ const router = new VueRouter({
                     name: 'Main',
                     component: Main,
                 },
+                {
+                    path: '/history',
+                    name: 'History',
+                    component: History
+                }
             ]
         },
 

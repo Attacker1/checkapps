@@ -1,77 +1,120 @@
 <template>
     <div class="check-image">
-        <img :src="receipt" alt="">
-        <div @click="showModal = true" class="check-zoom">
-            <IconZoom/>
+        <!--        <img :src="receipt" alt="">-->
+        <viewer :options="options" @inited="inited" ref="viewer">
+            <img :src="receipt" alt="check" class="check">
+        </viewer>
+        <div @click="rotate" class="check-rotate">
+            <IconTurn/>
         </div>
-        <transition name="fade">
-            <Modal class="check-modal" v-if="showModal">
-                <div class="icon text_pointer" @click="showModal = false">
-                    <IconCross i-color="white"/>
-                </div>
-                <img :src="receipt" alt="">
-            </Modal>
-        </transition>
+<!--        <div @mouseover="zoom()" @mousemove="move" @mouseout="reset" class="check-zoom" ref="coordinates"></div>-->
+        <!--<Modal class="check-modal" v-if="showModal">
+            <div class="icon text_pointer" @click="showModal = false">
+                <IconCross i-color="white"/>
+            </div>
+            <img :src="receipt" alt="">
+        </Modal>-->
     </div>
-
 </template>
 
 <script>
-import Modal from "@/components/modal/Modal";
-import IconCross from "@/assets/icons/IconCross";
-import IconZoom from "@/assets/icons/IconZoom";
+    import Modal from "@/components/modal/Modal";
+    import IconCross from "@/assets/icons/IconCross";
+    import IconTurn from "@/assets/icons/IconTurn";
 
-export default {
-    name: "CheckImage",
-    components: {IconZoom, IconCross, Modal},
-    data: () => ({
-        showModal: false,
-    }),
-    props: {
-        receipt: null,
+
+    export default {
+        name: "CheckImage",
+        components: {IconTurn, IconCross, Modal},
+        data: () => ({
+            showModal: false,
+            x: 0,
+            y: 0,
+            rotation: 0,
+            options: {
+                inline: true, button: false, navbar: false,
+                title: false, toolbar: false, tooltip: false,
+                movable: true, zoomable: true, rotatable: true,
+                scalable: false, transition: false, fullscreen: true, keyboard: false}
+        }),
+        props: {
+            receipt: null,
+        },
+        watch: {
+            receipt: function (val) {
+                document.querySelector(".viewer-move").src = val;
+                this.$viewer.update();
+                console.log('changes');
+            }
+        },
+        methods: {
+            inited (viewer) {
+                this.$viewer = viewer
+            },
+            rotate () {
+                this.$viewer.rotate(-90);
+            },
+            move (event) {
+                this.x = event.pageX - this.$refs.coordinates.getBoundingClientRect().left - 210;
+                this.y = event.clientY - this.$refs.coordinates.getBoundingClientRect().top - 300;
+                this.$viewer.move(-this.x * 0.05, -this.y * 0.05);
+                // this.$viewer.move(1, 1);
+                // console.log(this.x + ' : ' + this.y);
+            },
+        }
     }
-}
 </script>
 
 <style lang="scss" scoped>
-.check-modal {
-    .icon {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        z-index: 999;
-        width: 30px;
-        height: 30px;
+    .check-modal {
+        .icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 999;
+            width: 30px;
+            height: 30px;
 
-        svg {
-            width: 100%;
-            height: 100%;
+            svg {
+                width: 100%;
+                height: 100%;
+            }
         }
     }
-}
 
-.check-image {
-    border: 0.5px solid rgba(0, 0, 0, 0.08);
-    box-sizing: border-box;
-    border-radius: 6px;
-    position: relative;
-    background-color: $bg_dark;
-    box-shadow: 15px 15px 20px -5px rgba(217, 224, 235, .5);
+    .check-image {
+        border: 0.5px solid rgba(0, 0, 0, 0.08);
+        box-sizing: border-box;
+        border-radius: 6px;
+        position: relative;
+        background-color: $bg_dark;
+        box-shadow: 15px 15px 20px -5px rgba(217, 224, 235, .5);
+        overflow: hidden;
 
-    img {
-        top: 0;
-        left: 0;
+        .check {
+            display: none;
+        }
+    }
+
+    .check-rotate {
+        position: absolute;
+        bottom: 12px;
+        right: 12px;
+        cursor: pointer;
+        z-index: 1;
+    }
+
+    .check-zoom {
+        position: absolute;
         width: 100%;
         height: 100%;
-        object-fit: contain;
-        position: absolute;
+        top: 0;
+        left: 0;
     }
-}
 
-.check-zoom {
-    position: absolute;
-    bottom: 12px;
-    right: 12px;
-    cursor: pointer;
-}
+    .viewer-canvas {
+        .viewer-move {
+            object-fit: contain !important;
+        }
+    }
 </style>
