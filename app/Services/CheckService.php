@@ -4,6 +4,8 @@
 namespace App\Services;
 
 
+use App\Enum\CheckStatusEnum;
+use App\Models\Check;
 use Exception;
 use App\Models\User;
 use App\Models\CheckHistory;
@@ -112,6 +114,17 @@ class CheckService
                 'error' => $e->getCode()
             ];
         }
+    }
+
+    public function getChecks($request)
+    {
+        $user = $request->user();
+
+        return Check::query()->where([
+            ['status', CheckStatusEnum::INCHECK],
+            ['check_user_id', null]
+        ])->limit(50)->orderByDesc('current_quantity')->update(['check_user_id' => $user->id]);
+
     }
 
     private function addToApproveHistory(CheckApproveRequest $request)

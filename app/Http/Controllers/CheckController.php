@@ -47,4 +47,15 @@ class CheckController extends Controller
     {
         return $this->checkService->getPurchaseListItems($request);
     }
+
+    public function getChecks(Request $request)
+    {
+        $response = $this->checkService->getChecks($request);
+
+        if (isset($response->error)) {
+            return response()->json($response);
+        } else {
+            return response()->json($response);
+        }
+    }
 }
