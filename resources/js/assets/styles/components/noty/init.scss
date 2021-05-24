@@ -1,0 +1,84 @@
+.noty {
+    &_layout {
+        position: fixed;
+        top: 0 !important;
+        right: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    &_body {
+        display: flex;
+        justify-content: center;
+    }
+
+    &_type {
+        &__error {
+            background-color: #EE5A2B !important;
+            border-bottom: unset !important;
+        }
+
+        &__success {
+            background-color: #0071E3 !important;
+        }
+
+        &__alert {
+            .noty_body {
+                color: $primary !important;
+            }
+        }
+    }
+
+    &_bar {
+        padding: 11px 0 !important;
+        color: #ffffff !important;
+        margin-bottom: 4px !important;
+        margin-top: 0 !important;
+
+        @media screen and (max-width: 1182px) {
+            padding-left: 16px !important;
+            padding-right: 16px !important;
+        }
+    }
+
+    &_body {
+        max-width: 1152px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        font-weight: 400 !important;
+        font-size: 14px !important;
+        line-height: 18px !important;
+    }
+
+    &_effects_open {
+        opacity: 0;
+        transform: translateY(-50%);
+        animation: noty_anim_in 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    &_effects_close {
+        animation: noty_anim_out 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    &_bar {
+        border-radius: 0 !important;
+        margin-bottom: 0 !important;
+        margin-top: 0 !important;
+    }
+}
+
+@keyframes noty_anim_in {
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes noty_anim_out {
+    100% {
+        transform: translateY(-50%);
+        opacity: 0;
+    }
+}

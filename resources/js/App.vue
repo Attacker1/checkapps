@@ -4,7 +4,8 @@
     </div>
 </template>
 
-<script>
+<script lang="ts">
+import {Component, Vue} from 'vue-property-decorator';
 
     import {mapActions} from 'vuex';
     import resize from 'vue-resize-directive'
@@ -26,11 +27,15 @@
             this.onResize();
         },
     };
+@Component
+export default class App extends Vue {
+
+};
 </script>
 <style lang="scss">
-    @import '@/assets/styles/main.scss';
+@import '@/assets/styles/main.scss';
 
-    .main {
-        background-color: $bg;
-    }
+.main {
+    background-color: $bg;
+}
 </style>

@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\UserLogoutRequest;
 use App\Http\Requests\UserRequest;
 use App\Services\AuthService;
 

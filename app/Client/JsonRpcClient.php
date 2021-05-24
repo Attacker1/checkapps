@@ -27,7 +27,7 @@ class JsonRpcClient
                 'Access-Control-Allow-Origin' => '*',
             ],
             'base_uri' => $_ENV['APP_FINIKO_API_URL'],
-            'verify' => true,
+            'verify' => false,
             'timeout' => 200,
         ]);
     }

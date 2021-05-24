@@ -48,6 +48,7 @@
         grid-gap: 10px;
         align-items: center;
         margin-bottom: 20px;
+        cursor: pointer;
     }
 
     .radio {
