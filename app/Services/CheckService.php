@@ -64,7 +64,7 @@ class CheckService
         }
     }
 
-    public function  ($request)
+    public function getPurchaseListItems($request)
     {
         $params = $request->all();
         $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
