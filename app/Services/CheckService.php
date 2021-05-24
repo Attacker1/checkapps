@@ -4,12 +4,14 @@
 namespace App\Services;
 
 
-use App\Client\JsonRpcClient;
-use App\Http\Requests\CheckApproveRequest;
-use App\Http\Requests\CheckRejectRequest;
-use App\Http\Requests\PurchaseListRequest;
-use App\Models\CheckHistory;
+use Exception;
 use App\Models\User;
+use App\Models\CheckHistory;
+use App\Client\JsonRpcClient;
+use Illuminate\Http\Request;
+use App\Http\Requests\CheckRejectRequest;
+use App\Http\Requests\CheckApproveRequest;
+use App\Http\Requests\PurchaseListRequest;
 
 class CheckService
 {
@@ -62,7 +64,7 @@ class CheckService
         }
     }
 
-    public function getPurchaseListItems($request)
+    public function  ($request)
     {
         $params = $request->all();
         $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
@@ -95,5 +97,28 @@ class CheckService
         ];
         $check = new CheckHistory($result);
         $check->save();
+    }
+
+    public function addChecks($checks)
+    {
+        // try {
+        //     if(!is_array($checks)) {
+        //         throw new Exception('Переданный параметр не является массивом', 404);
+        //     }
+
+
+
+        //    return $checks;
+        // } catch (Exception $exception) {
+        //     return response()->json([
+        //         'code' => $exception->getCode(),
+        //         'message' => $exception->getMessage(),
+        //     ], $exception->getCode());
+        // }
+    }
+
+    public function addCheck($check)
+    {
+        # code...
     }
 }
