@@ -28,7 +28,8 @@ Route::group(['middleware' => 'guest'], static function() {
     Route::post('/purchase-items', [CheckController::class, 'getPurchaseListItems'])->name('check-items');
     Route::post('/reject', [CheckController::class, 'reject'])->name('reject');
     Route::post('/approve', [CheckController::class, 'approve'])->name('approve');
-    // Route::post('/add-checks', [CheckController::class, 'addChecks'])->name('addChecks');
+
+    Route::post('/add-checks', [CheckController::class, 'addChecks'])->name('addChecks');
 });
 
 

@@ -14,6 +14,7 @@ class Check extends Model
         'image',
         'verify_quantity',
         'current_quantity',
-        'status'
+        'status',
+        'check_user_id',
     ];
 }

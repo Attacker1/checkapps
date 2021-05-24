@@ -6,9 +6,12 @@ namespace App\Services;
 
 use Exception;
 use App\Models\User;
+use App\Models\Check;
 use App\Models\CheckHistory;
-use App\Client\JsonRpcClient;
 use Illuminate\Http\Request;
+use App\Client\JsonRpcClient;
+use App\Enum\CheckStatusEnum;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
 use App\Http\Requests\PurchaseListRequest;
@@ -24,6 +27,27 @@ class CheckService
     public function __construct(JsonRpcClient $client)
     {
         $this->client = $client;
+    }
+
+    public function getChecks($params) {
+        try {
+            if(!$params) {
+                throw new Exception('Не удалось получить доступ к чекам, не переданы необходимые параметры', 404);
+            }
+
+            $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
+
+            if(isset($list->error)) {
+                throw new Exception($list->message, $list->code);
+            }
+
+            return $list;
+        } catch (Exception $exception) {
+            return (object) [
+                'code' => $exception->getCode(),
+                'error' => $exception->getMessage(),
+            ];
+        }
     }
 
     public function checkReject(CheckRejectRequest $request)
@@ -67,8 +91,20 @@ class CheckService
     public function getPurchaseListItems($request)
     {
         $params = $request->all();
-        $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
-        return response()->json($list->items);
+        $list = $this->getChecks($params);
+
+        try {
+            if(isset($list->error)) {
+                throw new Exception($list->error, $list->code);
+            }
+
+            return response()->json($list->items);
+        } catch (Exception $exception) {
+            return [
+                'code' => $exception->getCode(),
+                'error' => $exception->getMessage(),
+            ];
+        }
     }
 
     private function addToRejectHistory($request)
@@ -100,26 +136,86 @@ class CheckService
         $check->save();
     }
 
-    public function addChecks($checks)
+    public function addChecks()
     {
-        // try {
-        //     if(!is_array($checks)) {
-        //         throw new Exception('Переданный параметр не является массивом', 404);
-        //     }
+        try {
+            $moderator = $this->client->send('User/login', [
+                'login' => 'chekapps.com@gmail.com',
+                'password' => 'HvJTP.3m,F5KtnH',
+            ]);
 
+            if(empty($moderator->token_id)) {
+                throw new Exception('Не удалось получить данные для чеков', 404);
+            }
 
+            $checks = $this->getChecks([
+                'token_id' => $moderator->token_id,
+                'limit' => 1,
+                'page' => 1,
+            ]);
 
-        //    return $checks;
-        // } catch (Exception $exception) {
-        //     return response()->json([
-        //         'code' => $exception->getCode(),
-        //         'message' => $exception->getMessage(),
-        //     ], $exception->getCode());
-        // }
+            if(empty($checks->items)) {
+                throw new Exception('Нет чеков для проверки', 404);
+            }
+
+            $addedChecksIDs = [];
+            $verifyQuantity = DB::table('settings')->where('name', 'check_verify_quantity')->first();
+
+            if(!$verifyQuantity) {
+                $verifyQuantity = 5;
+            } else {
+                $verifyQuantity = $verifyQuantity->value;
+            }
+
+            foreach($checks->items as $check) {
+                $addedCheckID = $this->addCheck($check, $verifyQuantity);
+
+                if(!isset($addedCheckID->error)) {
+                    $addedChecksIDs[] = $addedCheckID;
+                }
+            }
+
+           return $addedChecksIDs;
+        } catch (Exception $exception) {
+            return (object) [
+                'code' => $exception->getCode(),
+                'message' => $exception->getMessage(),
+            ];
+        }
     }
 
-    public function addCheck($check)
+    public function addCheck($rawCheck, $verifyQuantity)
     {
-        # code...
+        try {
+            if(empty($rawCheck)) {
+                throw new Exception('Чек не передан', 404);
+            }
+
+            $check = new Check();
+            $check->check_id = $rawCheck->id;
+            $check->image = $rawCheck->receipt;
+            $check->amount = $rawCheck->amount;
+            $check->amount_in_currency = $rawCheck->amount_in_currency;
+            $check->dt = date('Y-m-d H:i:s', strtotime($rawCheck->dt));
+            $check->dt_purchase = date('Y-m-d H:i:s', strtotime($rawCheck->dt_purchase));
+            $check->currency = $rawCheck->currency;
+            $check->verify_quantity = $verifyQuantity;
+            $check->current_quantity = 0;
+            $check->status = CheckStatusEnum::INCHECK;
+
+            $success = $check->save();
+
+            if($success) {
+                return $check->check_id;
+            } else {
+                throw new Exception('Ошибка при добавлении чека', 500);
+            }
+
+        } catch (Exception $exception) {
+            return [
+                'code' => $exception->getCode(),
+                'error' => $exception->getMessage(),
+            ];
+        }
     }
 }

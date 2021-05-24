@@ -40,11 +40,4 @@ class AuthService
             return response()->json($attributes);
         }
     }
-
-    public function logout()
-    {
-        return response()->json([
-            'success' => (bool)true
-        ]);
-    }
 }
