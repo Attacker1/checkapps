@@ -71,7 +71,7 @@ class CheckService
 
     private function addToRejectHistory($request)
     {
-        $user = User::byUserId($request->user_id)->first();
+        $user = User::find($request->user_id)->first();
         $result = [
             'user_id' => $user->user_id,
             'check_id' => $request->id,
@@ -85,7 +85,8 @@ class CheckService
 
     private function addToApproveHistory(CheckApproveRequest $request)
     {
-        $user = User::byUserId($request->user_id)->first();
+        $user = User::find($request->user_id)->first();
+
 
         $result = [
             'user_id' => $user->user_id,
