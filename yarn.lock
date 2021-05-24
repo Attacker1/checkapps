@@ -2072,11 +2072,6 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001196, caniuse-lite@^1.0.30001219:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001228.tgz#bfdc5942cd3326fa51ee0b42fbef4da9d492a7fa"
   integrity sha512-QQmLOGJ3DEgokHbMSA8cj2a+geXqmnpyOFT0lhQV6P3/YOJvGDEwoedcwxEQ30gJIwIIunHIicunJ2rzK5gB2A==
 
-canvas-exif-orientation@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/canvas-exif-orientation/-/canvas-exif-orientation-0.4.0.tgz#b487f3701998a9e879eb104010b2a58115368b6b"
-  integrity sha1-tIfzcBmYqeh56xBAELKlgRU2i2s=
-
 caseless@~0.12.0:
   version "0.12.0"
   resolved "https://registry.yarnpkg.com/caseless/-/caseless-0.12.0.tgz#1b681c21ff84033c826543090689420d187151dc"
@@ -2610,6 +2605,11 @@ css-declaration-sorter@^4.0.1:
   dependencies:
     postcss "^7.0.1"
     timsort "^0.3.0"
+
+css-element-queries@^1.0.2:
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/css-element-queries/-/css-element-queries-1.2.3.tgz#e14940b1fcd4bf0da60ea4145d05742d7172e516"
+  integrity sha512-QK9uovYmKTsV2GXWQiMOByVNrLn2qz6m3P7vWpOR4IdD6I3iXoDw5qtgJEN3Xq7gIbdHVKvzHjdAtcl+4Arc4Q==
 
 css-loader@^5.0.0:
   version "5.2.5"
@@ -4243,6 +4243,11 @@ interpret@^2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-2.2.0.tgz#1a78a0b5965c40a5416d007ad6f50ad27c417df9"
   integrity sha512-Ju0Bz/cEia55xDwUWEa8+olFpCiQoypjnQySseKtmjNrnps3P+xfpUmGr90T7yjlVJmOtybRvPXhKMbHr+fWnw==
+
+intersection-observer@^0.5.0:
+  version "0.5.1"
+  resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.5.1.tgz#e340fc56ce74290fe2b2394d1ce88c4353ac6dfa"
+  integrity sha512-Zd7Plneq82kiXFixs7bX62YnuZ0BMRci9br7io88LwDyF3V43cQMI+G5IiTlTNTt+LsDUppl19J/M2Fp9UkH6g==
 
 ip-regex@^4.0.0:
   version "4.3.0"
@@ -7665,6 +7670,11 @@ tfunk@^4.0.0:
     chalk "^1.1.3"
     dlv "^1.1.3"
 
+throttle-debounce@^2.0.1:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/throttle-debounce/-/throttle-debounce-2.3.0.tgz#fd31865e66502071e411817e241465b3e9c372e2"
+  integrity sha512-H7oLPV0P7+jgvrk+6mwwwBDmxTaxnu9HMXmloNLXwnNO0ZxZ31Orah2n8lU1eMPvsaowP2CX+USCgyovXfdOFQ==
+
 thunky@^1.0.2:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/thunky/-/thunky-1.1.0.tgz#5abaf714a9405db0504732bbccd2cedd9ef9537d"
@@ -7965,6 +7975,14 @@ uuid@^8.3.0:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
 
+v-viewer@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/v-viewer/-/v-viewer-1.5.1.tgz#94804d83814cca566e691339fe1e64793486f200"
+  integrity sha512-Q5ICKzmYQD0qTf+hti2Lhgy6UYY2zgFr+YrN9a3yPgr7pOjYrG405Pz4+6Z6FXlhdhGysCWFJUNCI2tsIyvjWQ==
+  dependencies:
+    throttle-debounce "^2.0.1"
+    viewerjs "^1.5.0"
+
 v8-compile-cache@^2.2.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/v8-compile-cache/-/v8-compile-cache-2.3.0.tgz#2de19618c66dc247dcfb6f99338035d8245a2cee"
@@ -7997,6 +8015,11 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
+viewerjs@^1.5.0:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/viewerjs/-/viewerjs-1.9.1.tgz#559a37c0efee1ad03cd577c7779667615a9f6592"
+  integrity sha512-ivllTQh63M0nRvphzX8pgmz+TJsgLUs6o4gseh5kKsJ3eqb+IJzJInrfyqrLNgpDhiHloz2Fv70ZZeQK8VeaeQ==
+
 vm-browserify@^1.0.1:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vm-browserify/-/vm-browserify-1.1.2.tgz#78641c488b8e6ca91a75f511e7a3b32a86e5dda0"
@@ -8011,14 +8034,6 @@ vue-class-component@^7.2.6:
   version "7.2.6"
   resolved "https://registry.yarnpkg.com/vue-class-component/-/vue-class-component-7.2.6.tgz#8471e037b8e4762f5a464686e19e5afc708502e4"
   integrity sha512-+eaQXVrAm/LldalI272PpDe3+i4mPis0ORiMYxF6Ae4hyuCh15W8Idet7wPUEs4N4YptgFHGys4UrgNQOMyO6w==
-
-vue-croppa@^1.3.8:
-  version "1.3.8"
-  resolved "https://registry.yarnpkg.com/vue-croppa/-/vue-croppa-1.3.8.tgz#1aac95bf5d94020de7bc1ea7ca61e3aadfff1811"
-  integrity sha512-WwYgEKscTCD7BzhnbfRJfzWIU6RcMq2JRimB3aI5gGzpADmpKuqmDh9+oVfiZaEnpmRthgXZxcAvbxU6CeIU9w==
-  dependencies:
-    canvas-exif-orientation "^0.4.0"
-    object-assign "^4.1.1"
 
 vue-flash-message@^0.7.2:
   version "0.7.2"
@@ -8052,6 +8067,15 @@ vue-property-decorator@^9.1.2:
   version "9.1.2"
   resolved "https://registry.yarnpkg.com/vue-property-decorator/-/vue-property-decorator-9.1.2.tgz#266a2eac61ba6527e2e68a6933cfb98fddab5457"
   integrity sha512-xYA8MkZynPBGd/w5QFJ2d/NM0z/YeegMqYTphy7NJQXbZcuU6FC6AOdUAcy4SXP+YnkerC6AfH+ldg7PDk9ESQ==
+
+vue-resize-directive@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/vue-resize-directive/-/vue-resize-directive-1.2.0.tgz#4214ca8a80a425529b036ea868cad54a38f613e4"
+  integrity sha512-LmpFexQcl1XYyz3DQrTrq3Efgj50MKEON60nR9MMAq1D2ZtXFg1WDcy1wy1T0SeduNtIu9hos2aLTsJUplvjlQ==
+  dependencies:
+    css-element-queries "^1.0.2"
+    intersection-observer "^0.5.0"
+    lodash.debounce "^4.0.8"
 
 vue-router@^3.5.1:
   version "3.5.1"
