@@ -1,5 +1,5 @@
 <template>
-    <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg :width="size" :height="size" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
         <g filter="url(#filter0_bzoom)">
             <rect width="48" height="48" rx="24" fill="black" fill-opacity="0.24"/>
             <path fill-rule="evenodd" clip-rule="evenodd"
@@ -21,7 +21,14 @@
 
 <script>
     export default {
-        name: "IconZoom"
+        name: "IconZoom",
+        props: {
+            size: {
+                type: Number,
+                default: 48
+            },
+        }
+
     }
 </script>
 
