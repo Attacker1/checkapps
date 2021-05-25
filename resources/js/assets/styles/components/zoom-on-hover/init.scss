@@ -1,0 +1,11 @@
+.zoom-on-hover {
+    overflow: unset !important;
+
+    .zoom {
+        transform-origin: center !important;
+    }
+
+    .normal {
+        object-fit: contain;
+    }
+}

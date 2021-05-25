@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Models\Setting;
 use App\Services\LoginService;
 use App\Http\Requests\LoginRequest;
 use App\Http\Controllers\Controller;
@@ -71,6 +72,6 @@ class LoginController extends Controller
     {
         $response = $this->loginService->login($request);
 
-        return isset($response->errors) ? response()->json($response, 404) : response()->json($response);
+        return isset($response->error) ? response()->json($response, 404) : response()->json($response);
     }
 }

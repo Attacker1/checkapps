@@ -1257,6 +1257,11 @@
   resolved "https://registry.yarnpkg.com/@webpack-cli/serve/-/serve-1.4.0.tgz#f84fd07bcacefe56ce762925798871092f0f228e"
   integrity sha512-xgT/HqJ+uLWGX+Mzufusl3cgjAcnqYYskaB7o0vRcwOEfuu6hMzSILQpnIzFMGsTaeaX4Nnekl+6fadLbl1/Vg==
 
+"@websanova/vue-auth@3.3.4":
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@websanova/vue-auth/-/vue-auth-3.3.4.tgz#51639983f7f066dd0c9cd569e02183b3c12a764f"
+  integrity sha512-T9n6NxxtCzTu2IkN/8CvUXFPpnPL+9iAXLzk0rgRjN1wOVCUCaK0urXtA2yLkiijgutdSeAvI7ML/VgPJ6L91w==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
@@ -8097,6 +8102,11 @@ vue-template-es2015-compiler@^1.9.0:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz#1ee3bc9a16ecbf5118be334bb15f9c46f82f5825"
   integrity sha512-4gDntzrifFnCEvyoO8PqyJDmguXgVPxKiIxrBKjIowvL9l+N66196+72XVYR8BBf1Uv1Fgt3bGevJ+sEmxfZzw==
+
+vue-zoom-on-hover@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/vue-zoom-on-hover/-/vue-zoom-on-hover-1.0.5.tgz#ae84ce02df50ae811da4a95dccf19311ab636ee4"
+  integrity sha512-pZF5FT09+pAVWNC/rPj0qUybzIGenf3HM1E8PFkF6ItIPrlc0modm0AQqaOrd2uKMOqep/HJ5iR0lfQT/B3chg==
 
 vue@^2.5.17:
   version "2.6.12"

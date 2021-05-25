@@ -10,6 +10,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
+use Illuminate\Support\Facades\Log;
 
 class ProcessAddingChecks implements ShouldQueue
 {
@@ -44,7 +45,7 @@ class ProcessAddingChecks implements ShouldQueue
             'password' => 'HvJTP.3m,F5KtnH',
         ]);
 
-        $checks = $checkService->getChecks([
+        $checks = $checkService->getChecksFromApi([
             'token_id' => $moderator->token_id,
             'limit' => $this->limit,
             'page' => 1,

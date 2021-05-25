@@ -24,38 +24,26 @@ class CheckController extends Controller
     public function reject(CheckRejectRequest $request)
     {
         $response = $this->checkService->checkReject($request);
-
-        if (isset($response->error)) {
-            return response()->json($response);
-        } else {
-            return response()->json($response);
-        }
+        return response()->json($response);
     }
 
     public function approve(CheckApproveRequest $request)
     {
         $response = $this->checkService->checkApprove($request);
-
-        if (isset($response->error)) {
-            return response()->json($response);
-        } else {
-            return response()->json($response);
-        }
-    }
-
-    public function getPurchaseListItems(PurchaseListRequest $request)
-    {
-        return $this->checkService->getPurchaseListItems($request);
+        return response()->json($response);
     }
 
     public function getChecks(Request $request)
     {
         $response = $this->checkService->getChecks($request);
+        $errors = isset($response->error);
+        return response()->json($response, $errors ? $response->code : 200);
+    }
 
-        if (isset($response->error)) {
-            return response()->json($response);
-        } else {
-            return response()->json($response);
-        }
+    public function resetChecks(Request $request)
+    {
+        $user = $request->user();
+        $this->checkService->resetUserChecks($user->id);
+        return response()->json(['message' => 'Чеки успешно очищены в базе']);
     }
 }

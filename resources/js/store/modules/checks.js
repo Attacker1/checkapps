@@ -26,15 +26,17 @@ export default {
     },
 
     actions: {
-        async fetchChecks({commit, rootGetters, state}) {
+        async fetchChecks({commit, state}) {
             commit('common/setLoader', null, {root: true})
-            await axios.post('purchase-items', {token_id: rootGetters['auth/token_id']})
-                .then(res => {
-                    commit('setChecks', res.data)
-                    commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
-                    commit('setExpiryTime')
-                })
-                .catch(err => console.log(err))
+            try {
+                const checks = await axios.get('purchase-items');
+                console.log(checks);
+                // commit('setChecks', res.data)
+                // commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
+                // commit('setExpiryTime')
+            } catch (response) {
+                console.log(response.data.error);
+            }
 
             commit('common/removeLoader', null, {root: true})
         },

@@ -1,5 +1,5 @@
 <template>
-    <span :style="{ height, width: computedWidth, borderRadius }" class="SkeletonBox">
+    <span :style="{ height, width, borderRadius }" class="SkeletonBox">
         <slot/>
     </span>
 </template>
@@ -22,8 +22,8 @@ export default {
             default: '1em'
         },
         width: {
-            type: String | null,
-            default: null
+            type: String,
+            default: '1em'
         },
         borderRadius: {
             type: String,
@@ -44,7 +44,7 @@ export default {
     position: relative;
     vertical-align: middle;
     overflow: hidden;
-    background-color: #222;
+    background-color: rgba(0, 0, 0, 0.12);
 
     &::after {
         position: absolute;
@@ -55,10 +55,10 @@ export default {
         transform: translateX(-100%);
         background-image: linear-gradient(
                 90deg,
-                rgba(#515151, 0) 0,
-                rgba(#515151, 0.2) 20%,
-                rgba(#515151, 0.5) 60%,
-                rgba(#515151, 0)
+                rgba(255, 255, 255, 0) 0,
+                rgba(255, 255, 255, 0.2) 20%,
+                rgba(255, 255, 255, 0.5) 60%,
+                rgba(255, 255, 255, 0)
         );
         animation: shimmer 2000ms infinite;
         content: '';

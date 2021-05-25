@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+
 // use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckController;
 
@@ -22,12 +24,15 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => 'guest'], static function() {
+Route::group(['middleware' => 'guest'], static function () {
     Route::post('/login', LoginController::class)->name('login');
-    Route::post('/logout', [LogoutController::class, 'logout'])->name('logout');
-    Route::post('/purchase-items', [CheckController::class, 'getPurchaseListItems'])->name('check-items');
-    Route::post('/reject', [CheckController::class, 'reject'])->name('reject');
-    Route::post('/approve', [CheckController::class, 'approve'])->name('approve');
 });
 
-
+Route::group(['middleware' => 'auth:api'], static function () {
+    Route::post('logout', [LogoutController::class, 'logout']);
+    Route::get('user', [UserController::class, 'user']);
+    Route::get('purchase-items', [CheckController::class, 'getChecks']);
+    Route::post('reject', [CheckController::class, 'reject']);
+    Route::post('approve', [CheckController::class, 'approve']);
+    Route::post('reset-checks', [CheckController::class, 'resetChecks']);
+});

@@ -2,8 +2,9 @@
     <div class="check-image">
         <!--        <img :src="receipt" alt="">-->
         <viewer :options="options" @inited="inited" ref="viewer">
-            <img :src="receipt" alt="check" class="check">
+            <img :src="receipt" ref="viewerImage" alt="check" class="check">
         </viewer>
+        <zoom-on-hover @click="asd" ref="zoom" :img-normal="receipt" class="check-image__image"></zoom-on-hover>
         <div @click="rotate" class="check-rotate">
             <IconTurn/>
         </div>
@@ -32,10 +33,11 @@
             y: 0,
             rotation: 0,
             options: {
-                inline: true, button: false, navbar: false,
-                title: false, toolbar: false, tooltip: false,
+                inline: false, button: true, navbar: false,
+                title: false, toolbar: true, tooltip: false,
                 movable: true, zoomable: true, rotatable: true,
-                scalable: false, transition: false, fullscreen: true, keyboard: false}
+                scalable: true, transition: false, fullscreen: true, keyboard: false
+            }
         }),
         props: {
             receipt: null,
@@ -44,23 +46,40 @@
             receipt: function (val) {
                 document.querySelector(".viewer-move").src = val;
                 this.$viewer.update();
-                console.log('changes');
             }
         },
         methods: {
+            asd() {
+                this.$refs.viewerImage.click();
+                console.log('fddfs');
+            },
             inited (viewer) {
                 this.$viewer = viewer
             },
             rotate () {
-                this.$viewer.rotate(-90);
+                this.rotation-=90;
+                if (this.rotation < -270) {
+                    this.rotation = 0;
+                }
+                let normal = this.$refs.zoom.$el.querySelector('.normal');
+                normal.style.transform = 'rotate(' + this.rotation + 'deg)';
+                if (normal.getBoundingClientRect().width < 419) {
+                    normal.style.transform = 'rotate(' + this.rotation + 'deg)' + 'scale(1.5)';
+                }
+                this.$refs.zoom.$el.querySelector('.zoom').style.transform = 'rotate(' + this.rotation + 'deg)';
             },
             move (event) {
                 this.x = event.pageX - this.$refs.coordinates.getBoundingClientRect().left - 210;
                 this.y = event.clientY - this.$refs.coordinates.getBoundingClientRect().top - 300;
                 this.$viewer.move(-this.x * 0.05, -this.y * 0.05);
-                // this.$viewer.move(1, 1);
-                // console.log(this.x + ' : ' + this.y);
             },
+        },
+        mounted() {
+            this.$refs.zoom.$el.querySelector('.zoom').addEventListener('click', this.asd);
+        },
+
+        destroyed() {
+            this.$refs.zoom.$el.querySelector('.zoom').removeEventListener('click', this.asd);
         }
     }
 </script>
@@ -90,9 +109,14 @@
         background-color: $bg_dark;
         box-shadow: 15px 15px 20px -5px rgba(217, 224, 235, .5);
         overflow: hidden;
+        display: flex;
+        align-items: center;
 
         .check {
-            display: none;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
         }
     }
 

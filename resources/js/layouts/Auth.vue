@@ -1,9 +1,9 @@
 <template>
     <div class="auth">
-        <Loader v-if="loader"/>
-        <div class="container">
+        <div class="container" >
             <div class="auth-wrap">
-                <router-view/>
+                <SkeletonBox height="349px" width="410px" border-radius="6px" v-if="loader" />
+                <router-view v-else />
             </div>
         </div>
     </div>
@@ -12,12 +12,12 @@
 <script>
 
     import Loader from "@/components/loader/Loader";
-    import CheckViewSkeleton from "@/components/skeleton/CheckViewSkeleton";
+    import SkeletonBox from '@/components/skeleton/SkeletonBox';
     import {mapGetters} from "vuex";
 
     export default {
         name: 'AuthLayout',
-        components: {Loader, CheckViewSkeleton},
+        components: {Loader, SkeletonBox},
         computed: {
             ...mapGetters({
                 loader: 'common/loader'

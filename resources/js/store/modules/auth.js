@@ -1,56 +1,66 @@
-import axios from 'axios';
 import Vue from 'vue';
-import {getStorageItem, removeStorageItem, setStorageItem} from "@/utils/localStorage";
-import router from "@/router";
 
 export default {
     namespaced: true,
-    state: {
-        user: getStorageItem('user'),
-        token_id: getStorageItem('token_id'),
-    },
-
-    mutations: {
-        setUser: (state, payload) => {
-            setStorageItem('user', state, payload)
-            setStorageItem('token_id', state, payload.user.token_id)
-        },
-        resetUser: (state) => {
-            removeStorageItem('user', state);
-            removeStorageItem('token_id', state);
-        },
+    state() {
+        return {};
     },
 
     actions: {
-        async LogIn({commit, dispatch}, User) {
-            commit('common/setLoader', null, {root: true})
-            const response = await axios.post('login', User)
-                .then(res => {
-                    if (res.data.error) {
-                        Vue.noty.error(res.data.error);
-                        commit('common/removeLoader', null, {root: true})
-                        return false;
-                    } else {
-                        return res.data;
-                    }
-                })
-                .catch((error) => console.log(error))
-            if (response) {
-                await commit('setUser', response)
-                dispatch('checks/fetchChecks', null, {root: true})
-                router.push({name: 'Main'})
-            }
+        fetch(ctx) {
+            return Vue.auth.fetch().catch((e) => {
+                if (e.response.status === 401) {
+                    ctx.dispatch('logout');
+                }
+            });
         },
 
-        LogOut({dispatch}) {
-            dispatch('common/resetStore', null, {root: true})
-            router.push({name: 'Login'})
-        }
+        refresh(data) {
+            return Vue.auth.refresh(data);
+        },
+
+        login(ctx, data) {
+            data = data || {};
+            return Vue.auth.login({
+                data: data.body,
+                fetchUser: true,
+                staySignedIn: true,
+            }).then((res) => {
+                Vue.router.push({name: 'Main'});
+                return res;
+            });
+        },
+
+        register(ctx, data) {
+            data = data || {};
+
+            return Vue.auth.register({
+                data: data.body,
+                autoLogin: true,
+                fetchUser: true,
+                staySignedIn: true,
+            })
+                .then((res) => {
+                    if (data.autoLogin) {
+                        ctx.dispatch('login', {
+                            email: data.email,
+                            password: data.password
+                        });
+                    }
+                    return res;
+                });
+        },
+
+        logout() {
+            /* reset localStorage */
+            localStorage.clear();
+            return Vue.auth.logout({redirect: {name: 'Login'}});
+        },
     },
 
     getters: {
-        auth: state => !!state.user,
-        token_id: state => state.token_id,
-        user: state => state.user,
+        user() {
+            return Vue.auth.user();
+        },
     }
 }
