@@ -3,17 +3,20 @@
 
 namespace App\Services;
 
-
-use App\Enum\CheckStatusEnum;
+use App\Enum\CheckHistoryStatusEnum;
 use App\Models\Check;
+use App\Models\Setting;
 use Exception;
 use App\Models\User;
 use App\Models\CheckHistory;
-use App\Client\JsonRpcClient;
 use Illuminate\Http\Request;
+use App\Client\JsonRpcClient;
+use App\Enum\CheckStatusEnum;
+use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
 use App\Http\Requests\PurchaseListRequest;
+use Illuminate\Support\Facades\Log;
 
 class CheckService
 {
@@ -28,37 +31,47 @@ class CheckService
         $this->client = $client;
     }
 
+    public function getChecksFromApi($params)
+    {
+        try {
+            if (!$params) {
+                throw new Exception('Не удалось получить доступ к чекам, не переданы необходимые параметры', 404);
+            }
+
+            $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
+
+            if (isset($list->error)) {
+                throw new Exception($list->message, $list->code);
+            }
+
+            return $list;
+        } catch (Exception $exception) {
+            return (object)[
+                'code' => $exception->getCode(),
+                'error' => $exception->getMessage(),
+            ];
+        }
+    }
+
     public function checkReject(CheckRejectRequest $request)
     {
-        $requestParams = $request->except(['image', 'user_id']);
-        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
+//        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
 
-        if (isset($result->error)) {
-            return $result;
-        }
-
-        if ($result) {
-            $addedToReject = $this->addToRejectHistory($request);
-            if (!isset($addedToReject->error)) {
-                return (object)[
-                    'message' => 'Чек отклонен',
-                    'success' => (bool)true
-                ];
-            } else {
-                return $addedToReject;
-            }
-        } else {
+        $addedToReject = $this->addToRejectHistory($request);
+        if (!isset($addedToReject->error)) {
             return (object)[
-                'message' => 'Что-то пошло не так, попробуйте позже',
-                'success' => (bool)false
+                'message' => 'Чек отклонен',
+                'success' => (bool)true
             ];
+        } else {
+            return $addedToReject;
         }
     }
 
     public function checkApprove(CheckApproveRequest $request)
     {
         $requestParams = $request->except(['image', 'user_id']);
-        $result = (bool)$this->client->send('Cashback/Moderator/accept', $requestParams);
+        $result = $this->client->send('Cashback/Moderator/accept', $requestParams);
 
         if (isset($result->error)) {
             return $result;
@@ -82,49 +95,74 @@ class CheckService
         }
     }
 
-    public function getPurchaseListItems($request)
-    {
-        $params = $request->all();
-        $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
-        return response()->json($list->items);
-    }
-
     private function addToRejectHistory($request)
     {
         try {
-            $user = User::find($request->user_id)->first();
+            $user = $request->user();
             if (!$user) {
                 throw new Exception('Пользователь не найден', 404);
             }
 
+            $reward = Setting::query()->where(['slug', 'check_verify_price'])->first()->value;
+
+            if (!$reward) {
+                throw new Exception('Не найдено такой настройки', 404);
+            }
+
+
             $result = [
                 'user_id' => $user->user_id,
                 'check_id' => $request->id,
-                'status' => 'REJECTED',
+                'status' => CheckHistoryStatusEnum::REJECTED,
                 'comment' => $request->comment,
-                'image' => $request->image,
+                'reward' => $reward,
             ];
 
             $check = new CheckHistory($result);
-            $check->save();
+            return $check->save();
 
         } catch (Exception $e) {
             return (object)[
-                'message' => $e->getMessage(),
-                'error' => $e->getCode()
+                'error' => $e->getMessage(),
+                'code' => $e->getCode()
             ];
         }
     }
 
-    public function getChecks($request)
+    public function getUniqueChecks($limit = 50, $check_user_id = null)
     {
-        $user = $request->user();
-
         return Check::query()->where([
             ['status', CheckStatusEnum::INCHECK],
-            ['check_user_id', null]
-        ])->limit(50)->orderByDesc('current_quantity')->update(['check_user_id' => $user->id]);
+            ['check_user_id', $check_user_id]
+        ])->limit($limit)->orderByDesc('current_quantity');
+    }
 
+    public function getChecks($request)
+    {
+        try {
+            $user = $request->user();
+
+            if (!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
+            /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним польхователем */
+            $this->resetUserChecks($user->id);
+
+            $checks = $this->getUniqueChecks();
+            $checks->update(['check_user_id' => $user->id]);
+
+            return $checks->get();
+        } catch (Exception $e) {
+            return (object)[
+                'error' => $e->getMessage(),
+                'code' => $e->getCode()
+            ];
+        }
+    }
+
+    private function resetUserChecks($userID)
+    {
+        $this->getUniqueChecks(-1, $userID)->update(['check_user_id', null]);
     }
 
     private function addToApproveHistory(CheckApproveRequest $request)
@@ -145,31 +183,78 @@ class CheckService
             $check->save();
         } catch (Exception $e) {
             return (object)[
-                'message' => $e->getMessage(),
-                'error' => $e->getCode()
+                'error' => $e->getMessage(),
+                'code' => $e->getCode()
             ];
         }
     }
 
     public function addChecks($checks)
     {
-        // try {
-        //     if(!is_array($checks)) {
-        //         throw new Exception('Переданный параметр не является массивом', 404);
-        //     }
+        try {
+            if (empty($checks->items)) {
+                throw new Exception('Нет чеков для проверки', 404);
+            }
 
+            $addedChecksIDs = [];
+            $setting = Setting::query()->where(['slug', 'check_verify_quantity'])->first();
 
-        //    return $checks;
-        // } catch (Exception $exception) {
-        //     return response()->json([
-        //         'code' => $exception->getCode(),
-        //         'message' => $exception->getMessage(),
-        //     ], $exception->getCode());
-        // }
+            if (!$setting) {
+                $verifyQuantity = 5;
+            } else {
+                $verifyQuantity = $setting->value;
+            }
+
+            foreach ($checks->items as $check) {
+                $addedCheckID = $this->addCheck($check, $verifyQuantity);
+
+                if (!isset($addedCheckID->error)) {
+                    $addedChecksIDs[] = $addedCheckID;
+                }
+            }
+
+            return $addedChecksIDs;
+        } catch (Exception $exception) {
+            return (object)[
+                'code' => $exception->getCode(),
+                'error' => $exception->getMessage(),
+            ];
+        }
     }
 
-    public function addCheck($check)
+    public function addCheck($rawCheck, $verifyQuantity)
     {
-        # code...
+        try {
+            if (empty($rawCheck)) {
+                throw new Exception('Чек не передан', 404);
+            }
+
+            $check = new Check();
+            $check->check_id = $rawCheck->id;
+            $check->image = $rawCheck->receipt;
+            $check->amount = $rawCheck->amount;
+            $check->amount_in_currency = $rawCheck->amount_in_currency;
+            $check->dt = date('Y-m-d H:i:s', strtotime($rawCheck->dt));
+            $check->dt_purchase = date('Y-m-d H:i:s', strtotime($rawCheck->dt_purchase));
+            $check->currency = $rawCheck->currency;
+            $check->verify_quantity = $verifyQuantity;
+            $check->current_quantity = 0;
+            $check->status = CheckStatusEnum::INCHECK;
+
+            $success = $check->save();
+
+
+            if ($success) {
+                return $check->check_id;
+            } else {
+                throw new Exception('Ошибка при добавлении чека', 500);
+            }
+
+        } catch (Exception $exception) {
+            return [
+                'code' => $exception->getCode(),
+                'error' => $exception->getMessage(),
+            ];
+        }
     }
 }

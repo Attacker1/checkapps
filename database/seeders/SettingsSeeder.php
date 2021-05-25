@@ -15,12 +15,14 @@ class SettingsSeeder extends Seeder
     public function run()
     {
         DB::table('settings')->insert([
-            'name' => 'check_verify_quantity',
+            'slug' => 'check_verify_quantity',
+            'name' => 'Количество проверок чека',
             'value' => 5,
         ]);
 
         DB::table('settings')->insert([
-            'name' => 'check_verify_price',
+            'slug' => 'check_verify_price',
+            'name' => 'Вознаграждение за проверку',
             'value' => 5,
         ]);
     }

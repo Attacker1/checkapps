@@ -14,11 +14,8 @@ class CheckRejectRequest extends FormRequest
     public function rules()
     {
         return [
-            'token_id' => 'required',
-            'id' => 'required',
+            'check_id' => 'required',
             'comment' => 'required',
-            'image' => 'required',
-            'user_id' => 'required'
         ];
     }
 

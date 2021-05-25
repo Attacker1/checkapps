@@ -20,7 +20,7 @@ export default {
             const checks = rootGetters['checks/checks'];
 
             const filteredChecks = checks.filter((check) => {
-                return check.id !== state.currentCheck.id
+                return check.check_id !== state.currentCheck.check_id
             })
 
 

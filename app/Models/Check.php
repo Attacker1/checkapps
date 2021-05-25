@@ -12,8 +12,14 @@ class Check extends Model
     protected $fillable = [
         'check_id',
         'image',
+        'amount',
+        'amount_in_currency',
+        'dt',
+        'dt_purchase',
+        'currency',
         'verify_quantity',
         'current_quantity',
-        'status'
+        'status',
+        'check_user_id',
     ];
 }

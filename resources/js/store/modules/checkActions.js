@@ -10,10 +10,7 @@ export default {
 
             const currentCheck = rootGetters['currentCheck/currentCheck'];
             const data = {
-                token_id: rootGetters['auth/token_id'],
-                id: currentCheck.id,
-                image: currentCheck.receipt,
-                user_id: rootGetters['auth/user'].user_id
+                check_id: currentCheck.check_id,
             }
             await axios.post('approve', data)
                 .then(res => {
@@ -33,11 +30,8 @@ export default {
 
             const currentCheck = rootGetters['currentCheck/currentCheck'];
             const data = {
-                token_id: rootGetters['auth/token_id'],
-                id: currentCheck.id,
+                check_id: currentCheck.check_id,
                 comment,
-                image: currentCheck.receipt,
-                user_id: rootGetters['auth/user'].user_id
             }
             await axios.post('reject', data)
                 .then(res => {
