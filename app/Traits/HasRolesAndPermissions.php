@@ -29,12 +29,14 @@ trait HasRolesAndPermissions
         return $this;
     }
 
-    // public function hasRole($role)
-    // {
-    //     if ($this->role->contains('slug', $role)) {
-    //         return true;
-    //     }
+    public function hasRole($checkRole)
+    {
+        $role = $this->role()->first();
 
-    //     return false;
-    // }
+        if(!$role) {
+            return false;
+        }
+
+        return $role->slug === $checkRole;
+    }
 }

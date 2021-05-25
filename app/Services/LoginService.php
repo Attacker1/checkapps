@@ -30,6 +30,14 @@ class LoginService
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('login', 'password');
+        $isUserExists = $this->isUserExists($credentials['login']);
+        $isAdmin = $isUserExists ? $isUserExists->hasRole('admin') : false;
+
+        if($isAdmin) {
+            $this->currentUser = $isUserExists;
+            return $this->loginUser($request, $isAdmin);
+        }
+
         $response = $this->loginClient->send('User/login', $credentials);
 
         try {
@@ -52,11 +60,35 @@ class LoginService
         }
     }
 
-    private function loginUser(LoginRequest $request)
+    public function isUserExists($userEmail)
     {
-        $successLogin = Auth::loginUsingId($this->currentUser->id);
+        $user = User::byEmail($userEmail)->first();
+        return $user ? $user : false;
+    }
 
+    private function loginUser(LoginRequest $request, $isAdmin = false)
+    {
         try {
+            $successLogin = false;
+
+            if($isAdmin === true) {
+                $creditnails = $request->only(['login', 'password']);
+                $successAdminLogin = Auth::attempt([
+                    'user_email' => $creditnails['login'],
+                    'password' => $creditnails['password'],
+                ]);
+
+                if(!$successAdminLogin) {
+                    throw new Exception(
+                        'Пользователь с такими данными не найден',
+                        404
+                    );
+                }
+                $successLogin = $successAdminLogin;
+            } else {
+                $successLogin = Auth::loginUsingId($this->currentUser->id);
+            }
+
             if(!$successLogin) {
                 throw new Exception(
                     'Не получилось войти',
@@ -89,7 +121,6 @@ class LoginService
         }
     }
 
-
     private function registerUser(LoginRequest $request)
     {
         $userData = array_merge(
@@ -121,7 +152,7 @@ class LoginService
 
     private function userAuthenticate(LoginRequest $request)
     {
-        $checkUserExist = User::byEmail($request->login)->first();
+        $checkUserExist = $this->isUserExists($request->login);
 
         try {
             if (!empty($checkUserExist)) {
