@@ -60,7 +60,6 @@ export default {
 
     getters: {
         user() {
-            console.log(Vue.auth.user());
             return Vue.auth.user();
         },
     }
