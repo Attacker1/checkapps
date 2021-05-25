@@ -35,9 +35,4 @@ class CheckController extends Controller
     {
         return $this->checkService->getPurchaseListItems($request);
     }
-
-    public function addChecks()
-    {
-        return $this->checkService->addChecks();
-    }
 }

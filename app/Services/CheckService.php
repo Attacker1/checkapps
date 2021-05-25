@@ -136,24 +136,9 @@ class CheckService
         $check->save();
     }
 
-    public function addChecks()
+    public function addChecks($checks)
     {
         try {
-            $moderator = $this->client->send('User/login', [
-                'login' => 'chekapps.com@gmail.com',
-                'password' => 'HvJTP.3m,F5KtnH',
-            ]);
-
-            if(empty($moderator->token_id)) {
-                throw new Exception('Не удалось получить данные для чеков', 404);
-            }
-
-            $checks = $this->getChecks([
-                'token_id' => $moderator->token_id,
-                'limit' => 1,
-                'page' => 1,
-            ]);
-
             if(empty($checks->items)) {
                 throw new Exception('Нет чеков для проверки', 404);
             }
