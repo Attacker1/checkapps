@@ -39,6 +39,6 @@ class ChecksAdd extends Command
      */
     public function handle()
     {
-        ProcessAddingChecks::dispatch(5000);
+        ProcessAddingChecks::dispatch(1000);
     }
 }

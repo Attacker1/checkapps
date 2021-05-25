@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Setting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -14,16 +15,21 @@ class SettingsSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('settings')->insert([
+
+        $setting1 = new Setting([
             'slug' => 'check_verify_quantity',
             'name' => 'Количество проверок чека',
             'value' => 5,
         ]);
 
-        DB::table('settings')->insert([
+        $setting1->save();
+
+        $setting2 = new Setting([
             'slug' => 'check_verify_price',
             'name' => 'Вознаграждение за проверку',
             'value' => 5,
         ]);
+
+        $setting2->save();
     }
 }

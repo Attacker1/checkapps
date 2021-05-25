@@ -15,7 +15,8 @@ export default {
     components: {CheckView, CheckViewSkeleton},
     methods: {
         ...mapActions({
-            'checkExpiryDate': 'checks/checkExpiryTime'
+            'checkExpiryDate': 'checks/checkExpiryTime',
+            'fetchChecks': 'checks/fetchChecks',
         })
     },
     computed: {
@@ -23,6 +24,9 @@ export default {
             check: 'currentCheck/currentCheck',
             loader: 'common/loader'
         })
+    },
+    beforeMount() {
+        this.fetchChecks()
     },
     mounted() {
         setInterval(() => {

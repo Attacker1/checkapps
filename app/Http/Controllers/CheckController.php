@@ -37,6 +37,13 @@ class CheckController extends Controller
     {
         $response = $this->checkService->getChecks($request);
         $errors = isset($response->error);
-        return response()->json($errors ? $response->message : $response, $errors ? $response->error : 200);
+        return response()->json($response, $errors ? $response->code : 200);
+    }
+
+    public function resetChecks(Request $request)
+    {
+        $user = $request->user();
+        $this->checkService->resetUserChecks($user->id);
+        return response()->json(['message' => 'Чеки успешно очищены в базе']);
     }
 }

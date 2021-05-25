@@ -145,13 +145,14 @@ class CheckService
             if (!$user) {
                 throw new Exception('Пользователь не найден', 404);
             }
-            /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним польхователем */
+            /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем */
             $this->resetUserChecks($user->id);
 
             $checks = $this->getUniqueChecks();
+
             $checks->update(['check_user_id' => $user->id]);
 
-            return $checks->get();
+            return (object)$checks->get();
         } catch (Exception $e) {
             return (object)[
                 'error' => $e->getMessage(),
@@ -160,9 +161,12 @@ class CheckService
         }
     }
 
-    private function resetUserChecks($userID)
+    public function resetUserChecks($userID)
     {
-        $this->getUniqueChecks(-1, $userID)->update(['check_user_id', null]);
+        $userChecks = $this->getUniqueChecks(-1, $userID);
+        if ($userChecks) {
+            $userChecks->update(['check_user_id' => null]);
+        }
     }
 
     private function addToApproveHistory(CheckApproveRequest $request)
@@ -197,8 +201,7 @@ class CheckService
             }
 
             $addedChecksIDs = [];
-            $setting = Setting::query()->where(['slug', 'check_verify_quantity'])->first();
-
+            $setting = Setting::query()->where('slug', 'check_verify_quantity')->first();
             if (!$setting) {
                 $verifyQuantity = 5;
             } else {
@@ -242,7 +245,6 @@ class CheckService
             $check->status = CheckStatusEnum::INCHECK;
 
             $success = $check->save();
-
 
             if ($success) {
                 return $check->check_id;
