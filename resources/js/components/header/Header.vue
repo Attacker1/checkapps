@@ -9,8 +9,7 @@
                 </div>
             </div>
             <div>
-                <div @click="submitLogout" class="text_pointer text_decornone logout-link text_grey text_md">Выйти
-                </div>
+                <div @click="submitLogout" class="text_pointer text_decornone logout-link text_grey text_md">Выйти</div>
             </div>
         </div>
     </header>
@@ -32,7 +31,7 @@
             }),
 
             submitLogout() {
-                this.logout();
+                this.$store.dispatch('auth/logout')
             }
         },
     }

@@ -1257,6 +1257,11 @@
   resolved "https://registry.yarnpkg.com/@webpack-cli/serve/-/serve-1.4.0.tgz#f84fd07bcacefe56ce762925798871092f0f228e"
   integrity sha512-xgT/HqJ+uLWGX+Mzufusl3cgjAcnqYYskaB7o0vRcwOEfuu6hMzSILQpnIzFMGsTaeaX4Nnekl+6fadLbl1/Vg==
 
+"@websanova/vue-auth@3.3.4":
+  version "3.3.4"
+  resolved "https://registry.yarnpkg.com/@websanova/vue-auth/-/vue-auth-3.3.4.tgz#51639983f7f066dd0c9cd569e02183b3c12a764f"
+  integrity sha512-T9n6NxxtCzTu2IkN/8CvUXFPpnPL+9iAXLzk0rgRjN1wOVCUCaK0urXtA2yLkiijgutdSeAvI7ML/VgPJ6L91w==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
