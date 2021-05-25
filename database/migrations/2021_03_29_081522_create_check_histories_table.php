@@ -19,8 +19,8 @@ class CreateCheckHistoriesTable extends Migration
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->bigInteger('check_id')->unique();
             $table->string('status');
+            $table->float('reward')->nullable();
             $table->text('comment')->nullable();
-            $table->text('image');
             $table->timestamps();
         });
     }

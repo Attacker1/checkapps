@@ -12,7 +12,7 @@ class Controller extends BaseController
 {
     /**
      * @OA\Info(
-     *     title="Finikolive api",
+     *     title="chekapps api",
      *     version="1.0.0"
      * )
      */
