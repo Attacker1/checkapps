@@ -31,7 +31,7 @@ class CheckService
     public function checkReject(CheckRejectRequest $request)
     {
         $requestParams = $request->except(['image', 'user_id']);
-        $result = (bool)$this->client->send('Cashback/Moderator/reject', $requestParams);
+        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
 
         if (isset($result->error)) {
             return $result;

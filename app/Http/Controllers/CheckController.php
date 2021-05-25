@@ -25,22 +25,13 @@ class CheckController extends Controller
     {
         $response = $this->checkService->checkReject($request);
 
-        if (isset($response->error)) {
-            return response()->json($response);
-        } else {
-            return response()->json($response);
-        }
+        return response()->json($response);
     }
 
     public function approve(CheckApproveRequest $request)
     {
         $response = $this->checkService->checkApprove($request);
-
-        if (isset($response->error)) {
-            return response()->json($response);
-        } else {
-            return response()->json($response);
-        }
+        return response()->json($response);
     }
 
     public function getPurchaseListItems(PurchaseListRequest $request)
