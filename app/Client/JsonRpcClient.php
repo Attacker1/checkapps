@@ -20,13 +20,13 @@ class JsonRpcClient
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'Application/json',
-                'X-API-key' => $_ENV['APP_FINIKO_API_KEY'],
+                'X-API-key' => env('APP_FINIKO_API_KEY'),
                 'Accept-Language' => 'en',
                 'Access-Control-Allow-Headers' => 'Authorization',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE',
                 'Access-Control-Allow-Origin' => '*',
             ],
-            'base_uri' => $_ENV['APP_FINIKO_API_URL'],
+            'base_uri' => env('APP_FINIKO_API_URL'),
             'verify' => false,
             'timeout' => 200,
         ]);
