@@ -17,6 +17,11 @@ class CreateChecksTable extends Migration
         Schema::create('checks', function (Blueprint $table) {
             $table->bigInteger('check_id')->unique()->primary();
             $table->string('image');
+            $table->float('amount');
+            $table->float('amount_in_currency');
+            $table->dateTime('dt');
+            $table->dateTime('dt_purchase');
+            $table->string('currency');
             $table->integer('verify_quantity');
             $table->integer('current_quantity');
             $table->enum('status', CheckStatusEnum::statuses())->default(CheckStatusEnum::INCHECK);
