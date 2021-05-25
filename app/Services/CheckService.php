@@ -3,10 +3,9 @@
 
 namespace App\Services;
 
-
+use App\Models\Check;
 use Exception;
 use App\Models\User;
-use App\Models\Check;
 use App\Models\CheckHistory;
 use Illuminate\Http\Request;
 use App\Client\JsonRpcClient;
@@ -53,38 +52,54 @@ class CheckService
     public function checkReject(CheckRejectRequest $request)
     {
         $requestParams = $request->except(['image', 'user_id']);
-        $result = (bool)$this->client->send('Cashback/Moderator/reject', $requestParams);
+        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
+
+        if (isset($result->error)) {
+            return $result;
+        }
 
         if ($result) {
-            $this->addToRejectHistory($request);
-            return response()->json([
-                'message' => 'Чек отклонен',
-                'success' => (bool)true
-            ]);
+            $addedToReject = $this->addToRejectHistory($request);
+            if (!isset($addedToReject->error)) {
+                return (object)[
+                    'message' => 'Чек отклонен',
+                    'success' => (bool)true
+                ];
+            } else {
+                return $addedToReject;
+            }
         } else {
-            return response()->json([
+            return (object)[
                 'message' => 'Что-то пошло не так, попробуйте позже',
                 'success' => (bool)false
-            ]);
+            ];
         }
     }
 
     public function checkApprove(CheckApproveRequest $request)
     {
         $requestParams = $request->except(['image', 'user_id']);
-
         $result = (bool)$this->client->send('Cashback/Moderator/accept', $requestParams);
+
+        if (isset($result->error)) {
+            return $result;
+        }
+
         if ($result) {
-            $this->addToApproveHistory($request);
-            return response()->json([
-                'message' => 'Чек принят',
-                'success' => (bool)true
-            ]);
+            $addedToApprove = $this->addToApproveHistory($request);
+            if (!isset($addedToApprove->error)) {
+                return (object)[
+                    'message' => 'Чек принят',
+                    'success' => (bool)true
+                ];
+            } else {
+                return $addedToApprove;
+            }
         } else {
-            return response()->json([
+            return (object)[
                 'message' => 'Что-то пошло не так, попробуйте позже',
                 'success' => (bool)false
-            ]);
+            ];
         }
     }
 
@@ -109,31 +124,64 @@ class CheckService
 
     private function addToRejectHistory($request)
     {
-        $user = User::find($request->user_id)->first();
-        $result = [
-            'user_id' => $user->user_id,
-            'check_id' => $request->id,
-            'status' => 'REJECTED',
-            'comment' => $request->comment,
-            'image' => $request->image,
-        ];
-        $check = new CheckHistory($result);
-        $check->save();
+        try {
+            $user = User::find($request->user_id)->first();
+            if (!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
+
+            $result = [
+                'user_id' => $user->user_id,
+                'check_id' => $request->id,
+                'status' => 'REJECTED',
+                'comment' => $request->comment,
+                'image' => $request->image,
+            ];
+
+            $check = new CheckHistory($result);
+            $check->save();
+
+        } catch (Exception $e) {
+            return (object)[
+                'message' => $e->getMessage(),
+                'error' => $e->getCode()
+            ];
+        }
+    }
+
+    public function issueChecks($request)
+    {
+        $user = $request->user();
+
+        return Check::query()->where([
+            ['status', CheckStatusEnum::INCHECK],
+            ['check_user_id', null]
+        ])->limit(50)->orderByDesc('current_quantity')->update(['check_user_id' => $user->id]);
+
     }
 
     private function addToApproveHistory(CheckApproveRequest $request)
     {
-        $user = User::find($request->user_id)->first();
+        try {
+            $user = User::find($request->user_id)->first();
+            if (!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
 
-
-        $result = [
-            'user_id' => $user->user_id,
-            'check_id' => $request->id,
-            'status' => 'APPROVED',
-            'image' => $request->image,
-        ];
-        $check = new CheckHistory($result);
-        $check->save();
+            $result = [
+                'user_id' => $user->user_id,
+                'check_id' => $request->id,
+                'status' => 'APPROVED',
+                'image' => $request->image,
+            ];
+            $check = new CheckHistory($result);
+            $check->save();
+        } catch (Exception $e) {
+            return (object)[
+                'message' => $e->getMessage(),
+                'error' => $e->getCode()
+            ];
+        }
     }
 
     public function addChecks($checks)
