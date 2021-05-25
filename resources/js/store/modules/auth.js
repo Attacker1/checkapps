@@ -1,27 +1,24 @@
-import axios from 'axios';
 import Vue from 'vue';
-import {getStorageItem, removeStorageItem, setStorageItem} from "@/utils/localStorage";
-import router from "@/router";
 
 export default {
     namespaced: true,
-    state: {
-        userInfo: getStorageItem('user'),
-        token_id: getStorageItem('token_id'),
-    },
-
-    mutations: {
-        setUser: (state, payload) => {
-            setStorageItem('user', state, payload)
-            setStorageItem('token_id', state, payload.user.token_id)
-        },
-        resetUser: (state) => {
-            removeStorageItem('user', state);
-            removeStorageItem('token_id', state);
-        },
+    state() {
+        return {};
     },
 
     actions: {
+        fetch(ctx) {
+            return Vue.auth.fetch().catch((e) => {
+                if (e.response.status === 401) {
+                    ctx.dispatch('logout');
+                }
+            });
+        },
+
+        refresh(data) {
+            return Vue.auth.refresh(data);
+        },
+
         login(ctx, data) {
             data = data || {};
             return Vue.auth.login({
@@ -34,16 +31,37 @@ export default {
             });
         },
 
+        register(ctx, data) {
+            data = data || {};
+
+            return Vue.auth.register({
+                data: data.body,
+                autoLogin: true,
+                fetchUser: true,
+                staySignedIn: true,
+            })
+                .then((res) => {
+                    if (data.autoLogin) {
+                        ctx.dispatch('login', {
+                            email: data.email,
+                            password: data.password
+                        });
+                    }
+                    return res;
+                });
+        },
+
         logout() {
             /* reset localStorage */
             localStorage.clear();
-            return Vue.auth.logout({redirect: {name: 'Logout'}});
+            return Vue.auth.logout({redirect: {name: 'Login'}});
         },
     },
 
     getters: {
-        auth: state => !!state.userInfo,
-        token_id: state => state.token_id,
-        user: state => state.userInfo,
+        user() {
+            console.log(Vue.auth.user());
+            return Vue.auth.user();
+        },
     }
 }

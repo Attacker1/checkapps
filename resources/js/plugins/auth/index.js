@@ -13,24 +13,33 @@ Vue.use(auth, {
     tokenDefaultKey: 'token',
 
     // Redirects
-    authRedirect: {name: 'Main'},
+    authRedirect: {name: 'Login'},
     forbiddenRedirect: {path: '/403'},
     notFoundRedirect: {path: '/404'},
+
+    // Http
+    registerData: {
+        url: 'register',
+        method: 'POST',
+        redirect: '/',
+        autoLogin: true
+    },
     loginData: {
         url: 'login',
         method: 'POST',
         redirect: '/',
     },
-    logoutData: {
-        success: function (){
-            this.token(this.options.refreshTokenName, 'INVALID');
-        },
+    refreshData: {
+        url: 'users/token/refresh',
+        method: 'POST',
+        enabled: false,
+        interval: 10
     },
     fetchData: {
         url: 'user',
         enabled: true,
     },
-    refreshTokenName: 'refresh_token',
 
     parseUserData: data => data,
 });
+
