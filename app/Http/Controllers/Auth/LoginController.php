@@ -71,6 +71,6 @@ class LoginController extends Controller
     {
         $response = $this->loginService->login($request);
 
-        return isset($response->errors) ? response()->json($response, 404) : response()->json($response);
+        return isset($response->error) ? response()->json($response, 404) : response()->json($response);
     }
 }

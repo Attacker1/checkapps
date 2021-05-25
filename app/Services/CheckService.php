@@ -3,7 +3,9 @@
 
 namespace App\Services;
 
+use App\Enum\CheckHistoryStatusEnum;
 use App\Models\Check;
+use App\Models\Setting;
 use Exception;
 use App\Models\User;
 use App\Models\CheckHistory;
@@ -53,28 +55,16 @@ class CheckService
 
     public function checkReject(CheckRejectRequest $request)
     {
-        $requestParams = $request->except(['image', 'user_id']);
-        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
+//        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
 
-        if (isset($result->error)) {
-            return $result;
-        }
-
-        if ($result) {
-            $addedToReject = $this->addToRejectHistory($request);
-            if (!isset($addedToReject->error)) {
-                return (object)[
-                    'message' => 'Чек отклонен',
-                    'success' => (bool)true
-                ];
-            } else {
-                return $addedToReject;
-            }
-        } else {
+        $addedToReject = $this->addToRejectHistory($request);
+        if (!isset($addedToReject->error)) {
             return (object)[
-                'message' => 'Что-то пошло не так, попробуйте позже',
-                'success' => (bool)false
+                'message' => 'Чек отклонен',
+                'success' => (bool)true
             ];
+        } else {
+            return $addedToReject;
         }
     }
 
@@ -105,43 +95,31 @@ class CheckService
         }
     }
 
-    public function getPurchaseListItems($request)
-    {
-        $params = $request->all();
-        $list = $this->getChecks($params);
-
-        try {
-            if (isset($list->error)) {
-                throw new Exception($list->error, $list->code);
-            }
-
-            return response()->json($list->items);
-        } catch (Exception $exception) {
-            return [
-                'code' => $exception->getCode(),
-                'error' => $exception->getMessage(),
-            ];
-        }
-    }
-
     private function addToRejectHistory($request)
     {
         try {
-            $user = User::find($request->user_id)->first();
+            $user = $request->user();
             if (!$user) {
                 throw new Exception('Пользователь не найден', 404);
             }
 
+            $reward = Setting::query()->where(['slug', 'check_verify_price'])->first()->value;
+
+            if (!$reward) {
+                throw new Exception('Не найдено такой настройки', 404);
+            }
+
+
             $result = [
                 'user_id' => $user->user_id,
                 'check_id' => $request->id,
-                'status' => 'REJECTED',
+                'status' => CheckHistoryStatusEnum::REJECTED,
                 'comment' => $request->comment,
-                'image' => $request->image,
+                'reward' => $reward,
             ];
 
             $check = new CheckHistory($result);
-            $check->save();
+            return $check->save();
 
         } catch (Exception $e) {
             return (object)[
@@ -151,15 +129,40 @@ class CheckService
         }
     }
 
-    public function getChecks($request)
+    public function getUniqueChecks($limit = 50, $check_user_id = null)
     {
-        $user = $request->user();
-
         return Check::query()->where([
             ['status', CheckStatusEnum::INCHECK],
-            ['check_user_id', null]
-        ])->limit(50)->orderByDesc('current_quantity')->update(['check_user_id' => $user->id]);
+            ['check_user_id', $check_user_id]
+        ])->limit($limit)->orderByDesc('current_quantity');
+    }
 
+    public function getChecks($request)
+    {
+        try {
+            $user = $request->user();
+
+            if (!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
+            /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним польхователем */
+            $this->resetUserChecks($user->id);
+
+            $checks = $this->getUniqueChecks();
+            $checks->update(['check_user_id' => $user->id]);
+
+            return $checks->get();
+        } catch (Exception $e) {
+            return (object)[
+                'message' => $e->getMessage(),
+                'error' => $e->getCode()
+            ];
+        }
+    }
+
+    private function resetUserChecks($userID)
+    {
+        $this->getUniqueChecks(-1, $userID)->update(['check_user_id', null]);
     }
 
     private function addToApproveHistory(CheckApproveRequest $request)
@@ -194,12 +197,12 @@ class CheckService
             }
 
             $addedChecksIDs = [];
-            $verifyQuantity = DB::table('settings')->where('name', 'check_verify_quantity')->first();
+            $setting = Setting::query()->where(['slug', 'check_verify_quantity'])->first();
 
-            if (!$verifyQuantity) {
+            if (!$setting) {
                 $verifyQuantity = 5;
             } else {
-                $verifyQuantity = $verifyQuantity->value;
+                $verifyQuantity = $setting->value;
             }
 
             foreach ($checks->items as $check) {

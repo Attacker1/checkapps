@@ -1,5 +1,6 @@
 <?php
 
+use App\Enum\CheckHistoryStatusEnum;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,7 @@ class CreateCheckHistoriesTable extends Migration
             $table->foreign('user_id')->references('user_id')->on('users');
             $table->bigInteger('check_id')->unique();
             $table->string('status');
+            $table->enum('status', CheckHistoryStatusEnum::statuses())->nullable();
             $table->float('reward')->nullable();
             $table->text('comment')->nullable();
             $table->timestamps();

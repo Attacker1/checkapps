@@ -5,15 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CheckHistory extends Model
+class Setting extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'check_id',
-        'status',
-        'comment',
-        'reward',
+        'slug',
+        'name',
+        'value',
     ];
 }

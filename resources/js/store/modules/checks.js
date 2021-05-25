@@ -28,9 +28,10 @@ export default {
     actions: {
         async fetchChecks({commit, rootGetters, state}) {
             commit('common/setLoader', null, {root: true})
-            await axios.post('purchase-items', {token_id: rootGetters['auth/token_id']})
+            await axios.get('purchase-items')
                 .then(res => {
                     commit('setChecks', res.data)
+                    console.log(state.checks[0])
                     commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
                     commit('setExpiryTime')
                 })

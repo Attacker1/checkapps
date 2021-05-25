@@ -33,14 +33,10 @@ class CheckController extends Controller
         return response()->json($response);
     }
 
-    public function getPurchaseListItems(PurchaseListRequest $request)
-    {
-        return $this->checkService->getPurchaseListItems($request);
-    }
-
     public function getChecks(Request $request)
     {
         $response = $this->checkService->getChecks($request);
-        return response()->json($response);
+        $errors = isset($response->error);
+        return response()->json($errors ? $response->message : $response, $errors ? $response->error : 200);
     }
 }

@@ -1,7 +1,7 @@
 <template>
     <div class="check-view">
         <Loader v-if="loader"/>
-        <CheckImage v-if="check" :receipt="check.receipt"/>
+        <CheckImage v-if="check" :receipt="check.image"/>
         <div class="check-data" v-if="check">
             <div class="table">
                 <div class="table__item">
