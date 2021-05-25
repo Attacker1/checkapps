@@ -23,5 +23,10 @@ class SettingsSeeder extends Seeder
             'name' => 'check_verify_price',
             'value' => 5,
         ]);
+
+        DB::table('settings')->insert([
+            'name' => 'check_lifetime',
+            'value' => 48,
+        ]);
     }
 }

@@ -12,7 +12,7 @@ class ChecksAdd extends Command
      *
      * @var string
      */
-    protected $signature = 'checks:add';
+    protected $signature = 'checks:add {--limit=100}';
 
     /**
      * The console command description.
@@ -38,6 +38,6 @@ class ChecksAdd extends Command
      */
     public function handle()
     {
-        ProcessAddingChecks::dispatch(5000);
+        ProcessAddingChecks::dispatch($this->option('limit'));
     }
 }
