@@ -28,21 +28,22 @@ class CheckService
         $this->client = $client;
     }
 
-    public function getChecks($params) {
+    public function getChecksFromApi($params)
+    {
         try {
-            if(!$params) {
+            if (!$params) {
                 throw new Exception('Не удалось получить доступ к чекам, не переданы необходимые параметры', 404);
             }
 
             $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
 
-            if(isset($list->error)) {
+            if (isset($list->error)) {
                 throw new Exception($list->message, $list->code);
             }
 
             return $list;
         } catch (Exception $exception) {
-            return (object) [
+            return (object)[
                 'code' => $exception->getCode(),
                 'error' => $exception->getMessage(),
             ];
@@ -79,7 +80,7 @@ class CheckService
     public function checkApprove(CheckApproveRequest $request)
     {
         $requestParams = $request->except(['image', 'user_id']);
-        $result = (bool)$this->client->send('Cashback/Moderator/accept', $requestParams);
+        $result = $this->client->send('Cashback/Moderator/accept', $requestParams);
 
         if (isset($result->error)) {
             return $result;
@@ -109,7 +110,7 @@ class CheckService
         $list = $this->getChecks($params);
 
         try {
-            if(isset($list->error)) {
+            if (isset($list->error)) {
                 throw new Exception($list->error, $list->code);
             }
 
@@ -149,7 +150,7 @@ class CheckService
         }
     }
 
-    public function issueChecks($request)
+    public function getChecks($request)
     {
         $user = $request->user();
 
@@ -187,30 +188,30 @@ class CheckService
     public function addChecks($checks)
     {
         try {
-            if(empty($checks->items)) {
+            if (empty($checks->items)) {
                 throw new Exception('Нет чеков для проверки', 404);
             }
 
             $addedChecksIDs = [];
             $verifyQuantity = DB::table('settings')->where('name', 'check_verify_quantity')->first();
 
-            if(!$verifyQuantity) {
+            if (!$verifyQuantity) {
                 $verifyQuantity = 5;
             } else {
                 $verifyQuantity = $verifyQuantity->value;
             }
 
-            foreach($checks->items as $check) {
+            foreach ($checks->items as $check) {
                 $addedCheckID = $this->addCheck($check, $verifyQuantity);
 
-                if(!isset($addedCheckID->error)) {
+                if (!isset($addedCheckID->error)) {
                     $addedChecksIDs[] = $addedCheckID;
                 }
             }
 
-           return $addedChecksIDs;
+            return $addedChecksIDs;
         } catch (Exception $exception) {
-            return (object) [
+            return (object)[
                 'code' => $exception->getCode(),
                 'message' => $exception->getMessage(),
             ];
@@ -220,7 +221,7 @@ class CheckService
     public function addCheck($rawCheck, $verifyQuantity)
     {
         try {
-            if(empty($rawCheck)) {
+            if (empty($rawCheck)) {
                 throw new Exception('Чек не передан', 404);
             }
 
@@ -238,7 +239,7 @@ class CheckService
 
             $success = $check->save();
 
-            if($success) {
+            if ($success) {
                 return $check->check_id;
             } else {
                 throw new Exception('Ошибка при добавлении чека', 500);

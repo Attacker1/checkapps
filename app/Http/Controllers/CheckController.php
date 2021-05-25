@@ -24,23 +24,13 @@ class CheckController extends Controller
     public function reject(CheckRejectRequest $request)
     {
         $response = $this->checkService->checkReject($request);
-
-        if (isset($response->error)) {
-            return response()->json($response);
-        } else {
-            return response()->json($response);
-        }
+        return response()->json($response);
     }
 
     public function approve(CheckApproveRequest $request)
     {
         $response = $this->checkService->checkApprove($request);
-
-        if (isset($response->error)) {
-            return response()->json($response);
-        } else {
-            return response()->json($response);
-        }
+        return response()->json($response);
     }
 
     public function getPurchaseListItems(PurchaseListRequest $request)
@@ -51,11 +41,6 @@ class CheckController extends Controller
     public function getChecks(Request $request)
     {
         $response = $this->checkService->getChecks($request);
-
-        if (isset($response->error)) {
-            return response()->json($response);
-        } else {
-            return response()->json($response);
-        }
+        return response()->json($response);
     }
 }

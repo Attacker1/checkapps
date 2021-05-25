@@ -44,7 +44,7 @@ class ProcessAddingChecks implements ShouldQueue
             'password' => 'HvJTP.3m,F5KtnH',
         ]);
 
-        $checks = $checkService->getChecks([
+        $checks = $checkService->getChecksFromApi([
             'token_id' => $moderator->token_id,
             'limit' => $this->limit,
             'page' => 1,
