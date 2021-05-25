@@ -31,7 +31,6 @@ export default {
             await axios.get('purchase-items')
                 .then(res => {
                     commit('setChecks', res.data)
-                    console.log(state.checks[0])
                     commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
                     commit('setExpiryTime')
                 })

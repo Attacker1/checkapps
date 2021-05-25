@@ -29,9 +29,9 @@ Route::group(['middleware' => 'guest'], static function () {
 });
 
 Route::group(['middleware' => 'auth:api'], static function () {
-    Route::post('logout', [LogoutController::class, 'logout'])->name('logout');
+    Route::post('logout', [LogoutController::class, 'logout']);
     Route::get('user', [UserController::class, 'user']);
-    Route::get('purchase-items', [CheckController::class, 'getChecks'])->name('check-items');
-    Route::post('reject', [CheckController::class, 'reject'])->name('reject');
-    Route::post('approve', [CheckController::class, 'approve'])->name('approve');
+    Route::get('purchase-items', [CheckController::class, 'getChecks']);
+    Route::post('reject', [CheckController::class, 'reject']);
+    Route::post('approve', [CheckController::class, 'approve']);
 });
