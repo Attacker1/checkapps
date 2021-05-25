@@ -4,7 +4,7 @@
         <!--<viewer :options="options" @inited="inited" ref="viewer">
             <img :src="receipt" alt="check" class="check">
         </viewer>-->
-        <zoom-on-hover ref="zoomHover" :img-normal="receipt" class="check-image__image"></zoom-on-hover>
+        <zoom-on-hover ref="zoom" :img-normal="receipt" class="check-image__image"></zoom-on-hover>
         <div @click="rotate" class="check-rotate">
             <IconTurn/>
         </div>
@@ -57,12 +57,12 @@
                 if (this.rotation < -270) {
                     this.rotation = 0;
                 }
-                let normal = document.querySelector('.normal');
+                let normal = this.$refs.zoom.$el.querySelector('.normal');
                 normal.style.transform = 'rotate(' + this.rotation + 'deg)';
                 if (normal.getBoundingClientRect().width < 419) {
                     normal.style.transform = 'rotate(' + this.rotation + 'deg)' + 'scale(1.5)';
                 }
-                document.querySelector('.zoom').style.transform = 'rotate(' + this.rotation + 'deg)';
+                this.$refs.zoom.$el.querySelector('.zoom').style.transform = 'rotate(' + this.rotation + 'deg)';
             },
             move (event) {
                 this.x = event.pageX - this.$refs.coordinates.getBoundingClientRect().left - 210;
