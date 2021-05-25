@@ -22,30 +22,23 @@ export default {
     },
 
     actions: {
-        async LogIn({commit, dispatch}, User) {
-            commit('common/setLoader', null, {root: true})
-            const response = await axios.post('login', User)
-                .then(res => {
-                    if (res.data.error) {
-                        Vue.noty.error(res.data.error);
-                        commit('common/removeLoader', null, {root: true})
-                        return false;
-                    } else {
-                        return res.data;
-                    }
-                })
-                .catch((error) => console.log(error))
-            if (response) {
-                await commit('setUser', response)
-                dispatch('checks/fetchChecks', null, {root: true})
-                router.push({name: 'Main'})
-            }
+        login(ctx, data) {
+            data = data || {};
+            return Vue.auth.login({
+                data: data.body,
+                fetchUser: true,
+                staySignedIn: true,
+            }).then((res) => {
+                Vue.router.push({name: 'Main'});
+                return res;
+            });
         },
 
-        LogOut({dispatch}) {
-            dispatch('common/resetStore', null, {root: true})
-            router.push({name: 'Login'})
-        }
+        logout() {
+            /* reset localStorage */
+            localStorage.clear();
+            return Vue.auth.logout({redirect: {name: 'Logout'}});
+        },
     },
 
     getters: {

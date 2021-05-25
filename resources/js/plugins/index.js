@@ -1,5 +1,6 @@
-import '@/plugins/vuelidate/index'
 import '@/plugins/http/index'
+import '@/plugins/auth/index'
+import '@/plugins/vuelidate/index'
 import '@/plugins/alert/index'
 import '@/plugins/moment/index'
 import '@/plugins/viewer/index'

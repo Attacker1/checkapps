@@ -11,7 +11,7 @@ import History from '@/pages/history/History';
 
 Vue.use(VueRouter);
 
-const router = new VueRouter({
+Vue.router = new VueRouter({
     mode: 'history',
     base: process.env.BASE_URL,
     routes: [
@@ -54,11 +54,4 @@ const router = new VueRouter({
     ]
 });
 
-router.beforeEach((to, from, next) => {
-    if (to.matched.some((record) => record.meta.auth))
-        if (store.getters['auth/auth']) next()
-        else next({name: 'Login'});
-    else next();
-});
-
-export default router;
+export default Vue.router;
