@@ -29,11 +29,10 @@ export default {
         async fetchChecks({commit, state}) {
             commit('common/setLoader', null, {root: true})
             try {
-                const checks = await axios.get('purchase-items');
-                console.log(checks);
-                // commit('setChecks', res.data)
-                // commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
-                // commit('setExpiryTime')
+                const response = await axios.get('purchase-items');
+                commit('setChecks', response.data)
+                commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
+                commit('setExpiryTime')
             } catch (response) {
                 console.log(response.data.error);
             }
