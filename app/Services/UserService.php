@@ -1,33 +1,24 @@
 <?php
 
+
 namespace App\Services;
 
 
-use App\Models\User;
+use Illuminate\Http\Request;
 
 class UserService
 {
-    public function storeUser($response)
-    {
-        $user = new User($response);
-        $user->save();
-        return $user;
-    }
 
-    public function updateUser($response, User $user)
+    public function user(Request $request)
     {
-        $user->update($response);
-        $user->save();
-        return $user;
-    }
+        $user = $request->user();
 
-    public function storeUpdate($response)
-    {
-        $user = User::byUserId($response->user_id)->first();
-        if ($user) {
-            return $this->updateUser((array)$response, $user);
-        } else {
-            return $this->storeUser((array)$response);
-        }
+        return $user->only([
+            'id',
+            'user_id',
+            'user_fio',
+            'user_email',
+            'balance',
+        ]);
     }
 }

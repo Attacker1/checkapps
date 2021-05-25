@@ -123,8 +123,8 @@ class CheckService
 
         } catch (Exception $e) {
             return (object)[
-                'message' => $e->getMessage(),
-                'error' => $e->getCode()
+                'error' => $e->getMessage(),
+                'code' => $e->getCode()
             ];
         }
     }
@@ -154,8 +154,8 @@ class CheckService
             return $checks->get();
         } catch (Exception $e) {
             return (object)[
-                'message' => $e->getMessage(),
-                'error' => $e->getCode()
+                'error' => $e->getMessage(),
+                'code' => $e->getCode()
             ];
         }
     }
@@ -183,8 +183,8 @@ class CheckService
             $check->save();
         } catch (Exception $e) {
             return (object)[
-                'message' => $e->getMessage(),
-                'error' => $e->getCode()
+                'error' => $e->getMessage(),
+                'code' => $e->getCode()
             ];
         }
     }
@@ -217,7 +217,7 @@ class CheckService
         } catch (Exception $exception) {
             return (object)[
                 'code' => $exception->getCode(),
-                'message' => $exception->getMessage(),
+                'error' => $exception->getMessage(),
             ];
         }
     }
