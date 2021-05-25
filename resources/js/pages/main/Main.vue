@@ -1,19 +1,27 @@
 <template>
     <div>
-        <CheckView/>
+        <CheckViewSkeleton v-if="loader"/>
+        <CheckView v-else/>
     </div>
 </template>
 
 <script>
 import CheckView from '@/components/check/CheckView';
-import {mapActions} from 'vuex';
+import CheckViewSkeleton from '@/components/skeleton/CheckViewSkeleton';
+import {mapActions, mapGetters} from 'vuex';
 
 export default {
     name: 'Main',
-    components: {CheckView},
+    components: {CheckView, CheckViewSkeleton},
     methods: {
         ...mapActions({
             'checkExpiryDate': 'checks/checkExpiryTime'
+        })
+    },
+    computed: {
+        ...mapGetters({
+            check: 'currentCheck/currentCheck',
+            loader: 'common/loader'
         })
     },
     mounted() {

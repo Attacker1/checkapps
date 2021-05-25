@@ -23,5 +23,9 @@
         grid-template-columns: 1fr 1.1fr;
         grid-gap: 24px;
         grid-template-rows: 600px;
+
+        @media screen and (max-width: 767px) {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

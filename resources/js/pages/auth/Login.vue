@@ -49,12 +49,17 @@
         },
         methods: {
             ...mapActions({
-                login: 'auth/LogIn',
+                login: 'auth/login',
             }),
             submitForm() {
                 this.$v.$touch();
                 if (!this.$v.$pending && !this.$v.$error) {
-                    this.login(this.form)
+                    this.$store.dispatch('auth/login', {body: this.form})
+                        .catch(({response}) => {
+                            this.serverErrors = {
+                                email: [response.data.message],
+                            };
+                        })
                 }
             },
         },
