@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Jobs\ProcessAddingChecks;
+use Illuminate\Support\Facades\Log;
 
 class ChecksAdd extends Command
 {

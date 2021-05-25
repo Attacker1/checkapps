@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
 use App\Http\Requests\PurchaseListRequest;
+use Illuminate\Support\Facades\Log;
 
 class CheckService
 {
@@ -238,6 +239,7 @@ class CheckService
             $check->status = CheckStatusEnum::INCHECK;
 
             $success = $check->save();
+
 
             if ($success) {
                 return $check->check_id;
