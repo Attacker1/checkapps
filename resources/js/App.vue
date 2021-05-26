@@ -34,5 +34,6 @@ import {Component, Vue} from 'vue-property-decorator';
 
 .main {
     background-color: $bg;
+    min-height: 100vh;
 }
 </style>

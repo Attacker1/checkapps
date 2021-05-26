@@ -21,17 +21,12 @@
 <style lang="scss" scoped>
     .wrap {
         display: flex;
-        align-items: center;
-        justify-content: center;
-        min-height: 100vh;
+        flex-direction: column;
+        min-height: calc(100vh - 82px);
     }
 
     .content {
         width: 100%;
-
-        @media screen and (max-width: 767px) {
-            margin-top: 80px;
-            margin-bottom: 50px;
-        }
+        margin-top: 12px;
     }
 </style>

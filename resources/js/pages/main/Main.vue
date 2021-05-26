@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-page">
         <CheckViewSkeleton v-if="loader"/>
         <CheckView v-else/>
     </div>
@@ -36,6 +36,10 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.main-page {
+    min-height: calc(100vh - 91px);
+    display: flex;
+    align-items: center;
+}
 </style>

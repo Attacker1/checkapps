@@ -104,13 +104,13 @@ class CheckService
                 'reward' => $reward,
             ];
 
-            $check = new CheckHistory($result);
-            $success = $check->save();
+            $checkHistory = new CheckHistory($result);
+            $success = $checkHistory->save();
             if (!$success) {
                 throw new Exception('Не получилось проверить чек', 404);
             }
             /* Здесь добавляем события, которые должны происходить после проверки чека */
-            event(new CheckVerified($user, $check));
+            event(new CheckVerified($user, $checkHistory));
         } catch (Exception $e) {
             return (object)[
                 'error' => $e->getMessage(),
@@ -119,12 +119,14 @@ class CheckService
         }
     }
 
-    public function getUniqueChecks($limit = 50, $check_user_id = null)
+    public function getUniqueChecks($check_user_id)
     {
+        $checkHistories = CheckHistory::query()->where('user_id', $check_user_id)->get('check_id')->values();
+
         return Check::query()->where([
             ['status', CheckStatusEnum::INCHECK],
-            ['check_user_id', $check_user_id]
-        ])->limit($limit)->orderByDesc('current_quantity');
+            ['check_user_id', null]
+        ])->whereNotIn('check_id', $checkHistories)->limit(50)->orderByDesc('current_quantity');
     }
 
     public function getChecks($request)
@@ -138,7 +140,7 @@ class CheckService
             /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем */
             $this->resetUserChecks($user->id);
 
-            $checks = $this->getUniqueChecks();
+            $checks = $this->getUniqueChecks($user->user_id);
 
             $checks->update(['check_user_id' => $user->id]);
 
@@ -153,7 +155,10 @@ class CheckService
 
     public function resetUserChecks($userID)
     {
-        $userChecks = $this->getUniqueChecks(-1, $userID);
+        $userChecks = Check::query()->where([
+            ['status', CheckStatusEnum::INCHECK],
+            ['check_user_id', $userID]
+        ])->orderByDesc('current_quantity');
         if ($userChecks) {
             $userChecks->update(['check_user_id' => null]);
         }
