@@ -35,19 +35,20 @@ class LoginService
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('login', 'password');
-        $isUserExists = $this->userService->userExists($credentials['login']);
-        $isAdmin = $isUserExists ? $isUserExists->hasRole('admin') : false;
+//        $isUserExists = $this->userService->userExists($credentials['login']);
+//        $isAdmin = $isUserExists ? $isUserExists->hasRole('admin') : false;
 
-        if ($isAdmin) {
-            return $this->adminService->login($request);
-        }
+//        if ($isAdmin) {
+//            return $this->adminService->login($request);
+//        }
 
         $response = $this->loginClient->send('User/login', $credentials);
+        dd($response);
 
         try {
             if (isset($response->error)) {
                 throw new Exception(
-                    $response->message,
+                    $response->error,
                     404
                 );
             }

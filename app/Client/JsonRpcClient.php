@@ -20,7 +20,6 @@ class JsonRpcClient
             'headers' => [
                 'Content-Type' => 'application/json',
                 'Accept' => 'Application/json',
-                'X-API-key' => env('APP_FINIKO_API_KEY'),
                 'Accept-Language' => 'en',
                 'Access-Control-Allow-Headers' => 'Authorization',
                 'Access-Control-Allow-Methods' => 'GET, POST, PUT, DELETE',
@@ -40,6 +39,7 @@ class JsonRpcClient
                     'jsonrpc' => self::JSON_RPC_VERSION,
                     'id' => time(),
                     'method' => $method,
+                    'key' => env('APP_FINIKO_API_URL'),
                     'params' => $params
                 ]
             ])->getBody()->getContents();
