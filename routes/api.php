@@ -35,4 +35,5 @@ Route::group(['middleware' => 'auth:api'], static function () {
     Route::post('reject', [CheckController::class, 'reject']);
     Route::post('approve', [CheckController::class, 'approve']);
     Route::post('reset-checks', [CheckController::class, 'resetChecks']);
+    Route::get('check-histories', [UserController::class, 'checkHistories']);
 });

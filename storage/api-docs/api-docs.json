@@ -1,7 +1,7 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "Finikolive api",
+        "title": "chekapps api",
         "version": "1.0.0"
     },
     "paths": {
@@ -113,6 +113,190 @@
                         }
                     }
                 }
+            }
+        },
+        "/api/user": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "User",
+                "description": "User",
+                "operationId": "user",
+                "responses": {
+                    "200": {
+                        "description": "Successfully response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer"
+                                        },
+                                        "user_id": {
+                                            "type": "integer"
+                                        },
+                                        "user_fio": {
+                                            "type": "string"
+                                        },
+                                        "user_email": {
+                                            "type": "string"
+                                        },
+                                        "balance": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/check-histories": {
+            "get": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "Позволяет получить историю чеков пользователя",
+                "description": "Позволяет получить список чеков пользователя. Параметры не обязательны, по умолчанию user_id - это текущий пользователь, а paginate - 20",
+                "operationId": "check-histories",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "query",
+                        "description": "Позволяет получить историю чеков определенного пользователя по его ID",
+                        "required": false,
+                        "example": "1"
+                    },
+                    {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Определяет количество чеков на одной странице",
+                        "required": false,
+                        "example": "3"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Номер запрашиваемой страницы",
+                        "required": false,
+                        "example": "1"
+                    }
+                ],
+                "responses": {
+                    "404": {
+                        "description": "404 response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "code": {
+                                            "type": "integer"
+                                        },
+                                        "error": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Вылетает если запрос не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Successfully response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "number"
+                                        },
+                                        "user_id": {
+                                            "type": "number"
+                                        },
+                                        "check_id": {
+                                            "type": "number"
+                                        },
+                                        "status": {
+                                            "type": "string"
+                                        },
+                                        "reward": {
+                                            "type": "number"
+                                        },
+                                        "comment": {
+                                            "type": "null|string"
+                                        },
+                                        "created_at": {
+                                            "description": "Date this interaction was created",
+                                            "type": "string",
+                                            "format": "date-format"
+                                        },
+                                        "user": {
+                                            "properties": {
+                                                "check_id": {
+                                                    "type": "number"
+                                                },
+                                                "image": {
+                                                    "type": "string"
+                                                },
+                                                "amount": {
+                                                    "type": "number"
+                                                },
+                                                "amount_in_currency": {
+                                                    "type": "number"
+                                                },
+                                                "currency": {
+                                                    "type": "string"
+                                                },
+                                                "verify_quantity": {
+                                                    "type": "number"
+                                                },
+                                                "current_quantity": {
+                                                    "type": "number"
+                                                },
+                                                "status": {
+                                                    "type": "string"
+                                                },
+                                                "check_user_id": {
+                                                    "type": "null|number"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
             }
         }
     },
