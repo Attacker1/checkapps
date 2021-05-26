@@ -66,7 +66,7 @@
             const component = this;
             this.handler = function (e) {
                 e.keyCode === 9 && component.skipCurrentCheck()
-                e.keyCode === 32 && component.clickRejected()
+                e.keyCode === 32 && component.changeRejectedModal()
                 e.keyCode === 13 && component.sendToApprove()
             }
             document.addEventListener('keydown', this.handler);
@@ -90,6 +90,10 @@
 
             clickRejected() {
                 this.rejectModal = true;
+            },
+
+            changeRejectedModal() {
+                this.rejectModal = !this.rejectModal;
             },
 
             hoverRejected() {
