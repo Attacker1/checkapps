@@ -1,6 +1,7 @@
 <template>
     <div class="d-flex justify-center pa-20 mb-25" @mouseleave="unhoverRejected">
-        <Modal class="reject-modal" :class="{active: rejectModal}" v-if="isMobile() ? rejectModal : true" @close="rejectModal = false">
+        <Modal class="reject-modal" :class="{active: rejectModal}" v-if="isMobile() ? rejectModal : true"
+               @close="rejectModal = false">
             <div class="container">
                 <div v-if="isMobile()" class="d-flex justify-end mb-5">
                     <div @click="rejectModal = false">
@@ -13,7 +14,7 @@
 
         <div class="check-actions">
             <div>
-                <div @click="clickRejected" @mouseover="hoverRejected"
+                <div @click="clickRejected"
                      class="circle circle_lg check-action check-action_dislike">
                     <IconDislike/>
                     <p class="shortkey text_xs text_grey">Пробел</p>
@@ -61,6 +62,19 @@
         data: () => ({
             rejectModal: false,
         }),
+        created() {
+            const component = this;
+            this.handler = function (e) {
+                e.keyCode === 9 && component.skipCurrentCheck()
+                e.keyCode === 32 && component.changeRejectedModal()
+                e.keyCode === 13 && component.sendToApprove()
+            }
+            document.addEventListener('keydown', this.handler);
+        },
+
+        beforeDestroy() {
+            window.removeEventListener('keyup', this.handler);
+        },
         methods: {
             ...mapActions({
                 approve: 'checkActions/sendApprove',
@@ -75,9 +89,11 @@
             },
 
             clickRejected() {
-                if (this.windowSize < 1023) {
-                    this.rejectModal = true;
-                }
+                this.rejectModal = true;
+            },
+
+            changeRejectedModal() {
+                this.rejectModal = !this.rejectModal;
             },
 
             hoverRejected() {
@@ -99,6 +115,7 @@
         computed: {
             ...mapState('common', ['windowSize']),
         },
+
     }
 </script>
 
