@@ -14,4 +14,9 @@ class Setting extends Model
         'name',
         'value',
     ];
+
+    public function scopeSettingBySlug($query, $slug)
+    {
+        return $query->where('slug', $slug);
+    }
 }
