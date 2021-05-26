@@ -39,7 +39,7 @@ class JsonRpcClient
                     'jsonrpc' => self::JSON_RPC_VERSION,
                     'id' => time(),
                     'method' => $method,
-                    'key' => env('APP_FINIKO_API_URL'),
+                    'key' => env('APP_FINIKO_API_KEY'),
                     'params' => $params
                 ]
             ])->getBody()->getContents();
