@@ -29,6 +29,7 @@
     import {required} from 'vuelidate/lib/validators';
     import FormGroup from "@/components/form/FormGroup";
     import {mapActions} from "vuex";
+    import Vue from 'vue';
 
 
     export default {
@@ -57,8 +58,9 @@
                     this.$store.dispatch('auth/login', {body: this.form})
                         .catch(({response}) => {
                             this.serverErrors = {
-                                email: [response.data.message],
+                                email: [response.data.error],
                             };
+                            Vue.noty.error(response.data.error);
                         })
                 }
             },

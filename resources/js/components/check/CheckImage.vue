@@ -4,7 +4,7 @@
         <viewer :options="options" @inited="inited" ref="viewer">
             <img :src="receipt" ref="viewerImage" alt="check" class="check">
         </viewer>
-        <zoom-on-hover @click="asd" ref="zoom" :img-normal="receipt" class="check-image__image"></zoom-on-hover>
+        <zoom-on-hover ref="zoom" :img-normal="receipt" class="check-image__image"></zoom-on-hover>
         <div @click="rotate" class="check-rotate">
             <IconTurn/>
         </div>
@@ -44,14 +44,15 @@
         },
         watch: {
             receipt: function (val) {
-                document.querySelector(".viewer-move").src = val;
-                this.$viewer.update();
+                if (document.querySelector(".viewer-move")) {
+                    document.querySelector(".viewer-move").src = val;
+                    this.$viewer.update();
+                }
             }
         },
         methods: {
-            asd() {
+            clickViewer() {
                 this.$refs.viewerImage.click();
-                console.log('fddfs');
             },
             inited (viewer) {
                 this.$viewer = viewer
@@ -75,11 +76,11 @@
             },
         },
         mounted() {
-            this.$refs.zoom.$el.querySelector('.zoom').addEventListener('click', this.asd);
+            this.$refs.zoom.$el.querySelector('.zoom').addEventListener('click', this.clickViewer);
         },
 
         destroyed() {
-            this.$refs.zoom.$el.querySelector('.zoom').removeEventListener('click', this.asd);
+            this.$refs.zoom.$el.querySelector('.zoom').removeEventListener('click', this.clickViewer);
         }
     }
 </script>
