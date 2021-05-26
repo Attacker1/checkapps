@@ -32,7 +32,7 @@ class User extends Authenticatable
 
     public function checkHistory()
     {
-        return $this->hasMany(CheckHistory::class);
+        return $this->hasMany(CheckHistory::class, 'user_id', 'user_id');
     }
 
     public function scopeByUserId($query, $userId)

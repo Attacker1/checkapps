@@ -3,7 +3,7 @@
 
 namespace App\Services;
 
-
+use App\Enum\CheckHistoryStatusEnum;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -28,7 +28,7 @@ class UserService
         return User::byEmail($userEmail)->first() ?? false;
     }
 
-    public function checkHistories($userID) {
+    public function checkHistories($userID, $paginate = 20) {
         try {
             $user = User::find($userID);
 
@@ -36,7 +36,19 @@ class UserService
                 throw new Exception('Пользователь не найден');
             }
 
-            return $checkHistories = $user->checkHistory()->orderBy('created_at')->paginate(2);
+            $checkHistories = $user->checkHistory()->with('check')->paginate($paginate);
+
+            $checkHistories->getCollection()->transform(function($checkHistory) {
+                unset($checkHistory['updated_at']);
+                unset($checkHistory['check']['dt']);
+                unset($checkHistory['check']['dt_purchase']);
+                unset($checkHistory['check']['updated_at']);
+                unset($checkHistory['check']['created_at']);
+
+                return $checkHistory;
+            });
+
+            return $checkHistories;
         } catch (Exception $exception) {
             return (object)[
                 'code' => $exception->getCode(),
