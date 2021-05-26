@@ -23,9 +23,9 @@ class ModeratorService
 
     public function getToken()
     {
-        $moderator = $this->getModerator();
-
         try {
+            $moderator = $this->getModerator();
+
             if(isset($moderator->error)) {
                 throw new Exception($moderator->message, $moderator->code);
             }
