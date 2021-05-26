@@ -235,4 +235,15 @@ class CheckService
             ];
         }
     }
+
+    public function skipCheck($request)
+    {
+        $check = Check::find($request->check_id)->first();
+        $check->check_user_id = null;
+        $success = $check->save();
+        return [
+            'message' => $success ? 'Чек пропущен' : 'Что-то пошло не так',
+            'success' => (bool)$success,
+        ];
+    }
 }

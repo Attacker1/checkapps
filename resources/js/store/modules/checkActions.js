@@ -47,9 +47,18 @@ export default {
             commit('common/removeLoader', null, {root: true})
         },
 
-        skipCheck({dispatch}) {
-            dispatch('currentCheck/removeFromChecks', null, {root: true})
-            Vue.noty.show('Чек пропущен');
+        skipCheck({dispatch, rootGetters}) {
+            const currentCheck = rootGetters['currentCheck/currentCheck'];
+            axios.post('skip', {check_id: currentCheck.check_id})
+                .then(res => {
+                    const response = res.data;
+                    if (response.success) {
+                        dispatch('currentCheck/removeFromChecks', null, {root: true})
+                        Vue.noty.show(response.message);
+                    } else {
+                        Vue.noty.error(response.message);
+                    }
+                })
         },
     },
     getters: {

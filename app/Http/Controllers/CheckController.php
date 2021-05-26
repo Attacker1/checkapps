@@ -33,6 +33,12 @@ class CheckController extends Controller
         return response()->json($response);
     }
 
+    public function skipCheck(Request $request)
+    {
+        $response = $this->checkService->skipCheck($request);
+        return response()->json($response);
+    }
+
     public function getChecks(Request $request)
     {
         $response = $this->checkService->getChecks($request);
