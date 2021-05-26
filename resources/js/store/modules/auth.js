@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -26,13 +27,13 @@ export default {
                 fetchUser: true,
                 staySignedIn: true,
             }).then((res) => {
-                Vue.router.push({name: 'Main'}).catch(err => {});
+                Vue.router.push({name: 'Main'}).catch(err => {
+                });
                 return res;
             });
         },
 
         logout() {
-            /* reset localStorage */
             localStorage.clear();
             return Vue.auth.logout({redirect: {name: 'Login'}});
         },

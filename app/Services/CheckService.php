@@ -122,11 +122,11 @@ class CheckService
     public function getUniqueChecks($check_user_id)
     {
         $checkHistories = CheckHistory::query()->where('user_id', $check_user_id)->get('check_id')->values();
-
-        return Check::query()->where([
-            ['status', CheckStatusEnum::INCHECK],
-            ['check_user_id', null]
-        ])->whereNotIn('check_id', $checkHistories)->limit(50)->orderByDesc('current_quantity');
+        return Check::whereNotIn('check_id', $checkHistories)
+            ->where([
+                ['status', CheckStatusEnum::INCHECK],
+                ['check_user_id', null]
+            ])->orderByDesc('current_quantity')->limit(50)->get();
     }
 
     public function getChecks($request)
@@ -138,13 +138,16 @@ class CheckService
                 throw new Exception('Пользователь не найден', 404);
             }
             /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем */
-            $this->resetUserChecks($user->id);
+            $this->resetUserChecks($user->user_id);
 
             $checks = $this->getUniqueChecks($user->user_id);
 
-            $checks->update(['check_user_id' => $user->id]);
+            $checks->each(function ($check) use ($user) {
+                $check->check_user_id = $user->user_id;
+                $check->save();
+            });
 
-            return (object)$checks->get();
+            return $checks;
         } catch (Exception $e) {
             return (object)[
                 'error' => $e->getMessage(),
@@ -159,9 +162,11 @@ class CheckService
             ['status', CheckStatusEnum::INCHECK],
             ['check_user_id', $userID]
         ])->orderByDesc('current_quantity');
-        if ($userChecks) {
-            $userChecks->update(['check_user_id' => null]);
-        }
+
+        $userChecks->each(function ($check) {
+            $check->check_user_id = null;
+            $check->save();
+        });
     }
 
     public function addChecks($checks)

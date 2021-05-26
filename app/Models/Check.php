@@ -10,6 +10,7 @@ class Check extends Model
 {
     use HasFactory;
 
+    protected $primaryKey = 'check_id';
     protected $fillable = [
         'check_id',
         'image',
