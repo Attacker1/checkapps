@@ -30,68 +30,68 @@
 </template>
 
 <script>
-import {mapGetters} from "vuex";
-import CheckActions from "@/components/check/CheckActions";
-import IconZoom from "@/assets/icons/IconZoom";
-import Modal from "@/components/modal/Modal";
-import CheckImage from "@/components/check/CheckImage";
-import Loader from "@/components/loader/Loader";
+    import {mapGetters} from "vuex";
+    import CheckActions from "@/components/check/CheckActions";
+    import IconZoom from "@/assets/icons/IconZoom";
+    import Modal from "@/components/modal/Modal";
+    import CheckImage from "@/components/check/CheckImage";
+    import Loader from "@/components/loader/Loader";
 
-export default {
-    name: 'CheckView',
-    components: {Loader, CheckImage, Modal, IconZoom, CheckActions},
-    computed: {
-        ...mapGetters({
-            check: 'currentCheck/currentCheck',
-            loader: 'common/loader'
-        })
-    },
-}
+    export default {
+        name: 'CheckView',
+        components: {Loader, CheckImage, Modal, IconZoom, CheckActions},
+        computed: {
+            ...mapGetters({
+                check: 'currentCheck/currentCheck',
+                loader: 'common/loader'
+            })
+        },
+    }
 </script>
 
 <style lang="scss" scoped>
-.check-view {
-    position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1.1fr;
-    grid-gap: 24px;
-    grid-template-rows: 600px;
-
-    @media screen and (max-width: 767px) {
-        grid-template-columns: 1fr;
-        grid-gap: 12px;
-    }
-}
-
-.check-data {
-    border: 0.5px solid rgba(0, 0, 0, 0.08);
-    box-sizing: border-box;
-    border-radius: 6px;
-    background-color: white;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    justify-content: space-between;
-}
-
-.table {
-    &__item {
-        padding: 16px 13px;
-        grid-gap: 20px;
+    .check-view {
+        position: relative;
         display: grid;
-        align-items: center;
-        grid-template-columns: 1fr 1fr;
-        min-height: 53px;
+        grid-template-columns: 1fr 1.1fr;
+        grid-gap: 24px;
+        grid-template-rows: 600px;
 
-        &:nth-child(2n + 2) {
-            background-color: #FAFAFA;
-        }
-
-        @media screen and (max-width: 567px) {
+        @media screen and (max-width: 767px) {
             grid-template-columns: 1fr;
-            grid-gap: 8px;
+            grid-gap: 12px;
         }
     }
-}
+
+    .check-data {
+        border: 0.5px solid rgba(0, 0, 0, 0.08);
+        box-sizing: border-box;
+        border-radius: 6px;
+        background-color: white;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        justify-content: space-between;
+    }
+
+    .table {
+        &__item {
+            padding: 16px 13px;
+            grid-gap: 20px;
+            display: grid;
+            align-items: center;
+            grid-template-columns: 1fr 1fr;
+            min-height: 53px;
+
+            &:nth-child(2n + 2) {
+                background-color: #FAFAFA;
+            }
+
+            @media screen and (max-width: 567px) {
+                grid-template-columns: 1fr;
+                grid-gap: 8px;
+            }
+        }
+    }
 </style>

@@ -26,29 +26,9 @@ export default {
                 fetchUser: true,
                 staySignedIn: true,
             }).then((res) => {
-                Vue.router.push({name: 'Main'});
+                Vue.router.push({name: 'Main'}).catch(err => {});
                 return res;
             });
-        },
-
-        register(ctx, data) {
-            data = data || {};
-
-            return Vue.auth.register({
-                data: data.body,
-                autoLogin: true,
-                fetchUser: true,
-                staySignedIn: true,
-            })
-                .then((res) => {
-                    if (data.autoLogin) {
-                        ctx.dispatch('login', {
-                            email: data.email,
-                            password: data.password
-                        });
-                    }
-                    return res;
-                });
         },
 
         logout() {
