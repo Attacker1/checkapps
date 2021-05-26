@@ -4,6 +4,7 @@
 namespace App\Services;
 
 
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class UserService
@@ -20,5 +21,11 @@ class UserService
             'user_email',
             'balance',
         ]);
+    }
+
+    public function userExists($userEmail)
+    {
+        $user = User::byEmail($userEmail)->first();
+        return $user ? $user : false;
     }
 }
