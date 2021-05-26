@@ -3,7 +3,7 @@
         <div class="container d-flex align-center justify-between">
             <div class="d-flex align-center">
                 <div class="d-flex align-center">
-                    <div @click="goToProfile">
+                    <div @click="goToProfile" class="header__profile">
                         <IconProfile class="mr-20"/>
                     </div>
                     <div v-if="user" class="user-fio">
@@ -54,6 +54,10 @@
 
         @media screen and (max-width: 767px) {
             padding-top: 20px;
+        }
+
+        &__profile {
+            cursor: pointer;
         }
 
         &__balance {

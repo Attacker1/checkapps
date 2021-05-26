@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div>
-                <div @click.prevent="skipCurrentCheck" class="circle circle_lg check-action">
+                <div @click.prevent="skipCurrentCheck" ref="skipButton" class="circle circle_lg check-action">
                     <IconSkip/>
                     <p class="shortkey text_xs text_grey">Tab</p>
                 </div>
@@ -65,7 +65,7 @@
         created() {
             const component = this;
             this.handler = function (e) {
-                e.keyCode === 9 && component.skipCurrentCheck()
+                e.keyCode === 9 && component.$refs.skipButton.click()
                 e.keyCode === 32 && component.changeRejectedModal()
                 e.keyCode === 13 && component.$refs.approveButton.click()
             }
