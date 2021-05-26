@@ -72,6 +72,7 @@ export default {
 
     &__status {
         margin-bottom: 4px;
+        font-weight: 500;
 
         &.approve {
             color: $success;
@@ -80,6 +81,10 @@ export default {
         &.rejected {
             color: $rejected
         }
+    }
+
+    &__reason {
+        font-weight: 500;
     }
 }
 </style>
