@@ -8,7 +8,7 @@
         <div @click="rotate" class="check-rotate">
             <IconTurn/>
         </div>
-<!--        <div @mouseover="zoom()" @mousemove="move" @mouseout="reset" class="check-zoom" ref="coordinates"></div>-->
+        <!--        <div @mouseover="zoom()" @mousemove="move" @mouseout="reset" class="check-zoom" ref="coordinates"></div>-->
         <!--<Modal class="check-modal" v-if="showModal">
             <div class="icon text_pointer" @click="showModal = false">
                 <IconCross i-color="white"/>
@@ -54,11 +54,11 @@
             clickViewer() {
                 this.$refs.viewerImage.click();
             },
-            inited (viewer) {
+            inited(viewer) {
                 this.$viewer = viewer
             },
-            rotate () {
-                this.rotation-=90;
+            rotate() {
+                this.rotation -= 90;
                 if (this.rotation < -270) {
                     this.rotation = 0;
                 }
@@ -69,18 +69,22 @@
                 }
                 this.$refs.zoom.$el.querySelector('.zoom').style.transform = 'rotate(' + this.rotation + 'deg)';
             },
-            move (event) {
+            move(event) {
                 this.x = event.pageX - this.$refs.coordinates.getBoundingClientRect().left - 210;
                 this.y = event.clientY - this.$refs.coordinates.getBoundingClientRect().top - 300;
                 this.$viewer.move(-this.x * 0.05, -this.y * 0.05);
             },
         },
         mounted() {
-            this.$refs.zoom.$el.querySelector('.zoom').addEventListener('click', this.clickViewer);
+            if (this.$refs.zoom) {
+                this.$refs.zoom.$el.querySelector('.zoom').addEventListener('click', this.clickViewer);
+            }
         },
 
         destroyed() {
-            this.$refs.zoom.$el.querySelector('.zoom').removeEventListener('click', this.clickViewer);
+            if (this.$refs.zoom) {
+                this.$refs.zoom.$el.querySelector('.zoom').removeEventListener('click', this.clickViewer);
+            }
         }
     }
 </script>
