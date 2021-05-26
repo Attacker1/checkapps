@@ -4,10 +4,18 @@ namespace Database\Seeders;
 
 use App\Models\Role;
 use App\Models\User;
+use App\Services\Admin\ModeratorService;
 use Illuminate\Database\Seeder;
 
 class UserSeeder extends Seeder
 {
+    protected $moderatorService;
+
+    public function __construct(ModeratorService $moderatorService)
+    {
+        $this->moderatorService = $moderatorService;
+    }
+
     /**
      * Run the database seeds.
      *
@@ -34,12 +42,18 @@ class UserSeeder extends Seeder
 
             if(isset($user['role'])) {
                 $role = Role::where('slug', $user['role'])->first();
+                $moderator = $this->moderatorService->getModerator();
 
                 if(!$role) {
                     return false;
                 }
 
                 $newUser->role()->attach($role);
+
+                if(!isset($moderator->error)) {
+                    $newUser->user_id = $moderator->info->user_id;
+                    $newUser->save();
+                }
             }
         }
     }
