@@ -4,6 +4,7 @@
 namespace App\Services;
 
 use App\Enum\CheckHistoryStatusEnum;
+use App\Events\CheckVerified;
 use App\Models\Check;
 use App\Models\Setting;
 use Exception;
@@ -37,7 +38,7 @@ class CheckService
             $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
 
             if (isset($list->error)) {
-                throw new Exception($list->message, $list->code);
+                throw new Exception($list->error, $list->code);
             }
 
             return $list;
@@ -53,7 +54,7 @@ class CheckService
     {
 //        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
 
-        $addedToReject = $this->addToRejectHistory($request);
+        $addedToReject = $this->addCheckToHistory($request);
         if (!isset($addedToReject->error)) {
             return (object)[
                 'message' => 'Чек отклонен',
@@ -66,57 +67,50 @@ class CheckService
 
     public function checkApprove(CheckApproveRequest $request)
     {
-        $requestParams = $request->except(['image', 'user_id']);
-        $result = $this->client->send('Cashback/Moderator/accept', $requestParams);
-
-        if (isset($result->error)) {
-            return $result;
-        }
-
-        if ($result) {
-            $addedToApprove = $this->addToApproveHistory($request);
-            if (!isset($addedToApprove->error)) {
-                return (object)[
-                    'message' => 'Чек принят',
-                    'success' => (bool)true
-                ];
-            } else {
-                return $addedToApprove;
-            }
-        } else {
+//        $result = $this->client->send('Cashback/Moderator/accept', $requestParams);
+        $addedToApprove = $this->addCheckToHistory($request);
+        if (!isset($addedToApprove->error)) {
             return (object)[
-                'message' => 'Что-то пошло не так, попробуйте позже',
-                'success' => (bool)false
+                'message' => 'Чек принят',
+                'success' => (bool)true
             ];
+        } else {
+            return $addedToApprove;
         }
     }
 
-    private function addToRejectHistory($request)
+    private function addCheckToHistory($request)
     {
+        $hasComment = $request->has('comment');
+
         try {
             $user = $request->user();
             if (!$user) {
                 throw new Exception('Пользователь не найден', 404);
             }
 
-            $reward = Setting::query()->where(['slug', 'check_verify_price'])->first()->value;
+            $reward = Setting::settingBySlug('check_verify_price')->first()->value;
 
             if (!$reward) {
-                throw new Exception('Не найдено такой настройки', 404);
+                throw new Exception('Не найдено такой настройки в базе', 404);
             }
 
 
             $result = [
                 'user_id' => $user->user_id,
-                'check_id' => $request->id,
-                'status' => CheckHistoryStatusEnum::REJECTED,
-                'comment' => $request->comment,
+                'check_id' => $request->check_id,
+                'status' => $hasComment ? CheckHistoryStatusEnum::REJECTED : CheckHistoryStatusEnum::APPROVED,
+                'comment' => $hasComment ? $request->comment : null,
                 'reward' => $reward,
             ];
 
             $check = new CheckHistory($result);
-            return $check->save();
-
+            $success = $check->save();
+            if (!$success) {
+                throw new Exception('Не получилось проверить чек', 404);
+            }
+            /* Здесь добавляем события, которые должны происходить после проверки чека */
+            event(new CheckVerified($user, $check));
         } catch (Exception $e) {
             return (object)[
                 'error' => $e->getMessage(),
@@ -162,30 +156,6 @@ class CheckService
         $userChecks = $this->getUniqueChecks(-1, $userID);
         if ($userChecks) {
             $userChecks->update(['check_user_id' => null]);
-        }
-    }
-
-    private function addToApproveHistory(CheckApproveRequest $request)
-    {
-        try {
-            $user = User::find($request->user_id)->first();
-            if (!$user) {
-                throw new Exception('Пользователь не найден', 404);
-            }
-
-            $result = [
-                'user_id' => $user->user_id,
-                'check_id' => $request->id,
-                'status' => 'APPROVED',
-                'image' => $request->image,
-            ];
-            $check = new CheckHistory($result);
-            $check->save();
-        } catch (Exception $e) {
-            return (object)[
-                'error' => $e->getMessage(),
-                'code' => $e->getCode()
-            ];
         }
     }
 

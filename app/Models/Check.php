@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\CheckHistory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Check extends Model
 {
@@ -22,4 +23,9 @@ class Check extends Model
         'status',
         'check_user_id',
     ];
+
+    public function checkHistory()
+    {
+        return $this->hasMany(CheckHistory::class);
+    }
 }

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Check;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class CheckHistory extends Model
 {
@@ -16,4 +18,14 @@ class CheckHistory extends Model
         'comment',
         'reward',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function check()
+    {
+        return $this->belongsTo(Check::class);
+    }
 }
