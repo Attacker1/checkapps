@@ -54,9 +54,8 @@ class JsonRpcClient
             }
         } catch (JsonRpcException $exception) {
             return (object)[
-                'message' => $exception->getMessage(),
                 'code' => $exception->getCode(),
-                'error' => $exception->getCode()
+                'error' => $exception->getMessage()
             ];
         }
     }
