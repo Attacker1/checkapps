@@ -47,7 +47,7 @@ class LoginService
         try {
             if (isset($response->error)) {
                 throw new Exception(
-                    $response->message,
+                    $response->error,
                     404
                 );
             }

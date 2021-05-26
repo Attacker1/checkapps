@@ -27,7 +27,7 @@ class ModeratorService
             $moderator = $this->getModerator();
 
             if(isset($moderator->error)) {
-                throw new Exception($moderator->message, $moderator->code);
+                throw new Exception($moderator->error, $moderator->code);
             }
 
             return $moderator->token_id;

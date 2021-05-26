@@ -38,7 +38,7 @@ class CheckService
             $list = $this->client->send('Cashback/Moderator/getPurchaseList', $params);
 
             if (isset($list->error)) {
-                throw new Exception($list->message, $list->code);
+                throw new Exception($list->error, $list->code);
             }
 
             return $list;
