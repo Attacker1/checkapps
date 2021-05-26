@@ -2,18 +2,21 @@
 
 namespace App\Services;
 
+use Exception;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Client\JsonRpcClient;
+use App\Services\AdminService;
 use Illuminate\Support\Carbon;
-use App\Http\Client\LoginClient;
 use App\Http\Requests\LoginRequest;
-use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class LoginService
 {
     protected $loginClient;
+    protected $adminService;
+    protected $userService;
+
     protected $loginResponse;
     protected $currentUser;
 
@@ -22,20 +25,21 @@ class LoginService
      * @param $loginClient
      * @param $userService
      */
-    public function __construct(JsonRpcClient $loginClient)
+    public function __construct(JsonRpcClient $loginClient, AdminService $adminService, UserService $userService)
     {
         $this->loginClient = $loginClient;
+        $this->adminService = $adminService;
+        $this->userService = $userService;
     }
 
     public function login(LoginRequest $request)
     {
         $credentials = $request->only('login', 'password');
-        $isUserExists = $this->isUserExists($credentials['login']);
+        $isUserExists = $this->userService->userExists($credentials['login']);
         $isAdmin = $isUserExists ? $isUserExists->hasRole('admin') : false;
 
-        if($isAdmin) {
-            $this->currentUser = $isUserExists;
-            return $this->loginUser($request, $isAdmin);
+        if ($isAdmin) {
+            return $this->adminService->login($request);
         }
 
         $response = $this->loginClient->send('User/login', $credentials);
@@ -60,36 +64,12 @@ class LoginService
         }
     }
 
-    public function isUserExists($userEmail)
-    {
-        $user = User::byEmail($userEmail)->first();
-        return $user ? $user : false;
-    }
-
-    private function loginUser(LoginRequest $request, $isAdmin = false)
+    private function loginUser(LoginRequest $request)
     {
         try {
-            $successLogin = false;
+            $successLogin = Auth::loginUsingId($this->currentUser->id);
 
-            if($isAdmin === true) {
-                $creditnails = $request->only(['login', 'password']);
-                $successAdminLogin = Auth::attempt([
-                    'user_email' => $creditnails['login'],
-                    'password' => $creditnails['password'],
-                ]);
-
-                if(!$successAdminLogin) {
-                    throw new Exception(
-                        'Пользователь с такими данными не найден',
-                        404
-                    );
-                }
-                $successLogin = $successAdminLogin;
-            } else {
-                $successLogin = Auth::loginUsingId($this->currentUser->id);
-            }
-
-            if(!$successLogin) {
+            if (!$successLogin) {
                 throw new Exception(
                     'Не получилось войти',
                     404
@@ -131,7 +111,7 @@ class LoginService
         $createdUser = $this->create($userData);
 
         try {
-            if(isset($createdUser->error)) {
+            if (isset($createdUser->error)) {
                 throw new Exception(
                     $createdUser->error,
                     404
@@ -149,10 +129,9 @@ class LoginService
         }
     }
 
-
     private function userAuthenticate(LoginRequest $request)
     {
-        $checkUserExist = $this->isUserExists($request->login);
+        $checkUserExist = $this->userService->userExists($request->login);
 
         try {
             if (!empty($checkUserExist)) {
@@ -161,7 +140,7 @@ class LoginService
                 $checkUserExist->token_id = $this->loginResponse->token_id;
                 $success = $checkUserExist->save();
 
-                if(!$success) {
+                if (!$success) {
                     throw new Exception(
                         'Не удалось обновить токен входа',
                         404
@@ -186,7 +165,7 @@ class LoginService
             $user = new User($response);
             $success = $user->save();
 
-            if(!$success) {
+            if (!$success) {
                 throw new Exception(
                     'Не удалось создать пользователя',
                     404

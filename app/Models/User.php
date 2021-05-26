@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\CheckHistory;
 use Laravel\Passport\HasApiTokens;
 use App\Traits\HasRolesAndPermissions;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -29,6 +29,11 @@ class User extends Authenticatable
         'token_id',
         'password',
     ];
+
+    public function checkHistory()
+    {
+        return $this->hasMany(CheckHistory::class);
+    }
 
     public function scopeByUserId($query, $userId)
     {
