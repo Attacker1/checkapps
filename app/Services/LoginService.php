@@ -131,7 +131,7 @@ class LoginService
 
     private function userAuthenticate(LoginRequest $request)
     {
-        $checkUserExist = $this->isUserExists($request->login);
+        $checkUserExist = $this->userService->userExists($request->login);
 
         try {
             if (!empty($checkUserExist)) {
