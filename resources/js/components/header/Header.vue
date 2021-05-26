@@ -3,9 +3,9 @@
         <div class="container d-flex align-center justify-between">
             <div class="d-flex align-center">
                 <div class="d-flex align-center">
-                    <router-link :to="{name: 'History'}">
+                    <div @click="goToProfile" class="header__profile">
                         <IconProfile class="mr-20"/>
-                    </router-link>
+                    </div>
                     <div v-if="user" class="user-fio">
                         <p class="text text_bold">{{ user.user_fio }}</p>
                         <p class="text_sm text_grey">{{ user.user_email }}</p>
@@ -26,6 +26,7 @@
 <script>
     import IconProfile from '@/assets/icons/IconProfile';
     import {mapGetters} from "vuex";
+    import Vue from "vue";
 
     export default {
         name: 'Header',
@@ -37,6 +38,10 @@
         methods: {
             submitLogout() {
                 this.$store.dispatch('auth/logout')
+            },
+
+            goToProfile() {
+                Vue.router.push({name: 'History'}).catch(err => {});
             }
         },
     }
@@ -49,6 +54,10 @@
 
         @media screen and (max-width: 767px) {
             padding-top: 20px;
+        }
+
+        &__profile {
+            cursor: pointer;
         }
 
         &__balance {

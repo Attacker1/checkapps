@@ -1,6 +1,6 @@
 <template>
     <div class="history-review">
-        <h2 class="mb-12 text_lg history-review__title">21 Августа</h2>
+        <h2 class="text_lg history-review__title">21 Августа</h2>
         <div class="history-review__wrapper">
             <CheckCard  />
             <CheckCard  />
@@ -18,5 +18,8 @@ export default {
 </script>
 <style lang="scss">
 .history-review {
+    &__title {
+        font-weight: 500;
+    }
 }
 </style>

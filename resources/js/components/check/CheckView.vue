@@ -73,6 +73,7 @@
         flex-direction: column;
         position: relative;
         justify-content: space-between;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
     }
 
     .table {

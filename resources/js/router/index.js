@@ -47,7 +47,16 @@ Vue.router = new VueRouter({
                     path: '/history',
                     name: 'History',
                     component: History
-                }
+                },
+                {
+                    path: '*',
+                    meta: {
+                        auth: undefined,
+                        title: 'Ckekapps - 404'
+                    },
+                    name: 'NotFound',
+                    component: () => import('@/pages/404/NotFound.vue'),
+                },
             ]
         },
 
