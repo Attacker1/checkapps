@@ -18,12 +18,9 @@ import IconZoom from "../../assets/icons/IconZoom";
 export default {
     name: 'CheckCard',
     components: {IconZoom},
-
-    methods: {
-        get isStatusApprove() {
-            return true;
-        }
-    }
+    data: () => ({
+        isStatusApprove: true,
+    }),
 }
 </script>
 <style lang="scss">

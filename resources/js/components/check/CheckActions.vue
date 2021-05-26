@@ -27,7 +27,7 @@
                 </div>
             </div>
             <div>
-                <div @click="sendToApprove" class="circle circle_lg check-action check-action_like">
+                <div @click="sendToApprove" ref="approveButton" class="circle circle_lg check-action check-action_like">
                     <IconLike/>
                     <p class="shortkey text_xs text_grey">Enter</p>
                 </div>
@@ -67,7 +67,7 @@
             this.handler = function (e) {
                 e.keyCode === 9 && component.skipCurrentCheck()
                 e.keyCode === 32 && component.changeRejectedModal()
-                e.keyCode === 13 && component.sendToApprove()
+                e.keyCode === 13 && component.$refs.approveButton.click()
             }
             document.addEventListener('keydown', this.handler);
         },
@@ -80,12 +80,17 @@
                 approve: 'checkActions/sendApprove',
                 skipCheck: 'checkActions/skipCheck'
             }),
+
             sendToApprove() {
-                this.approve();
+                if (!this.rejectModal) {
+                    this.approve();
+                }
             },
 
             skipCurrentCheck() {
-                this.skipCheck()
+                if (!this.rejectModal) {
+                    this.skipCheck();
+                }
             },
 
             clickRejected() {

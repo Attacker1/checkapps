@@ -43,6 +43,7 @@ export default {
         background-color: #fff;
         border-radius: 12px;
         margin-bottom: 24px;
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
     }
 
     &__review {
