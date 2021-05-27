@@ -2,10 +2,17 @@
     <div class="history-review__wrapper">
         <div class="check-card">
             <div class="check-card__left">
-                <img :src="checkData.check.image" :alt="checkData.check_id" class="check-card__img">
-                <div class="check-card__scale">
-                    <IconZoom :size="48"/>
-                </div>
+                <viewer :images="[checkData.check.image]"
+                        @inited="inited"
+                        class="viewer" ref="viewer">
+                    <template slot-scope="scope">
+                        <img class="check-card__img" v-for="src in [checkData.check.image]" :src="src" :key="src">
+                        <div class="check-card__scale">
+                            <IconZoom :size="48"/>
+                        </div>
+                    </template>
+                </viewer>
+                <!--                <img :src="checkData.check.image" :alt="checkData.check_id" class="check-card__img">-->
             </div>
             <div class="check-card__right">
                 <span class="text check-card__data">{{ checkData.created_at | moment('DD.MM.YYYY, h:mm') }}</span>
@@ -27,11 +34,19 @@ export default {
     data: () => ({
         isStatusApprove: true,
     }),
+    methods: {
+        inited(viewer) {
+            this.$viewer = viewer
+        },
+    },
     computed: {
         getStatusName() {
             return this.checkData.status === 'REJECTED' ? 'Отклонено' : 'Одобрено';
         }
-    }
+    },
+    beforeDestroy() {
+        this.$viewer.destroy();
+    },
 }
 </script>
 <style lang="scss" scoped>
@@ -46,6 +61,7 @@ export default {
     }
 
     &__left {
+        flex-shrink: 0;
         position: relative;
         background-color: #D1D9DB;
         border-radius: 6px;
@@ -54,6 +70,7 @@ export default {
 
     &__scale {
         position: absolute;
+        pointer-events: none;
         bottom: 4px;
         right: 4px;
         width: 32px;
@@ -70,6 +87,7 @@ export default {
         width: 100px;
         height: 100px;
         object-fit: contain;
+        cursor: pointer;
     }
 
     &__right {
