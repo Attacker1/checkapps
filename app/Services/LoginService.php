@@ -20,11 +20,6 @@ class LoginService
     protected $loginResponse;
     protected $currentUser;
 
-    /**
-     * LoginService constructor.
-     * @param $loginClient
-     * @param $userService
-     */
     public function __construct(JsonRpcClient $loginClient, AdminService $adminService, UserService $userService)
     {
         $this->loginClient = $loginClient;
@@ -34,14 +29,7 @@ class LoginService
 
     public function login(LoginRequest $request)
     {
-        // DebugBar::info('wdwdw');
         $credentials = $request->only('login', 'password');
-        $isUserExists = $this->userService->userExists($credentials['login']);
-        $isAdmin = $isUserExists ? $isUserExists->hasRole('admin') : false;
-
-        if ($isAdmin) {
-            return $this->adminService->login($request);
-        }
 
         $response = $this->loginClient->send('User/login', $credentials);
 

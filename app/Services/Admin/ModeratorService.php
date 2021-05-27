@@ -13,12 +13,16 @@ class ModeratorService
         $this->client = $client;
     }
 
-    public function getModerator()
-    {
-        return $this->client->send('User/login', [
+    public function getModeratorCreditnails() {
+        return [
             'login' => 'chekapps.com@gmail.com',
             'password' => 'HvJTP.3m,F5KtnH',
-        ]);
+        ];
+    }
+
+    public function getModerator()
+    {
+        return $this->client->send('User/login', $this->getModeratorCreditnails());
     }
 
     public function getToken()
