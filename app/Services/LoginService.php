@@ -9,7 +9,6 @@ use App\Client\JsonRpcClient;
 use App\Services\AdminService;
 use Illuminate\Support\Carbon;
 use App\Http\Requests\LoginRequest;
-use DebugBar\DebugBar;
 use Illuminate\Support\Facades\Auth;
 
 class LoginService
