@@ -6,6 +6,7 @@ use App\Http\Requests\CheckApproveRequest;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\PurchaseListRequest;
 use App\Services\CheckService;
+use DebugBar\DebugBar;
 use Illuminate\Http\Request;
 
 class CheckController extends Controller
@@ -36,14 +37,15 @@ class CheckController extends Controller
     public function skipCheck(Request $request)
     {
         $response = $this->checkService->skipCheck($request);
-        return response()->json($response);
+        return response()->json($response, $response->code ?? 200);
     }
 
     public function getChecks(Request $request)
     {
         $response = $this->checkService->getChecks($request);
         $errors = isset($response->error);
-        return response()->json($response, $errors ? $response->code : 200);
+
+        return response()->json($response);
     }
 
     public function resetChecks(Request $request)

@@ -28,7 +28,7 @@ class ResetCheckUser
     {
         $checkHistory = $event->checkHistory;
         $check = $checkHistory->check()->first();
-        // dd($check);
+//        dd($check->first());
 
         $check->check_user_id = null;
         $check->save();

@@ -14,6 +14,7 @@ use App\Client\JsonRpcClient;
 use App\Enum\CheckStatusEnum;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
+use Illuminate\Database\Eloquent\Builder;
 
 class CheckService
 {
@@ -104,6 +105,7 @@ class CheckService
                 'reward' => $reward,
             ];
 
+
             $checkHistory = new CheckHistory($result);
             $success = $checkHistory->save();
             if (!$success) {
@@ -122,6 +124,15 @@ class CheckService
     public function getUniqueChecks($check_user_id)
     {
         $checkHistories = CheckHistory::query()->where('user_id', $check_user_id)->get('check_id')->values();
+
+//        return Check::query()
+//            ->whereDoesntHave('checkHistory', function (Builder $query) use ($check_user_id) {
+//                $query->where('user_id', '!=', $check_user_id);
+//            })
+//            ->where([['status', CheckStatusEnum::INCHECK], ['check_user_id', null]])
+//            ->limit(50)
+//            ->get();
+
         return Check::whereNotIn('check_id', $checkHistories)
             ->where([
                 ['status', CheckStatusEnum::INCHECK],
@@ -141,12 +152,12 @@ class CheckService
             $this->resetUserChecks($user->user_id);
 
             $checks = $this->getUniqueChecks($user->user_id);
-
+//            dd($checks);
+//            $checks->update(['check_user_id' => $user->user_id]);
             $checks->each(function ($check) use ($user) {
                 $check->check_user_id = $user->user_id;
                 $check->save();
             });
-
             return $checks;
         } catch (Exception $e) {
             return (object)[
@@ -163,10 +174,7 @@ class CheckService
             ['check_user_id', $userID]
         ])->orderByDesc('current_quantity');
 
-        $userChecks->each(function ($check) {
-            $check->check_user_id = null;
-            $check->save();
-        });
+        $userChecks->update(['check_user_id' => null]);
     }
 
     public function addChecks($checks)
@@ -238,12 +246,23 @@ class CheckService
 
     public function skipCheck($request)
     {
-        $check = Check::find($request->check_id)->first();
-        $check->check_user_id = null;
-        $success = $check->save();
-        return [
-            'message' => $success ? 'Чек пропущен' : 'Что-то пошло не так',
-            'success' => (bool)$success,
-        ];
+        try {
+            $check = Check::query()->where('check_id', $request->check_id)->first();
+            $check->setAttribute('check_user_id', null);
+            $success = $check->save();
+            if (!$success) {
+                throw new Exception('Что-то пошло не так', 500);
+            }
+
+            return [
+                'message' => 'Чек пропущен',
+                'success' => (bool)true,
+            ];
+        } catch (Exception $e) {
+            return [
+                'code' => $e->getCode(),
+                'error' => $e->getMessage(),
+            ];
+        }
     }
 }
