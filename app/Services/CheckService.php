@@ -121,23 +121,16 @@ class CheckService
         }
     }
 
-    public function getUniqueChecks($check_user_id)
+    public function getUniqueChecks(User $user)
     {
-        $checkHistories = CheckHistory::query()->where('user_id', $check_user_id)->get('check_id')->values();
 
-        return Check::query()
-            ->whereDoesntHave('checkHistory', function (Builder $query) use ($check_user_id) {
-                $query->where('user_id', '!=', $check_user_id);
-            })
-            ->where([['status', CheckStatusEnum::INCHECK], ['check_user_id', null]])
-            ->limit(50)
-            ->get();
+        $checkHistories = $user->checkHistory()->get('check_id')->values();
 
-//        return Check::whereNotIn('check_id', $checkHistories)
-//            ->where([
-//                ['status', CheckStatusEnum::INCHECK],
-//                ['check_user_id', null]
-//            ])->orderByDesc('current_quantity')->limit(50)->get();
+        return Check::whereNotIn('check_id', $checkHistories)
+            ->where([
+                ['status', CheckStatusEnum::INCHECK],
+                ['check_user_id', null]
+            ])->orderByDesc('current_quantity')->limit(50)->get();
     }
 
     public function getChecks($request)
@@ -151,7 +144,7 @@ class CheckService
             /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем */
             $this->resetUserChecks($user->user_id);
 
-            $checks = $this->getUniqueChecks($user->user_id);
+            $checks = $this->getUniqueChecks($user);
 
             $checks->each(function ($check) use ($user) {
                 $check->check_user_id = $user->user_id;
