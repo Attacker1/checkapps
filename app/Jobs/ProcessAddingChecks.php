@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Client\JsonRpcClient;
+use App\Services\Admin\ModeratorService;
 use Illuminate\Bus\Queueable;
 use App\Services\CheckService;
 use Illuminate\Queue\SerializesModels;
@@ -37,16 +37,11 @@ class ProcessAddingChecks implements ShouldQueue
      */
     public function handle()
     {
-        $client = new JsonRpcClient();
+        $moderatorService = new ModeratorService();
         $checkService = new CheckService();
 
-        $moderator = $client->send('User/login', [
-            'login' => 'chekapps.com@gmail.com',
-            'password' => 'HvJTP.3m,F5KtnH',
-        ]);
-
         $checks = $checkService->getChecksFromApi([
-            'token_id' => $moderator->token_id,
+            'token_id' => $moderatorService->getToken(),
             'limit' => $this->limit,
             'page' => 1,
         ]);

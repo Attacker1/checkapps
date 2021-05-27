@@ -8,9 +8,9 @@ class ModeratorService
 {
     private $client;
 
-    public function __construct(JsonRpcClient $client)
+    public function __construct()
     {
-        $this->client = $client;
+        $this->client = new JsonRpcClient();
     }
 
     public function getModeratorCreditnails() {
