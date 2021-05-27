@@ -27,6 +27,6 @@ class Check extends Model
 
     public function checkHistory()
     {
-        return $this->hasMany(CheckHistory::class);
+        return $this->hasMany(CheckHistory::class, 'check_id');
     }
 }

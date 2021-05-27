@@ -125,19 +125,19 @@ class CheckService
     {
         $checkHistories = CheckHistory::query()->where('user_id', $check_user_id)->get('check_id')->values();
 
-//        return Check::query()
-//            ->whereDoesntHave('checkHistory', function (Builder $query) use ($check_user_id) {
-//                $query->where('user_id', '!=', $check_user_id);
-//            })
-//            ->where([['status', CheckStatusEnum::INCHECK], ['check_user_id', null]])
-//            ->limit(50)
-//            ->get();
+        return Check::query()
+            ->whereDoesntHave('checkHistory', function (Builder $query) use ($check_user_id) {
+                $query->where('user_id', '!=', $check_user_id);
+            })
+            ->where([['status', CheckStatusEnum::INCHECK], ['check_user_id', null]])
+            ->limit(50)
+            ->get();
 
-        return Check::whereNotIn('check_id', $checkHistories)
-            ->where([
-                ['status', CheckStatusEnum::INCHECK],
-                ['check_user_id', null]
-            ])->orderByDesc('current_quantity')->limit(50)->get();
+//        return Check::whereNotIn('check_id', $checkHistories)
+//            ->where([
+//                ['status', CheckStatusEnum::INCHECK],
+//                ['check_user_id', null]
+//            ])->orderByDesc('current_quantity')->limit(50)->get();
     }
 
     public function getChecks($request)
@@ -152,12 +152,12 @@ class CheckService
             $this->resetUserChecks($user->user_id);
 
             $checks = $this->getUniqueChecks($user->user_id);
-//            dd($checks);
-//            $checks->update(['check_user_id' => $user->user_id]);
+
             $checks->each(function ($check) use ($user) {
                 $check->check_user_id = $user->user_id;
                 $check->save();
             });
+
             return $checks;
         } catch (Exception $e) {
             return (object)[
