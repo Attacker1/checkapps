@@ -44,7 +44,6 @@ export default {
                         page: this.currentPage,
                     }
                 })
-                console.log(response.data)
                 this.checks = response.data.data;
                 this.links = response.data.links;
                 this.lastPage = response.data.last_page;
@@ -55,9 +54,11 @@ export default {
         },
 
         changePage(val) {
-            const url = new URL(val.link.url);
-            url.searchParams.has('page') ? this.currentPage = url.searchParams.get('page') : ''
-            this.getHistory();
+            if (val.link.url) {
+                const url = new URL(val.link.url);
+                url.searchParams.has('page') ? this.currentPage = url.searchParams.get('page') : ''
+                this.getHistory();
+            }
         }
     },
 

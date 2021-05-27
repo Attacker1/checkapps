@@ -1,7 +1,9 @@
 <template>
     <div>
         <div class="pagination">
-            <div v-if="link.url" @click="changePagePagination(link)" v-for="(link, i) in links" :key="link + i" class="pagination__item"
+            <div @click="changePagePagination(link)" v-for="(link, i) in links"
+                 :key="link + i"
+                 class="pagination__item"
                  :class="{active: link.active}" v-html="replacePaginate(link.label)"/>
         </div>
     </div>
@@ -19,9 +21,8 @@ export default {
                 return '«'
             } else if (label.includes('Next')) {
                 return '»'
-            } else {
-                return label
             }
+            return label;
         },
 
         changePagePagination(link) {
