@@ -28,22 +28,25 @@ class UserService
         return User::byEmail($userEmail)->first() ?? false;
     }
 
-    public function checkHistories($userID, $paginate = 20) {
+    public function checkHistories($userID, $paginate = 20)
+    {
         try {
             $user = User::find($userID);
 
-            if(!$user) {
+            if (!$user) {
                 throw new Exception('Пользователь не найден');
             }
 
             $checkHistories = $user->checkHistory()->with('check')->paginate($paginate);
 
-            $checkHistories->getCollection()->transform(function($checkHistory) {
-                unset($checkHistory['updated_at']);
-                unset($checkHistory['check']['dt']);
-                unset($checkHistory['check']['dt_purchase']);
-                unset($checkHistory['check']['updated_at']);
-                unset($checkHistory['check']['created_at']);
+            $checkHistories->getCollection()->transform(function ($checkHistory) {
+                unset(
+                    $checkHistory['updated_at'],
+                    $checkHistory['check']['dt'],
+                    $checkHistory['check']['dt_purchase'],
+                    $checkHistory['check']['updated_at'],
+                    $checkHistory['check']['created_at']
+                );
 
                 return $checkHistory;
             });
