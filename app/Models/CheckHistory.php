@@ -26,6 +26,6 @@ class CheckHistory extends Model
 
     public function check()
     {
-        return $this->belongsTo(Check::class, 'check_id', 'check_id');
+        return $this->belongsTo(Check::class, 'check_id');
     }
 }

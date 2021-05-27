@@ -14,6 +14,7 @@ use App\Client\JsonRpcClient;
 use App\Enum\CheckStatusEnum;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
+use Illuminate\Database\Eloquent\Builder;
 
 class CheckService
 {
@@ -104,6 +105,7 @@ class CheckService
                 'reward' => $reward,
             ];
 
+
             $checkHistory = new CheckHistory($result);
             $success = $checkHistory->save();
             if (!$success) {
@@ -119,9 +121,11 @@ class CheckService
         }
     }
 
-    public function getUniqueChecks($check_user_id)
+    public function getUniqueChecks(User $user)
     {
-        $checkHistories = CheckHistory::query()->where('user_id', $check_user_id)->get('check_id')->values();
+
+        $checkHistories = $user->checkHistory()->get('check_id')->values();
+
         return Check::whereNotIn('check_id', $checkHistories)
             ->where([
                 ['status', CheckStatusEnum::INCHECK],
@@ -140,7 +144,7 @@ class CheckService
             /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем */
             $this->resetUserChecks($user->user_id);
 
-            $checks = $this->getUniqueChecks($user->user_id);
+            $checks = $this->getUniqueChecks($user);
 
             $checks->each(function ($check) use ($user) {
                 $check->check_user_id = $user->user_id;
@@ -163,10 +167,7 @@ class CheckService
             ['check_user_id', $userID]
         ])->orderByDesc('current_quantity');
 
-        $userChecks->each(function ($check) {
-            $check->check_user_id = null;
-            $check->save();
-        });
+        $userChecks->update(['check_user_id' => null]);
     }
 
     public function addChecks($checks)
@@ -238,12 +239,23 @@ class CheckService
 
     public function skipCheck($request)
     {
-        $check = Check::find($request->check_id)->first();
-        $check->check_user_id = null;
-        $success = $check->save();
-        return [
-            'message' => $success ? 'Чек пропущен' : 'Что-то пошло не так',
-            'success' => (bool)$success,
-        ];
+        try {
+            $check = Check::query()->where('check_id', $request->check_id)->first();
+            $check->setAttribute('check_user_id', null);
+            $success = $check->save();
+            if (!$success) {
+                throw new Exception('Что-то пошло не так', 500);
+            }
+
+            return [
+                'message' => 'Чек пропущен',
+                'success' => (bool)true,
+            ];
+        } catch (Exception $e) {
+            return [
+                'code' => $e->getCode(),
+                'error' => $e->getMessage(),
+            ];
+        }
     }
 }

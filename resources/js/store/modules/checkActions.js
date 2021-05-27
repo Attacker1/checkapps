@@ -49,6 +49,7 @@ export default {
 
         skipCheck({dispatch, rootGetters}) {
             const currentCheck = rootGetters['currentCheck/currentCheck'];
+            console.log('SkipCheck: ' + currentCheck.check_id);
             axios.post('skip', {check_id: currentCheck.check_id})
                 .then(res => {
                     const response = res.data;
