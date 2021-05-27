@@ -24,9 +24,9 @@ class CheckService
      * CheckService constructor.
      * @param $client
      */
-    public function __construct(JsonRpcClient $client)
+    public function __construct()
     {
-        $this->client = $client;
+        $this->client = new JsonRpcClient();
     }
 
     public function getChecksFromApi($params)
@@ -53,7 +53,7 @@ class CheckService
 
     public function checkReject(CheckRejectRequest $request)
     {
-//        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
+        //$result = $this->client->send('Cashback/Moderator/reject', $requestParams);
 
         $addedToReject = $this->addCheckToHistory($request);
         if (!isset($addedToReject->error)) {
@@ -68,7 +68,7 @@ class CheckService
 
     public function checkApprove(CheckApproveRequest $request)
     {
-//        $result = $this->client->send('Cashback/Moderator/accept', $requestParams);
+        //$result = $this->client->send('Cashback/Moderator/accept', $requestParams);
         $addedToApprove = $this->addCheckToHistory($request);
         if (!isset($addedToApprove->error)) {
             return (object)[
@@ -167,7 +167,7 @@ class CheckService
             ['check_user_id', $userID]
         ])->orderByDesc('current_quantity');
 
-        $userChecks->update(['check_user_id' => null]);
+        $this->resetChecks($userChecks);
     }
 
     public function addChecks($checks)
@@ -228,7 +228,6 @@ class CheckService
             } else {
                 throw new Exception('Ошибка при добавлении чека', 500);
             }
-
         } catch (Exception $exception) {
             return [
                 'code' => $exception->getCode(),
@@ -257,5 +256,9 @@ class CheckService
                 'error' => $e->getMessage(),
             ];
         }
+    }
+
+    public function resetChecks(Builder $checks) {
+        $checks->update(['check_user_id' => null]);
     }
 }

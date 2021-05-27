@@ -38,7 +38,7 @@ class ProcessAddingChecks implements ShouldQueue
     public function handle()
     {
         $client = new JsonRpcClient();
-        $checkService = new CheckService($client);
+        $checkService = new CheckService();
 
         $moderator = $client->send('User/login', [
             'login' => 'chekapps.com@gmail.com',

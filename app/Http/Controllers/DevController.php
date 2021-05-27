@@ -15,7 +15,7 @@ class DevController extends Controller
 
     public function index()
     {
-        $data =  $this->checkRepository->getByExpirityTimeout(60);
+        $data =  $this->checkRepository->getByExpirityTimeout(60 * 60);
 
         return view('dev', ['data' => $data]);
     }
