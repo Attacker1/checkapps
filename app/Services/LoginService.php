@@ -9,6 +9,7 @@ use App\Client\JsonRpcClient;
 use App\Services\AdminService;
 use Illuminate\Support\Carbon;
 use App\Http\Requests\LoginRequest;
+use DebugBar\DebugBar;
 use Illuminate\Support\Facades\Auth;
 
 class LoginService
@@ -34,6 +35,7 @@ class LoginService
 
     public function login(LoginRequest $request)
     {
+        // DebugBar::info('wdwdw');
         $credentials = $request->only('login', 'password');
         $isUserExists = $this->userService->userExists($credentials['login']);
         $isAdmin = $isUserExists ? $isUserExists->hasRole('admin') : false;
