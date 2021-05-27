@@ -1,11 +1,6 @@
 <template>
     <div class="history-review">
-        <h2 class="text_lg history-review__title">21 Августа</h2>
-        <div class="history-review__wrapper">
-            <CheckCard  />
-            <CheckCard  />
-            <CheckCard  />
-        </div>
+
     </div>
 </template>
 <script>

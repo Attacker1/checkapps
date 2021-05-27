@@ -29,12 +29,12 @@ export default {
         async fetchChecks({commit, state}) {
             commit('common/setLoader', null, {root: true})
             try {
-                if (!state.checks || state.checks.length <= 1) {
+                // if (!state.checks || state.checks.length <= 1) {
                     const response = await axios.get('purchase-items');
                     commit('setChecks', response.data)
                     commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
                     commit('setExpiryTime')
-                }
+                // }
             } catch (response) {
                 console.log(response.data.error);
             }
@@ -53,7 +53,7 @@ export default {
             await axios.post('reset-checks')
                 .then(res => console.log(res.data))
                 .catch(err => console.log(err))
-        }
+        },
     },
     getters: {
         checks: s => s.checks
