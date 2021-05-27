@@ -2,11 +2,13 @@
 
 namespace App\Listeners;
 
+use App\Enum\SettingSlugEnum;
 use App\Events\CheckVerified;
+use App\Models\Setting;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class ResetCheckUser
+class IncreareCheckVerifyQuantity
 {
     /**
      * Create the event listener.
@@ -28,8 +30,15 @@ class ResetCheckUser
     {
         $checkHistory = $event->checkHistory;
         $check = $checkHistory->check()->first();
+        $oldValue = $check->current_quantity;
+        $newValue = $oldValue + 1;
+        $maxVerifyQuantity = Setting::first('slug', SettingSlugEnum::CHECK_VERIFY_QUANTITY)->value;
 
-        $check->check_user_id = null;
+        $check->current_quantity = $newValue;
         $check->save();
+
+        if($newValue === $maxVerifyQuantity) {
+            // Здесь вызывать ивент закрытия чека
+        }
     }
 }
