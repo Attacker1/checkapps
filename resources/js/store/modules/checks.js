@@ -47,6 +47,12 @@ export default {
             if (state.expiry && (now.getTime() > state.expiry)) {
                 dispatch('fetchChecks');
             }
+        },
+
+        async resetAllChecks() {
+            await axios.post('reset-checks')
+                .then(res => console.log(res.data))
+                .catch(err => console.log(err))
         }
     },
     getters: {

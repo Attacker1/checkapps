@@ -45,7 +45,7 @@ class CheckController extends Controller
         $response = $this->checkService->getChecks($request);
         $errors = isset($response->error);
 
-        return response()->json($response);
+        return response()->json($response, $errors ? $response->code : 200);
     }
 
     public function resetChecks(Request $request)
