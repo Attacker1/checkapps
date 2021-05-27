@@ -40,7 +40,7 @@ export default {
             try {
                 const response = await axios.get('check-histories', {
                     params: {
-                        paginate: 2,
+                        paginate: 10,
                         page: this.currentPage,
                     }
                 })

@@ -36,12 +36,14 @@ export default {
 .pagination {
     margin-top: 50px;
     display: grid;
-    grid-template-columns: repeat(auto-fill, 50px);
-    grid-gap: 1em;
+    grid-template-columns: repeat(auto-fill, 40px);
+    grid-gap: 0.5em;
+    justify-content: center;
+    width: 100%;
 
     &__item {
-        width: 50px;
-        height: 50px;
+        width: 40px;
+        height: 40px;
         border-radius: 4px;
         border: 2px solid #c4c4c4;
         color: $primary;
