@@ -28,6 +28,16 @@ class SettingsSeeder extends Seeder
                 'name' => 'Вознаграждение за проверку',
                 'value' => 5,
             ],
+            [
+                'slug' => SettingSlugEnum::CHECK_EXPIRITY_TIME,
+                'name' => 'Срок жизни чека',
+                'value' => 72,
+            ],
+            [
+                'slug' => SettingSlugEnum::CHECK_MINIMAL_LIMIT,
+                'name' => 'Лимит при которм запрашивать новые чеки',
+                'value' => 1000,
+            ],
         ];
 
         foreach($settings as $rawSetting) {

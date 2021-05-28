@@ -18,11 +18,12 @@ class CreateCheckHistoriesTable extends Migration
             $table->id();
             $table->bigInteger('user_id');
             $table->foreign('user_id')->references('user_id')->on('users');
-            $table->bigInteger('check_id')->unique();
+            $table->bigInteger('check_id');
             $table->foreign('check_id')->references('check_id')->on('checks')->cascadeOnDelete();
             $table->enum('status', CheckHistoryStatusEnum::statuses())->nullable();
             $table->float('reward')->nullable();
             $table->text('comment')->nullable();
+            $table->unique(['user_id', 'check_id']);
             $table->timestamps();
         });
     }

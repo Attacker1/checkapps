@@ -55,9 +55,8 @@ class CheckService
 
     public function checkReject(CheckRejectRequest $request)
     {
-        //$result = $this->client->send('Cashback/Moderator/reject', $requestParams);
-
         $addedToReject = $this->addCheckToHistory($request);
+
         if (!isset($addedToReject->error)) {
             return (object)[
                 'message' => 'Чек отклонен',
@@ -70,8 +69,8 @@ class CheckService
 
     public function checkApprove(CheckApproveRequest $request)
     {
-        //$result = $this->client->send('Cashback/Moderator/accept', $requestParams);
         $addedToApprove = $this->addCheckToHistory($request);
+
         if (!isset($addedToApprove->error)) {
             return (object)[
                 'message' => 'Чек принят',
@@ -113,19 +112,19 @@ class CheckService
             if (!$success) {
                 throw new Exception('Не получилось проверить чек', 404);
             }
-            /* Здесь добавляем события, которые должны происходить после проверки чека */
+
             event(new CheckVerified($user, $checkHistory));
         } catch(QueryException $exception) {
             if ((int)$exception->getCode() === 23000) {
                 return (object)[
-                    'message' => 'Данный чек уже проверен другим пользователем',
-                    'error' => 500
+                    'error' => 'Данный чек уже проверен вами, пропустите его',
+                    'code' => 500
                 ];
             }
 
             return (object)[
-                'message' => 'Ошибка',
-                'error' => 500
+                'error' => 'Ошибка',
+                'code' => 500
             ];
         } catch (Exception $e) {
             return (object)[

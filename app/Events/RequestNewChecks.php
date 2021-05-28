@@ -2,8 +2,6 @@
 
 namespace App\Events;
 
-use App\Models\CheckHistory;
-use App\Models\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -12,26 +10,19 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class CheckVerified
+class RequestNewChecks
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
-    public $checkHistory;
-    public $check;
-
     /**
-     * CheckVerified constructor.
-     * @param $user
-     * @param $checkHistory
+     * Create a new event instance.
+     *
+     * @return void
      */
-    public function __construct(User $user, CheckHistory $checkHistory)
+    public function __construct()
     {
-        $this->user = $user;
-        $this->checkHistory = $checkHistory;
-        $this->check = $this->checkHistory->check()->with('checkHistory')->first();
+        //
     }
-
 
     /**
      * Get the channels the event should broadcast on.
@@ -40,6 +31,6 @@ class CheckVerified
      */
     public function broadcastOn()
     {
-        return new PrivateChannel('check-verified.check_id:' . $this->checkHistory->check_id);
+        return new PrivateChannel('channel-name');
     }
 }
