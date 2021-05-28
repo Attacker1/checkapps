@@ -112,12 +112,12 @@ class CheckService
             if (!$success) {
                 throw new Exception('Не получилось проверить чек', 404);
             }
-            /* Здесь добавляем события, которые должны происходить после проверки чека */
+
             event(new CheckVerified($user, $checkHistory));
         } catch(QueryException $exception) {
             if ((int)$exception->getCode() === 23000) {
                 return (object)[
-                    'error' => 'Данный чек уже проверен другим пользователем',
+                    'error' => 'Данный чек уже проверен вами, пропустите его',
                     'code' => 500
                 ];
             }
