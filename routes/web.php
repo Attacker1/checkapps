@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckController;
+use App\Http\Controllers\DevController;
 use App\Http\Controllers\SpaController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,5 +16,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/dev', [DevController::class, 'index']);
 
 Route::get('/{any}', [SpaController::class, 'index'])->where('any', '.*');

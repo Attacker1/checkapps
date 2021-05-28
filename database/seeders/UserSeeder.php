@@ -23,37 +23,26 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $users = [
-            [
-                'user_fio' => 'Админ Админович Админов',
-                'user_email' => 'demeja16@gmail.com',
-                'password' => bcrypt('finiko_super_good'),
-                'role' => 'admin',
-            ],
-        ];
+        $moderator = $this->moderatorService->getModerator();
 
-        foreach($users as $user) {
+        if(!isset($moderator->error)) {
             $newUser = new User();
-            $newUser->user_fio = $user['user_fio'];
-            $newUser->user_email = $user['user_email'];
-            $newUser->password = $user['password'];
+            $newUser->user_fio = $moderator->info->user_fio;
+            $newUser->user_email = $moderator->info->user_email;
+            $newUser->password = bcrypt($this->moderatorService->getModeratorCreditnails()['password']);
+            $newUser->user_id = $moderator->info->user_id;
+            $newUser->user_phone = $moderator->info->user_phone;
+            $newUser->referer_user_id = $moderator->info->referer_user_id;
+            $newUser->referer_user_fio = $moderator->info->referer_user_fio;
+            $newUser->career_id = $moderator->info->career_id;
+            $newUser->token_id = $moderator->token_id;
             $newUser->save();
             $newUser->refresh();
 
-            if(isset($user['role'])) {
-                $role = Role::where('slug', $user['role'])->first();
-                $moderator = $this->moderatorService->getModerator();
+            $role = Role::where('slug', 'admin')->first();
 
-                if(!$role) {
-                    return false;
-                }
-
+            if($role) {
                 $newUser->role()->attach($role);
-
-                if(!isset($moderator->error)) {
-                    $newUser->user_id = $moderator->info->user_id;
-                    $newUser->save();
-                }
             }
         }
     }

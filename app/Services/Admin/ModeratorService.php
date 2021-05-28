@@ -8,17 +8,21 @@ class ModeratorService
 {
     private $client;
 
-    public function __construct(JsonRpcClient $client)
+    public function __construct()
     {
-        $this->client = $client;
+        $this->client = new JsonRpcClient();
+    }
+
+    public function getModeratorCreditnails() {
+        return [
+            'login' => 'chekapps.com@gmail.com',
+            'password' => 'HvJTP.3m,F5KtnH',
+        ];
     }
 
     public function getModerator()
     {
-        return $this->client->send('User/login', [
-            'login' => 'chekapps.com@gmail.com',
-            'password' => 'HvJTP.3m,F5KtnH',
-        ]);
+        return $this->client->send('User/login', $this->getModeratorCreditnails());
     }
 
     public function getToken()
