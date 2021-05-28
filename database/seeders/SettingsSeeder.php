@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enum\SettingSlugEnum;
 use App\Models\Setting;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -16,20 +17,26 @@ class SettingsSeeder extends Seeder
     public function run()
     {
 
-        $setting1 = new Setting([
-            'slug' => 'check_verify_quantity',
-            'name' => 'Количество проверок чека',
-            'value' => 5,
-        ]);
+        $settings = [
+            [
+                'slug' => SettingSlugEnum::CHECK_VERIFY_QUANTITY,
+                'name' => 'Количество проверок чека',
+                'value' => 5,
+            ],
+            [
+                'slug' => SettingSlugEnum::CHECK_VERIFY_PRICE,
+                'name' => 'Вознаграждение за проверку',
+                'value' => 5,
+            ],
+        ];
 
-        $setting1->save();
-
-        $setting2 = new Setting([
-            'slug' => 'check_verify_price',
-            'name' => 'Вознаграждение за проверку',
-            'value' => 5,
-        ]);
-
-        $setting2->save();
+        foreach($settings as $rawSetting) {
+            $setting1 = new Setting([
+                'slug' => $rawSetting['slug'],
+                'name' => $rawSetting['name'],
+                'value' => $rawSetting['value'],
+            ]);
+            $setting1->save();
+        }
     }
 }

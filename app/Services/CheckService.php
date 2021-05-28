@@ -12,9 +12,11 @@ use App\Models\User;
 use App\Models\CheckHistory;
 use App\Client\JsonRpcClient;
 use App\Enum\CheckStatusEnum;
+use App\Enum\SettingSlugEnum;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\QueryException;
 
 class CheckService
 {
@@ -24,9 +26,9 @@ class CheckService
      * CheckService constructor.
      * @param $client
      */
-    public function __construct(JsonRpcClient $client)
+    public function __construct()
     {
-        $this->client = $client;
+        $this->client = new JsonRpcClient();
     }
 
     public function getChecksFromApi($params)
@@ -53,7 +55,7 @@ class CheckService
 
     public function checkReject(CheckRejectRequest $request)
     {
-//        $result = $this->client->send('Cashback/Moderator/reject', $requestParams);
+        //$result = $this->client->send('Cashback/Moderator/reject', $requestParams);
 
         $addedToReject = $this->addCheckToHistory($request);
         if (!isset($addedToReject->error)) {
@@ -68,7 +70,7 @@ class CheckService
 
     public function checkApprove(CheckApproveRequest $request)
     {
-//        $result = $this->client->send('Cashback/Moderator/accept', $requestParams);
+        //$result = $this->client->send('Cashback/Moderator/accept', $requestParams);
         $addedToApprove = $this->addCheckToHistory($request);
         if (!isset($addedToApprove->error)) {
             return (object)[
@@ -90,7 +92,7 @@ class CheckService
                 throw new Exception('Пользователь не найден', 404);
             }
 
-            $reward = Setting::settingBySlug('check_verify_price')->first()->value;
+            $reward = Setting::settingBySlug(SettingSlugEnum::CHECK_VERIFY_PRICE)->first()->value;
 
             if (!$reward) {
                 throw new Exception('Не найдено такой настройки в базе', 404);
@@ -113,13 +115,25 @@ class CheckService
             }
             /* Здесь добавляем события, которые должны происходить после проверки чека */
             event(new CheckVerified($user, $checkHistory));
+        } catch(QueryException $exception) {
+            if ((int)$exception->getCode() === 23000) {
+                return (object)[
+                    'message' => 'Данный чек уже проверен другим пользователем',
+                    'error' => 500
+                ];
+            }
+
+            return (object)[
+                'message' => 'Ошибка',
+                'error' => 500
+            ];
         } catch (Exception $e) {
             return (object)[
                 'error' => $e->getMessage(),
                 'code' => $e->getCode()
             ];
         }
-    }
+     }
 
     public function getUniqueChecks(User $user)
     {
@@ -167,7 +181,7 @@ class CheckService
             ['check_user_id', $userID]
         ])->orderByDesc('current_quantity');
 
-        $userChecks->update(['check_user_id' => null]);
+        $this->resetChecks($userChecks);
     }
 
     public function addChecks($checks)
@@ -178,7 +192,7 @@ class CheckService
             }
 
             $addedChecksIDs = [];
-            $setting = Setting::query()->where('slug', 'check_verify_quantity')->first();
+            $setting = Setting::query()->where('slug', SettingSlugEnum::CHECK_VERIFY_QUANTITY)->first();
             if (!$setting) {
                 $verifyQuantity = 5;
             } else {
@@ -228,7 +242,6 @@ class CheckService
             } else {
                 throw new Exception('Ошибка при добавлении чека', 500);
             }
-
         } catch (Exception $exception) {
             return [
                 'code' => $exception->getCode(),
@@ -257,5 +270,9 @@ class CheckService
                 'error' => $e->getMessage(),
             ];
         }
+    }
+
+    public function resetChecks(Builder $checks) {
+        $checks->update(['check_user_id' => null]);
     }
 }

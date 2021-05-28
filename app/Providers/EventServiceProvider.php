@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\CheckVerified;
 use App\Listeners\ChangeUserBalance;
+use App\Listeners\IncreareCheckVerifyQuantity;
 use App\Listeners\ResetCheckUser;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -22,7 +23,8 @@ class EventServiceProvider extends ServiceProvider
         ],
         CheckVerified::class => [
             ChangeUserBalance::class,
-            ResetCheckUser::class
+            ResetCheckUser::class,
+            IncreareCheckVerifyQuantity::class,
         ]
     ];
 
