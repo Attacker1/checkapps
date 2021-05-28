@@ -27,8 +27,7 @@ export default {
                 fetchUser: true,
                 staySignedIn: true,
             }).then((res) => {
-                Vue.router.push({name: 'Main'}).catch(err => {
-                });
+                Vue.router.push({name: 'Main'}).catch(err => {});
                 return res;
             });
         },

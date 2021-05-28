@@ -6,9 +6,10 @@
         </div>
         <div class="history__wrapper">
             <h2 class="history__title">История действий</h2>
-            <div v-if="checks.length" class="history__review">
+            <div v-if="checks.length && !loader" class="history__review">
                 <CheckCard v-for="check in checks" :key="check.check_id" :check-data="check"/>
             </div>
+            <HistoryCardsSkeleton v-if="loader"/>
             <Pagination @change-page="changePage" v-if="checks.length" :links="links"/>
         </div>
     </div>
@@ -19,12 +20,16 @@ import {mapGetters} from "vuex";
 import axios from 'axios';
 import CheckCard from '../../components/history/CheckCard';
 import Pagination from '../../components/pagination/Pagination';
+import HistoryCardsSkeleton from '@/components/skeleton/HistoryCardsSkeleton';
 
 export default {
     name: 'History',
-    components: {Pagination, CheckCard, HistoryReview},
+    components: {Pagination, CheckCard, HistoryReview, HistoryCardsSkeleton},
     computed: {
-        ...mapGetters('auth', ['user']),
+        ...mapGetters({
+            user: 'auth/user',
+            loader: 'common/loader'
+        }),
     },
     data: () => ({
         checks: [],
@@ -37,6 +42,7 @@ export default {
 
     methods: {
         async getHistory() {
+            this.$store.commit('common/setLoader', null, {root: true})
             try {
                 const response = await axios.get('check-histories', {
                     params: {
@@ -51,6 +57,7 @@ export default {
             } catch (response) {
                 console.log(response)
             }
+            this.$store.commit('common/removeLoader', null, {root: true})
         },
 
         changePage(val) {

@@ -28,9 +28,11 @@ export default {
                 commit('checks/setChecks', filteredChecks, {root: true});
                 commit('resetCurrentCheck');
                 commit('setCurrentCheck', filteredChecks[0])
+
             } else {
                 dispatch('checks/fetchChecks', null, {root: true})
             }
+            dispatch('auth/fetch', null, {root: true});
         }
     },
 

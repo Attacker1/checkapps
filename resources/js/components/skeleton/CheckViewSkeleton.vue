@@ -16,8 +16,9 @@
         }
     }
 </script>
-<style lang="scss">
+<style lang="scss" scoped>
     .skeleton-check {
+        width: 100%;
         position: relative;
         display: grid;
         grid-template-columns: 1fr 1.1fr;

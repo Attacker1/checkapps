@@ -12,7 +12,7 @@
         mounted() {
             this.$router.push({
                 path: '/404'
-            })
+            }).catch(err => {});
         }
     }
 </script>

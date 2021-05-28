@@ -22,7 +22,7 @@ export default {
                     }
                 })
                 .catch(err => console.log(err))
-            commit('common/removeLoader', null, {root: true})
+            setTimeout(() => {  commit('common/removeLoader', null, {root: true}); }, 200);
         },
 
         async sendReject({getters, rootGetters, commit, dispatch}, comment) {
@@ -37,17 +37,18 @@ export default {
                 .then(res => {
                     if (res.data.success) {
                         Vue.noty.error(res.data.message);
-                        dispatch('currentCheck/removeFromChecks', null, {root: true})
+                        dispatch('currentCheck/removeFromChecks', null, {root: true});
                     } else {
                         Vue.noty.error(res.data.message);
                     }
                 })
                 .catch(err => console.log(err))
 
-            commit('common/removeLoader', null, {root: true})
+            setTimeout(() => {  commit('common/removeLoader', null, {root: true}); }, 200);
         },
 
-        skipCheck({dispatch, rootGetters}) {
+        skipCheck({dispatch, commit, rootGetters}) {
+            commit('common/setLoader', null, {root: true})
             const currentCheck = rootGetters['currentCheck/currentCheck'];
             console.log('SkipCheck: ' + currentCheck.check_id);
             axios.post('skip', {check_id: currentCheck.check_id})
@@ -59,7 +60,8 @@ export default {
                     } else {
                         Vue.noty.error(response.message);
                     }
-                })
+                });
+            setTimeout(() => {  commit('common/removeLoader', null, {root: true}); }, 200);
         },
     },
     getters: {
