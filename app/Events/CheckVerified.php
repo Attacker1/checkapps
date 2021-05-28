@@ -18,6 +18,7 @@ class CheckVerified
 
     public $user;
     public $checkHistory;
+    public $check;
 
     /**
      * CheckVerified constructor.
@@ -28,6 +29,7 @@ class CheckVerified
     {
         $this->user = $user;
         $this->checkHistory = $checkHistory;
+        $this->check = $this->checkHistory->check()->with('checkHistory')->first();
     }
 
 

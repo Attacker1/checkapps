@@ -25,7 +25,7 @@ class EventServiceProvider extends ServiceProvider
             ChangeUserBalance::class,
             ResetCheckUser::class,
             IncreareCheckVerifyQuantity::class,
-        ]
+        ],
     ];
 
     /**
