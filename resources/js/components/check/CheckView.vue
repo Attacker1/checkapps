@@ -5,11 +5,11 @@
             <div class="table">
                 <div class="table__item">
                     <p class="text_grey">Дата добавления покупки</p>
-                    <p class="text_semibold">{{ check.dt | moment('DD.MM.YYYY, hh:mm') }}</p>
+                    <p class="text_semibold">{{ check.dt | moment('DD.MM.YYYY, HH:mm') }}</p>
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Дата совершения покупки</p>
-                    <p class="text_semibold">{{ check.dt_purchase | moment('DD.MM.YYYY, hh:mm') }}</p>
+                    <p class="text_semibold">{{ check.dt_purchase | moment('DD.MM.YYYY, HH:mm') }}</p>
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Сумма покупки в CFR</p>

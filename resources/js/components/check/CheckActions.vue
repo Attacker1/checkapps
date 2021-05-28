@@ -15,19 +15,21 @@
         <div class="check-actions">
             <div>
                 <div @click="clickRejected"
-                     class="circle circle_lg check-action check-action_dislike">
+                     class="circle circle_lg check-action check-action_dislike"
+                     v-shortkey="['space']" @shortkey="changeRejectedModal()"
+                >
                     <IconDislike/>
                     <p class="shortkey text_xs text_grey">Пробел</p>
                 </div>
             </div>
             <div>
-                <div @click.prevent="skipCurrentCheck" ref="skipButton" class="circle circle_lg check-action">
+                <div @click.prevent="skipCurrentCheck" ref="skipButton" class="circle circle_lg check-action" v-shortkey="['tab']" @shortkey="skipCurrentCheck()" >
                     <IconSkip/>
                     <p class="shortkey text_xs text_grey">Tab</p>
                 </div>
             </div>
             <div>
-                <div @click="sendToApprove" ref="approveButton" class="circle circle_lg check-action check-action_like">
+                <div @click="sendToApprove" ref="approveButton" class="circle circle_lg check-action check-action_like" v-shortkey="['enter']" @shortkey="sendToApprove()">
                     <IconLike/>
                     <p class="shortkey text_xs text_grey">Enter</p>
                 </div>
@@ -62,7 +64,7 @@
         data: () => ({
             rejectModal: false,
         }),
-        created() {
+        /*created() {
             const component = this;
             this.handler = function (e) {
                 e.keyCode === 9 && component.$refs.skipButton.click()
@@ -74,12 +76,17 @@
 
         beforeDestroy() {
             window.removeEventListener('keyup', this.handler);
-        },
+        },*/
         methods: {
             ...mapActions({
                 approve: 'checkActions/sendApprove',
-                skipCheck: 'checkActions/skipCheck'
+                skipCheck: 'checkActions/skipCheck',
+                check: 'currentCheck/currentCheck',
             }),
+
+            qwe() {
+                dispatch('auth/refresh');
+            },
 
             sendToApprove() {
                 if (!this.rejectModal) {

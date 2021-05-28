@@ -5,5 +5,6 @@ import '@/plugins/alert/index'
 import '@/plugins/moment/index'
 import '@/plugins/viewer/index'
 import '@/plugins/zoom-on-hover/index'
+import '@/plugins/shortkey/index'
 
 export default {}

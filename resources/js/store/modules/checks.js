@@ -26,13 +26,15 @@ export default {
     },
 
     actions: {
-        async fetchChecks({commit, state}) {
+        async fetchChecks({commit, state}, force= false) {
             commit('common/setLoader', null, {root: true})
             try {
-                const response = await axios.get('purchase-items');
-                commit('setChecks', response.data)
-                commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
-                commit('setExpiryTime')
+                if ((!state.checks || state.checks.length <= 1) || force) {
+                    const response = await axios.get('purchase-items');
+                    commit('setChecks', response.data)
+                    commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
+                    commit('setExpiryTime')
+                }
             } catch (response) {
                 console.log(response.data.error);
             }
@@ -43,7 +45,7 @@ export default {
         checkExpiryTime({dispatch, state}) {
             const now = new Date();
             if (state.expiry && (now.getTime() > state.expiry)) {
-                dispatch('fetchChecks');
+                dispatch('fetchChecks', {force: true});
             }
         },
         async resetAllChecks() {

@@ -1,7 +1,8 @@
 <template>
     <div class="main-page">
         <CheckViewSkeleton v-if="loader"/>
-        <CheckView v-else/>
+        <CheckView v-if="!loader && check"/>
+        <h1 class="main-page__notfound" v-if="!check">Чеков нет, но вы держитесь</h1>
     </div>
 </template>
 
@@ -41,5 +42,15 @@ export default {
     min-height: calc(100vh - 91px);
     display: flex;
     align-items: center;
+
+    &__notfound {
+        text-align: center;
+        width: 100%;
+        font-size: 72px;
+
+        @media screen and (max-width: 767px) {
+            font-size: 40px;
+        }
+    }
 }
 </style>
