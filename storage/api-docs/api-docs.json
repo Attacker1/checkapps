@@ -298,6 +298,94 @@
                     }
                 ]
             }
+        },
+        "/api/users": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Позволяет получить всех пользователей с пагинацией",
+                "description": "Позволяет получить всех пользователей с пагинацией. Параметры не обязательны, по умолчанию paginate = 20, а filter = DESC",
+                "operationId": "users",
+                "parameters": [
+                    {
+                        "name": "paginate",
+                        "in": "query",
+                        "description": "Определяет количество пользователей на одной странице",
+                        "required": false,
+                        "example": "20"
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "description": "Номер запрашиваемой страницы",
+                        "required": false,
+                        "example": "1"
+                    },
+                    {
+                        "name": "filter",
+                        "in": "query",
+                        "description": "Фильтр пользователей по активности DESC - самые активные, ASC - самые неактивные",
+                        "required": false,
+                        "example": "DESC"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Вылетает если запрос не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Successfully response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "number"
+                                        },
+                                        "user_id": {
+                                            "type": "number"
+                                        },
+                                        "user_fio": {
+                                            "type": "string"
+                                        },
+                                        "user_email": {
+                                            "type": "string"
+                                        },
+                                        "user_phone": {
+                                            "type": "string"
+                                        },
+                                        "balance": {
+                                            "type": "number"
+                                        },
+                                        "check_history_count": {
+                                            "type": "number"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
         }
     },
     "security": [

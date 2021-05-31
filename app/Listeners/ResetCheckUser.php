@@ -26,8 +26,7 @@ class ResetCheckUser
      */
     public function handle(CheckVerified $event)
     {
-        $checkHistory = $event->checkHistory;
-        $check = $checkHistory->check()->first();
+        $check = $event->check;
 
         $check->check_user_id = null;
         $check->save();

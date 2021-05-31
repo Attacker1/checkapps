@@ -17,8 +17,10 @@ class ProcessAddingChecks implements ShouldQueue
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     public $tries = 1;
-    public $retryAfter = 0;
+    public $timeout = 60*60;
+    public $retryAfter = 60*60+10;
     public $limit;
+
 
     /**
      * Create a new job instance.
