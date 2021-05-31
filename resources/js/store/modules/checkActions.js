@@ -4,6 +4,16 @@ import Vue from "vue";
 
 export default {
     namespaced: true,
+    state: {
+        countChecks: 0,
+    },
+
+    mutations: {
+        setCountChecks: (state) => {
+            state.countChecks++;
+        },
+    },
+
     actions: {
         async sendApprove({rootGetters, dispatch, commit}) {
             commit('common/setLoader', null, {root: true})
@@ -48,7 +58,8 @@ export default {
         },
 
         skipCheck({dispatch, commit, rootGetters}) {
-            commit('common/setLoader', null, {root: true})
+            commit('setCountChecks');
+            commit('common/setLoader', null, {root: true});
             const currentCheck = rootGetters['currentCheck/currentCheck'];
             console.log('SkipCheck: ' + currentCheck.check_id);
             axios.post('skip', {check_id: currentCheck.check_id})
@@ -65,6 +76,6 @@ export default {
         },
     },
     getters: {
-        check: state => state.check,
+        countChecks: s => s.countChecks,
     }
 }

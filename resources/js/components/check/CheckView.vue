@@ -13,7 +13,7 @@
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Сумма покупки в CFR</p>
-                    <p class="text_semibold">{{ check.amount | curr }} CFR</p>
+                    <p class="text_semibold">{{ check.amount.toFixed(2) | curr }} CFR</p>
                 </div>
                 <div class="table__item">
                     <p class="text_grey">Валюта</p>
