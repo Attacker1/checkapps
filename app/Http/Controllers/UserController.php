@@ -121,4 +121,62 @@ class UserController extends Controller
 
         return response()->json($this->userService->checkHistories($userID, $paginate));
     }
+
+    /**
+     * @OA\GET(
+     *     path="/api/users",
+     *     summary="Позволяет получить всех пользователей с пагинацией",
+     *     description="Позволяет получить всех пользователей с пагинацией. Параметры не обязательны, по умолчанию paginate = 20, а filter = DESC",
+     *     operationId="users",
+     *     tags={"Users"},
+     *     security={ {"passport": {} }},
+     *     @OA\Parameter(
+     *         description="Определяет количество пользователей на одной странице",
+     *         in="query",
+     *         name="paginate",
+     *         required=false,
+     *         example="20",
+     *     ),
+     *     @OA\Parameter(
+     *         description="Номер запрашиваемой страницы",
+     *         in="query",
+     *         name="page",
+     *         required=false,
+     *         example="1",
+     *     ),
+     *     @OA\Parameter(
+     *         description="Фильтр пользователей по активности DESC - самые активные, ASC - самые неактивные",
+     *         in="query",
+     *         name="filter",
+     *         required=false,
+     *         example="DESC",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Вылетает если запрос не авторизован",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully response",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="number"),
+     *             @OA\Property(property="user_id", type="number"),
+     *             @OA\Property(property="user_fio", type="string"),
+     *             @OA\Property(property="user_email", type="string"),
+     *             @OA\Property(property="user_phone", type="string"),
+     *             @OA\Property(property="balance", type="number"),
+     *             @OA\Property(property="check_history_count", type="number"),
+     *         )
+     *     )
+     * )
+     */
+    public function all(Request $request) {
+        $paginate = $request->paginate ?? 20;
+        $filter = $request->filter ?? 'desc';
+
+        return response()->json($this->userService->all($paginate, $filter));
+    }
 }

@@ -59,4 +59,31 @@ class UserService
             ];
         }
     }
+
+    public function all($paginate, $filter) {
+        $approvedFilters = [
+            'DESC' => 'DESC',
+            'ASC' => 'ASC',
+        ];
+
+        $filter = empty($approvedFilters[$filter]) ? $approvedFilters['DESC'] : $approvedFilters[$filter];
+
+        $users = User::withCount('checkHistory')->orderBy('check_history_count', $filter)->paginate($paginate);
+
+        $users->getCollection()->transform(function($user) {
+            unset(
+                $user['password'],
+                $user['created_at'],
+                $user['updated_at'],
+                $user['token_id'],
+                $user['career_id'],
+                $user['referer_user_fio'],
+                $user['referer_user_id'],
+            );
+
+            return $user;
+        });
+
+        return $users;
+    }
 }
