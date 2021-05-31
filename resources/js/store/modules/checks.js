@@ -27,10 +27,17 @@ export default {
 
     actions: {
         async fetchChecks({commit, state}, data, force= false) {
+            console.log(data);
+
             commit('common/setLoader', null, {root: true})
+
             try {
                 if ((!state.checks || state.checks.length <= 1) || force) {
-                    const response = await axios.get('purchase-items', {data});
+                    const response = await axios.get('purchase-items',{
+                        params: {
+                            recaptcha_token: data.recaptcha_token
+                        }
+                    });
                     commit('setChecks', response.data)
                     commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
                     commit('setExpiryTime')

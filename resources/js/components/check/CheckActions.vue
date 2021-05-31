@@ -87,13 +87,6 @@
                 check: 'currentCheck/currentCheck',
             }),
 
-            async recaptcha() {
-                /*await this.$recaptchaLoaded()
-
-                const token = await this.$recaptcha('check')
-                console.log(token);*/
-            },
-
             inputText(val) {
                 this.lock = val;
             },
