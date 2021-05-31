@@ -29,12 +29,26 @@ Route::group(['middleware' => 'guest'], static function () {
 });
 
 Route::group(['middleware' => 'auth:api'], static function () {
-    Route::post('logout', [LogoutController::class, 'logout']);
+    /**
+     * GET
+     */
     Route::get('user', [UserController::class, 'user']);
     Route::get('purchase-items', [CheckController::class, 'getChecks']);
+    Route::get('check-histories', [UserController::class, 'checkHistories']);
+
+    /**
+     * POST
+     */
+    Route::post('logout', [LogoutController::class, 'logout']);
     Route::post('reject', [CheckController::class, 'reject']);
     Route::post('approve', [CheckController::class, 'approve']);
     Route::post('skip', [CheckController::class, 'skipCheck']);
     Route::post('reset-checks', [CheckController::class, 'resetChecks']);
-    Route::get('check-histories', [UserController::class, 'checkHistories']);
+
+    /**
+     * GROUP
+     */
+    Route::group(['prefix' => 'users'], function() {
+        Route::get('/', [UserController::class, 'all']);
+    });
 });

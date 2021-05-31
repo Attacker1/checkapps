@@ -45,5 +45,7 @@ class UserSeeder extends Seeder
                 $newUser->role()->attach($role);
             }
         }
+
+        User::factory(200)->create();
     }
 }
