@@ -6,6 +6,7 @@ import auth from '@/store/modules/auth';
 import currentCheck from '@/store/modules/currentCheck';
 import checks from '@/store/modules/checks';
 import checkActions from '@/store/modules/checkActions';
+import admin from '@/store/modules/admin';
 
 Vue.use(Vuex);
 
@@ -18,6 +19,7 @@ export default new Vuex.Store({
         checks,
         currentCheck,
         checkActions,
+        admin
     },
     strict: debug
 });

@@ -23,13 +23,15 @@
                 </div>
             </div>
             <div>
-                <div @click.prevent="skipCurrentCheck" ref="skipButton" class="circle circle_lg check-action" v-shortkey="['tab']" @shortkey="skipCurrentCheck()" >
+                <div @click.prevent="skipCurrentCheck" ref="skipButton" class="circle circle_lg check-action"
+                     v-shortkey="['tab']" @shortkey="skipCurrentCheck()">
                     <IconSkip/>
                     <p class="shortkey text_xs text_grey">Tab</p>
                 </div>
             </div>
             <div>
-                <div @click="sendToApprove" ref="approveButton" class="circle circle_lg check-action check-action_like" v-shortkey="['enter']" @shortkey="sendToApprove()">
+                <div @click="sendToApprove" ref="approveButton" class="circle circle_lg check-action check-action_like"
+                     v-shortkey="['enter']" @shortkey="sendToApprove()">
                     <IconLike/>
                     <p class="shortkey text_xs text_grey">Enter</p>
                 </div>
@@ -86,9 +88,10 @@
             }),
 
             async recaptcha() {
-               /* await this.$recaptchaLoaded()
+                /*await this.$recaptchaLoaded()
 
-                const token = await this.$recaptcha('check')*/
+                const token = await this.$recaptcha('check')
+                console.log(token);*/
             },
 
             inputText(val) {
