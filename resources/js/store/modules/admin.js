@@ -16,7 +16,7 @@ export default {
     },
 
     actions: {
-        async fetchUsers({commit}) {
+        async fetchUsers({commit}, ) {
             commit('common/setLoader', null, {root: true})
             try {
                 const response = await axios.get('users');

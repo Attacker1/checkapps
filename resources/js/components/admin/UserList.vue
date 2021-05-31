@@ -20,7 +20,9 @@
                 loader: 'common/loader'
             })
         },
-        beforeMount() {
+        async beforeMount() {
+            /*await this.$recaptchaLoaded()
+            const token = await this.$recaptcha('check')*/
             this.fetchUsers();
         },
     }

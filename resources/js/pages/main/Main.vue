@@ -27,7 +27,11 @@ export default {
         })
     },
     beforeMount() {
-        this.fetchChecks()
+        await this.$recaptchaLoaded()
+
+        const token = await this.$recaptcha('check')
+        console.log(token);
+        this.fetchChecks({})
     },
     mounted() {
         setInterval(() => {
