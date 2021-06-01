@@ -27,7 +27,6 @@ export default {
 
     actions: {
         async fetchChecks({commit, state}, data, force= false) {
-            console.log(data);
 
             commit('common/setLoader', null, {root: true})
 

@@ -2,7 +2,9 @@
     <div class="admin-panel">
         <div class="admin-panel__wrapper">
             <FindUsers/>
-            <UserList />
+        </div>
+        <div class="admin-panel__wrapper">
+            <UserList/>
         </div>
     </div>
 </template>
@@ -17,6 +19,11 @@
 </script>
 <style lang="scss" scoped>
     .admin-panel {
+        &__title {
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+
         &__wrapper {
             padding: 24px;
             background-color: #fff;

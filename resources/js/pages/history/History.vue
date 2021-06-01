@@ -18,8 +18,8 @@
 import HistoryReview from '@/components/history/HistoryReview';
 import {mapGetters} from "vuex";
 import axios from 'axios';
-import CheckCard from '../../components/history/CheckCard';
-import Pagination from '../../components/pagination/Pagination';
+import CheckCard from '@/components/history/CheckCard';
+import Pagination from '@/components/pagination/Pagination';
 import HistoryCardsSkeleton from '@/components/skeleton/HistoryCardsSkeleton';
 
 export default {

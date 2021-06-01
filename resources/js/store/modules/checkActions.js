@@ -4,15 +4,7 @@ import Vue from "vue";
 
 export default {
     namespaced: true,
-    state: {
-        countChecks: 0,
-    },
-
-    mutations: {
-        setCountChecks: (state) => {
-            state.countChecks++;
-        },
-    },
+    state: {},
 
     actions: {
         async sendApprove({rootGetters, dispatch, commit}) {
@@ -58,7 +50,6 @@ export default {
         },
 
         skipCheck({dispatch, commit, rootGetters}) {
-            commit('setCountChecks');
             commit('common/setLoader', null, {root: true});
             const currentCheck = rootGetters['currentCheck/currentCheck'];
             console.log('SkipCheck: ' + currentCheck.check_id);
@@ -75,7 +66,4 @@ export default {
             setTimeout(() => {  commit('common/removeLoader', null, {root: true}); }, 200);
         },
     },
-    getters: {
-        countChecks: s => s.countChecks,
-    }
 }
