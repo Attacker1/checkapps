@@ -8,6 +8,7 @@ import Logout from '@/pages/auth/Logout';
 import MainLayout from '@/layouts/Main';
 import Main from '@/pages/main/Main';
 import History from '@/pages/history/History';
+import Admin from '@/pages/admin/Admin';
 
 Vue.use(VueRouter);
 
@@ -47,6 +48,11 @@ Vue.router = new VueRouter({
                     path: '/history',
                     name: 'History',
                     component: History
+                },
+                {
+                    path: '/admin',
+                    name: 'Admin',
+                    component: Admin
                 },
                 {
                     path: '*',

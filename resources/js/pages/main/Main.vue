@@ -26,8 +26,12 @@ export default {
             loader: 'common/loader'
         })
     },
-    beforeMount() {
-        this.fetchChecks()
+    async beforeMount() {
+        await this.$recaptchaLoaded()
+
+        const token = await this.$recaptcha('check')
+        // console.log(token);
+        this.fetchChecks({recaptcha_token: token})
     },
     mounted() {
         setInterval(() => {

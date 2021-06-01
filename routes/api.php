@@ -20,9 +20,9 @@ use App\Http\Controllers\CheckController;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::group(['middleware' => 'guest'], static function () {
     Route::post('/login', LoginController::class)->name('login');
@@ -33,7 +33,7 @@ Route::group(['middleware' => 'auth:api'], static function () {
      * GET
      */
     Route::get('user', [UserController::class, 'user']);
-    Route::get('purchase-items', [CheckController::class, 'getChecks']);
+    Route::middleware('recaptcha')->get('purchase-items', [CheckController::class, 'getChecks']);
     Route::get('check-histories', [UserController::class, 'checkHistories']);
 
     /**

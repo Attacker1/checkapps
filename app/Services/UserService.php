@@ -3,24 +3,27 @@
 
 namespace App\Services;
 
-use App\Enum\CheckHistoryStatusEnum;
-use App\Models\User;
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
+use App\Enum\CheckHistoryStatusEnum;
+use Illuminate\Support\Facades\Auth;
 
 class UserService
 {
     public function user(Request $request)
     {
-        $user = $request->user();
-
-        return $user->only([
+        $user_id = $request->user()->user_id;
+        $user = User::where('user_id', $user_id)->withCount('checkHistory')->first()->only([
             'id',
             'user_id',
             'user_fio',
             'user_email',
             'balance',
+            'check_history_count'
         ]);
+
+        return $user;
     }
 
     public function userExists($userEmail)

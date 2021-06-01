@@ -35,6 +35,7 @@ export default {
         }
     },
     getters: {
-        loader: s => s.loader
+        loader: s => s.loader,
+        windowSize: s => s.windowSize
     }
 }

@@ -1,14 +1,14 @@
 <template>
-    <div class="d-flex justify-center pa-20 mb-25" @mouseleave="unhoverRejected">
+    <div class="d-flex justify-center pa-20 mb-25">
         <Modal class="reject-modal" :class="{active: rejectModal}" v-if="isMobile() ? rejectModal : true"
                @close="rejectModal = false">
             <div class="container">
-                <div v-if="isMobile()" class="d-flex justify-end mb-5">
-                    <div @click="rejectModal = false">
-                        <IconCross i-color="white"/>
+                <div class="reject-modal__close">
+                    <div @click="closeRejectModal">
+                        <IconCross :i-color="isMobile() ? 'white' : 'black'"/>
                     </div>
                 </div>
-                <CheckRejectForm @closeRejectForm="rejectModal = false"/>
+                <CheckRejectForm @inputText="inputText" @closeRejectForm="rejectModal = false"/>
             </div>
         </Modal>
 
@@ -23,13 +23,15 @@
                 </div>
             </div>
             <div>
-                <div @click.prevent="skipCurrentCheck" ref="skipButton" class="circle circle_lg check-action" v-shortkey="['tab']" @shortkey="skipCurrentCheck()" >
+                <div @click.prevent="skipCurrentCheck" ref="skipButton" class="circle circle_lg check-action"
+                     v-shortkey="['tab']" @shortkey="skipCurrentCheck()">
                     <IconSkip/>
                     <p class="shortkey text_xs text_grey">Tab</p>
                 </div>
             </div>
             <div>
-                <div @click="sendToApprove" ref="approveButton" class="circle circle_lg check-action check-action_like" v-shortkey="['enter']" @shortkey="sendToApprove()">
+                <div @click="sendToApprove" ref="approveButton" class="circle circle_lg check-action check-action_like"
+                     v-shortkey="['enter']" @shortkey="sendToApprove()">
                     <IconLike/>
                     <p class="shortkey text_xs text_grey">Enter</p>
                 </div>
@@ -47,7 +49,7 @@
     import IconArrowRightSm from '@/assets/icons/IconArrowRightSm.vue';
     import Modal from "@/components/modal/Modal";
     import CheckReject from "@/components/check/CheckReject";
-    import {mapActions, mapState} from 'vuex';
+    import {mapActions, mapState, mapGetters} from 'vuex';
     import CheckRejectForm from '@/components/check/CheckRejectForm';
     import IconCross from '@/assets/icons/IconCross';
     import IconSkip from '@/assets/icons/IconSkip';
@@ -63,6 +65,7 @@
         },
         data: () => ({
             rejectModal: false,
+            lock: false,
         }),
         /*created() {
             const component = this;
@@ -84,8 +87,8 @@
                 check: 'currentCheck/currentCheck',
             }),
 
-            qwe() {
-                dispatch('auth/refresh');
+            inputText(val) {
+                this.lock = val;
             },
 
             sendToApprove() {
@@ -104,19 +107,15 @@
                 this.rejectModal = true;
             },
 
-            changeRejectedModal() {
-                this.rejectModal = !this.rejectModal;
-            },
-
-            hoverRejected() {
-                if (this.windowSize > 1023) {
-                    this.rejectModal = true;
+            closeRejectModal() {
+                if (!this.lock) {
+                    this.rejectModal = false;
                 }
             },
 
-            unhoverRejected() {
-                if (this.windowSize > 1023) {
-                    this.rejectModal = false;
+            changeRejectedModal() {
+                if (!this.lock) {
+                    this.rejectModal = !this.rejectModal;
                 }
             },
 
@@ -125,7 +124,11 @@
             },
         },
         computed: {
-            ...mapState('common', ['windowSize']),
+            // ...mapState('common', ['windowSize']),
+            ...mapGetters({
+                windowSize: 'common/windowSize',
+                countChecks: 'checkActions/countChecks'
+            })
         },
 
     }
@@ -179,6 +182,21 @@
         @media screen and (min-width: 1024px) {
             height: 100%;
             border-radius: 0;
+        }
+    }
+
+    .reject-modal {
+        &__close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+
+            @media screen and (max-width: 1024px) {
+                position: unset;
+                display: flex;
+                justify-content: flex-end;
+            }
         }
     }
 </style>

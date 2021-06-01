@@ -26,8 +26,7 @@
             modelValue: {
                 default: ""
             },
-        }
-        ,
+        },
         computed: {
             shouldBeChecked() {
                 return this.modelValue === this.value
