@@ -20,7 +20,7 @@ export default {
                         Vue.noty.success(res.data.message);
                         dispatch('currentCheck/removeFromChecks', null, {root: true})
                     } else {
-                        Vue.noty.error(res.data.message);
+                        Vue.noty.error(res.data.message ? res.data.message : res.data.error);
                     }
                 })
                 .catch(err => console.log(err))
@@ -41,7 +41,7 @@ export default {
                         Vue.noty.error(res.data.message);
                         dispatch('currentCheck/removeFromChecks', null, {root: true});
                     } else {
-                        Vue.noty.error(res.data.message);
+                        Vue.noty.error(res.data.message ? res.data.message : res.data.error);
                     }
                 })
                 .catch(err => console.log(err))
@@ -60,7 +60,7 @@ export default {
                         dispatch('currentCheck/removeFromChecks', null, {root: true})
                         Vue.noty.show(response.message);
                     } else {
-                        Vue.noty.error(response.message);
+                        Vue.noty.error(res.data.message ? res.data.message : res.data.error);
                     }
                 });
             setTimeout(() => {  commit('common/removeLoader', null, {root: true}); }, 200);

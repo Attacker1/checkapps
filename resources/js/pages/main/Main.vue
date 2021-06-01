@@ -2,7 +2,7 @@
     <div class="main-page">
         <CheckViewSkeleton v-if="loader"/>
         <CheckView v-if="!loader && check"/>
-        <h1 class="main-page__notfound" v-if="!check">Чеков нет, но вы держитесь</h1>
+        <h1 class="main-page__notfound" v-if="!check && !loader">Чеков нет, но вы держитесь</h1>
     </div>
 </template>
 
