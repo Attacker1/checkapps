@@ -2,8 +2,8 @@
     <div class="auth">
         <div class="container" >
             <div class="auth-wrap">
-                <SkeletonBox height="349px" width="410px" border-radius="6px" v-if="loader" />
-                <router-view v-else />
+<!--                <SkeletonBox height="349px" width="410px" border-radius="6px" v-if="loader" />-->
+                <router-view />
             </div>
         </div>
     </div>
@@ -17,7 +17,7 @@
 
     export default {
         name: 'AuthLayout',
-        components: {Loader, SkeletonBox},
+        components: {SkeletonBox},
         computed: {
             ...mapGetters({
                 loader: 'common/loader'

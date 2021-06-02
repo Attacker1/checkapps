@@ -37,8 +37,8 @@ export default {
 
     methods: {
         async submitLogout() {
-            await this.$store.dispatch('checks/resetAllChecks')
-            await this.$store.dispatch('auth/logout')
+            await this.$store.dispatch('checks/resetAllChecks');
+            await this.$store.dispatch('auth/logout');
         },
 
         goToProfile() {

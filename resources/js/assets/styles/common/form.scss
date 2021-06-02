@@ -1,20 +1,25 @@
-.textarea {
-    border: 1px solid #BDBDBD;
-    border-radius: 5px;
-    font-family: $font;
-    outline: none;
-    width: 100%;
-    min-height: 100px;
-    padding: 16px 24px;
-    font-size: 16px;
-    resize: none;
+.form {
+    &_input {
+        border: 1px solid #bdbdbd;
+        border-radius: 5px;
+        font-family: $font;
+        outline: none;
+        width: 100%;
+        padding: 16px 24px;
+        font-size: 16px;
 
-    @media screen and (max-width: 767px) {
-        padding: 12px 16px;
+        &::placeholder {
+            color: $grey;
+            font-size: 16px;
+        }
+
+        @media screen and (max-width: 767px) {
+            padding: 12px 16px;
+        }
     }
 
-    &::placeholder {
-        color: $grey;
-        font-size: 16px;
+    &_textarea {
+        min-height: 100px;
+        resize: none;
     }
 }
