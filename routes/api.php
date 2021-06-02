@@ -48,7 +48,9 @@ Route::group(['middleware' => 'auth:api'], static function () {
     /**
      * GROUP
      */
-    Route::group(['prefix' => 'users'], function() {
-        Route::get('/', [UserController::class, 'all']);
+    Route::group(['middleware' => 'role:admin'], function() {
+        Route::group(['prefix' => 'users'], function() {
+            Route::get('/', [UserController::class, 'all']);
+        });
     });
 });

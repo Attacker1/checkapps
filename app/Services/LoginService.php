@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Exception;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Client\JsonRpcClient;
@@ -153,6 +154,12 @@ class LoginService
         try {
             $user = new User($response);
             $success = $user->save();
+            $user->refresh();
+            $role = Role::where('slug', 'user')->first();
+
+            if($role) {
+                $user->role()->attach($role);
+            }
 
             if (!$success) {
                 throw new Exception(

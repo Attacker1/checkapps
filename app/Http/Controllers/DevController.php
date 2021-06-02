@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Repositories\CheckRepository;
 
 class DevController extends Controller
@@ -13,10 +15,9 @@ class DevController extends Controller
         $this->checkRepository = $checkRepository;
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = 'Мамкин хацкер';
-        // $data = $this->checkRepository->getExpiredChecks()->get();
+        $data = 'Мамкин хацкер';;
 
         return view('dev', ['data' => $data]);
     }
