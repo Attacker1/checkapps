@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Exception;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class RoleMiddleware
@@ -18,12 +19,11 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, ... $roles)
     {
         try {
-            // throw new Exception(json_encode($roles), 404);
             if (!$request->user()) {
                 throw new Exception('Пользователь не авторизован', 404);
             }
 
-            $userRole = $request->user()->role()->first();
+            $userRole = $request->user()->role;
 
             if(!$userRole) {
                 throw new Exception('Пользователь не имеет ролей', 404);

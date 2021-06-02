@@ -93,8 +93,12 @@ class LoginService
 
     private function registerUser(LoginRequest $request)
     {
+        $role = Role::where('slug', 'user')->first();
         $userData = array_merge(
-            ['password' =>  bcrypt(Str::random())],
+            [
+                'password' =>  bcrypt(Str::random()),
+                'role_id' => $role->id,
+            ],
             (array) $this->loginResponse
         );
 
@@ -154,12 +158,6 @@ class LoginService
         try {
             $user = new User($response);
             $success = $user->save();
-            $user->refresh();
-            $role = Role::where('slug', 'user')->first();
-
-            if($role) {
-                $user->role()->attach($role);
-            }
 
             if (!$success) {
                 throw new Exception(

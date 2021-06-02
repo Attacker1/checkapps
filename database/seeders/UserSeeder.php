@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $moderator = $this->moderatorService->getModerator();
+        $role = Role::where('slug', 'admin')->first();
 
         if(!isset($moderator->error)) {
             $newUser = new User();
@@ -36,14 +37,9 @@ class UserSeeder extends Seeder
             $newUser->referer_user_fio = $moderator->info->referer_user_fio;
             $newUser->career_id = $moderator->info->career_id;
             $newUser->token_id = $moderator->token_id;
+            $newUser->role_id = $role->id;
+
             $newUser->save();
-            $newUser->refresh();
-
-            $role = Role::where('slug', 'admin')->first();
-
-            if($role) {
-                $newUser->role()->attach($role);
-            }
         }
 
         User::factory(200)->create();

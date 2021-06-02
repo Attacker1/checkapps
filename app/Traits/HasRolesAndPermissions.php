@@ -9,24 +9,7 @@ trait HasRolesAndPermissions
 {
     public function role()
     {
-        return $this->belongsToMany(Role::class, 'users_roles');
-    }
-
-    public function getRole(string $role)
-    {
-        return Role::where('slug', $role)->get();
-    }
-
-    public function setRole(string $role)
-    {
-        $newRole = $this->getRole($role)->first();
-
-        if ($newRole === null) {
-            return $this;
-        }
-
-        $this->role()->save($newRole);
-        return $this;
+        return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
     public function hasRole($checkRole)
