@@ -28,6 +28,7 @@ class User extends Authenticatable
         'career_id',
         'token_id',
         'password',
+        'role_id',
     ];
 
     public function checkHistory()

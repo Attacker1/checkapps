@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use App\Models\User;
-use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 class UserFactory extends Factory
 {
@@ -22,6 +23,8 @@ class UserFactory extends Factory
      */
     public function definition()
     {
+        $role = Role::where('slug', 'user')->first();
+
         $userData = [
             'user_id' => $this->faker->unique()->numberBetween(0, 123456),
             'user_fio' => $this->faker->lastName . ' ' . $this->faker->firstName,
@@ -30,8 +33,9 @@ class UserFactory extends Factory
             'referer_user_id' => 100500,
             'token_id' => Str::random(10),
             'password' => $this->faker->password(),
+            'role_id' => $role->id,
         ];
-        
+
         return $userData;
     }
 }

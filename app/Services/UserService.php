@@ -14,14 +14,21 @@ class UserService
     public function user(Request $request)
     {
         $user_id = $request->user()->user_id;
-        $user = User::where('user_id', $user_id)->withCount('checkHistory')->first()->only([
-            'id',
-            'user_id',
-            'user_fio',
-            'user_email',
-            'balance',
-            'check_history_count'
-        ]);
+        $user = User::query()
+            ->where('user_id', $user_id)
+            ->withCount('checkHistory')
+            ->with('role:id,slug,name')
+            ->first()
+            ->only(
+            [
+                'id',
+                'user_id',
+                'user_fio',
+                'user_email',
+                'balance',
+                'check_history_count',
+                'role',
+            ]);
 
         return $user;
     }
