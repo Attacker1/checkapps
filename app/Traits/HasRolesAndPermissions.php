@@ -4,22 +4,114 @@
 namespace App\Traits;
 
 use App\Models\Role;
+use App\Models\Permission;
 
 trait HasRolesAndPermissions
 {
-    public function role()
+    public function roles()
     {
-        return $this->belongsTo(Role::class, 'role_id', 'id');
+        return $this->belongsToMany(Role::class, 'users_roles');
     }
 
-    public function hasRole($checkRole)
+    public function permissions()
     {
-        $role = $this->role()->first();
+        return $this->belongsToMany(Permission::class, 'users_permissions');
+    }
 
-        if(!$role) {
-            return false;
+    /**
+     * @param mixed $roles
+     * @return bool
+     */
+    public function hasRole($roles): bool
+    {
+        $roles = is_array($roles) ? $roles : explode(',', $roles);
+
+        foreach ($roles as $role) {
+            if ($this->roles->contains('slug', $role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $permission
+     * @return bool
+     */
+    public function hasPermission(String $permission): bool
+    {
+        return (bool) $this->permissions->where('slug', $permission)->count();
+    }
+
+    /**
+     * @param $permission
+     * @return bool
+     */
+    public function hasPermissionThroughRole(Permission $permission): bool
+    {
+        foreach ($permission->roles as $role) {
+            if ($this->roles->contains($role)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param $permission
+     * @return bool
+     */
+    public function hasPermissionTo(Permission $permission): bool
+    {
+        return $this->hasPermissionThroughRole($permission) || $this->hasPermission($permission->slug);
+    }
+
+    /**
+     * @param array $permissions
+     * @return mixed
+     */
+    public function getAllPermissions(array $permissions)
+    {
+        return Permission::whereIn('slug', $permissions)->get();
+    }
+
+    /**
+     * @param mixed ...$permissions
+     * @return $this
+     */
+    public function givePermissionsTo(...$permissions)
+    {
+        $permissions = $this->getAllPermissions($permissions);
+
+        if ($permissions === null) {
+            return $this;
         }
 
-        return $role->slug === $checkRole;
+        $this->permissions()->saveMany($permissions);
+
+        return $this;
+    }
+
+    /**
+     * @param mixed ...$permissions
+     * @return $this
+     */
+    public function deletePermissions(...$permissions)
+    {
+        $permissions = $this->getAllPermissions($permissions);
+
+        $this->permissions()->detach($permissions);
+
+        return $this;
+    }
+
+    /**
+     * @param mixed ...$permissions
+     * @return HasRolesAndPermissions
+     */
+    public function refreshPermissions(...$permissions)
+    {
+        $this->permissions()->detach();
+        return $this->givePermissionsTo($permissions);
     }
 }

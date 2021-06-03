@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enum\PermissionsEnum;
 use App\Models\Permission;
 use Illuminate\Database\Seeder;
 
@@ -14,21 +15,7 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = [
-            [
-                'name' => 'Проверка чеков',
-                'slug' => 'verify_check',
-            ],
-            [
-                'name' => 'Изменение настроек',
-                'slug' => 'edit_settings',
-            ],
-            [
-                'name' => 'Блокировать пользователей',
-                'slug' => 'block_users',
-            ],
-        ];
-
+        $permissions = PermissionsEnum::values();
 
         foreach ($permissions as $permission) {
             $newPermission = new Permission($permission);

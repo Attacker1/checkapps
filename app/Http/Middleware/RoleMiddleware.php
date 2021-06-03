@@ -16,23 +16,15 @@ class RoleMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, ... $roles)
+    public function handle(Request $request, Closure $next, ...$roles)
     {
         try {
             if (!$request->user()) {
                 throw new Exception('Пользователь не авторизован', 404);
             }
 
-            $userRole = $request->user()->role;
-
-            if(!$userRole) {
-                throw new Exception('Пользователь не имеет ролей', 404);
-            }
-
-            $isPass = in_array($userRole->slug, $roles);
-
-            if(!$isPass) {
-                throw new Exception('Отсутствуют права для запрашиваемого метода', 404);
+            if(!$request->user()->hasRole($roles)) {
+                throw new Exception('Отсутствуют права для запрашиваемого метода', 403);
             }
 
             return $next($request);
@@ -40,7 +32,7 @@ class RoleMiddleware
             return response()->json([
                 'error' => $exception->getMessage(),
                 'code' => $exception->getCode(),
-            ]);
+            ], $exception->getCode());
         }
     }
 }

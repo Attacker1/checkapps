@@ -173,10 +173,12 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function all(Request $request) {
-        $paginate = $request->paginate ?? 20;
-        $filter = $request->filter ?? 'desc';
+    public function users(Request $request) {
+        // $paginate =  ?? 20;
+        // $filter =  ?? 'desc';
+        // $s =  ?? false;
+        // $searchBy =  ?? false;
 
-        return response()->json($this->userService->all($paginate, $filter));
+        return response()->json($this->userService->users($request->paginate, $request->filter, $request->s, $request->searchBy));
     }
 }

@@ -31,7 +31,7 @@ class Recaptcha
             }
 
             if(!$responce) {
-                throw new Exception('Captcha is invalid.', 404);
+                throw new Exception('Похоже что вы не прошли проверку на робота, по всем вопроса обращаейтесь в техподдержку mail@chekapps.com', 404);
             }
 
             return $next($request);
@@ -39,7 +39,7 @@ class Recaptcha
             return response()->json([
                 'error' => $exception->getMessage(),
                 'code' => $exception->getCode(),
-            ]);
+            ], $exception->getCode());
         }
     }
 }

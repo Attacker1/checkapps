@@ -6,7 +6,10 @@ namespace App\Services;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Enum\UserOrderByEnum;
 use App\Enum\CheckHistoryStatusEnum;
+use App\Enum\UserSearchByEnum;
+use App\Http\Resources\User\UserResource;
 use Illuminate\Support\Facades\Auth;
 
 class UserService
@@ -17,7 +20,7 @@ class UserService
         $user = User::query()
             ->where('user_id', $user_id)
             ->withCount('checkHistory')
-            ->with('role:id,slug,name')
+            ->with('roles')
             ->first()
             ->only(
             [
@@ -27,7 +30,7 @@ class UserService
                 'user_email',
                 'balance',
                 'check_history_count',
-                'role',
+                'roles',
             ]);
 
         return $user;
@@ -70,26 +73,30 @@ class UserService
         }
     }
 
-    public function all($paginate, $filter) {
-        $approvedFilters = [
-            'DESC' => 'DESC',
-            'ASC' => 'ASC',
-        ];
+    public function users($paginate, $filter, $s = null, $searchBy = null) {
+        $approvedFilters = UserOrderByEnum::values();
+        $approvedSearchBy = UserSearchByEnum::values();
 
-        $filter = empty($approvedFilters[$filter]) ? $approvedFilters['DESC'] : $approvedFilters[$filter];
+        $paginate = $paginate ?? 20;
+        $filter = $filter && in_array(strtoupper($filter), $approvedFilters) ? strtoupper($filter) : UserOrderByEnum::DESC;
 
-        $users = User::withCount('checkHistory')->orderBy('check_history_count', $filter)->paginate($paginate);
+        $users = User::query();
+
+        if($s && ($searchBy && in_array(strtolower($searchBy), $approvedSearchBy))) {
+            $searchBy = strtolower($searchBy);
+
+            $users->where($searchBy, 'like', '%'. $s . '%');
+        }
+
+        $users
+            ->withCount('checkHistory')
+            ->with('roles')
+            ->orderBy('check_history_count', $filter);
+
+        $users = $users->paginate($paginate);
 
         $users->getCollection()->transform(function($user) {
-            unset(
-                $user['password'],
-                $user['created_at'],
-                $user['updated_at'],
-                $user['token_id'],
-                $user['career_id'],
-                $user['referer_user_fio'],
-                $user['referer_user_id'],
-            );
+            $user = new UserResource($user);
 
             return $user;
         });
