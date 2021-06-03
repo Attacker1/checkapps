@@ -27,9 +27,7 @@
             }),
         },
         async beforeMount() {
-            await this.$recaptchaLoaded()
-            const token = await this.$recaptcha('check')
-            this.fetchChecks({recaptcha_token: token})
+            this.fetchChecks()
         },
         mounted() {
             setInterval(() => {

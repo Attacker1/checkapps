@@ -52,7 +52,17 @@ Vue.router = new VueRouter({
                 {
                     path: '/admin',
                     name: 'Admin',
-                    component: Admin
+                    component: Admin,
+                    beforeEnter: async (to, from, next) => {
+                        await store.dispatch('auth/fetch', null, {root: true});
+                        let slug = store.getters['auth/user'].role.slug;
+                        if (slug === 'admin') {
+                            next()
+                        }
+                        else {
+                            next({name: 'NotFound'});
+                        }
+                    }
                 },
                 {
                     path: '*',

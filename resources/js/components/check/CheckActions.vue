@@ -108,9 +108,8 @@
             },
 
             closeRejectModal() {
-                if (!this.lock) {
-                    this.rejectModal = false;
-                }
+                this.rejectModal = false;
+                this.lock = false;
             },
 
             changeRejectedModal() {
