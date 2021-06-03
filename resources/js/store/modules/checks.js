@@ -66,4 +66,3 @@ export default {
         checks: s => s.checks
     }
 }
-// {"check_id":19319550,"image":"https://api.thefiniko.com/upload/cashback_purchase/20210603/c3d6f1b000e9438b56b5f1d5a55b66aa.jpg.webp","amount":2.1,"amount_in_currency":154,"dt":"2021-06-03 11:06:41","dt_purchase":"2021-06-01 11:05:44","currency":"RUB","verify_quantity":5,"current_quantity":0,"status":"INCHECK","created_at":"2021-06-03T08:10:59.000000Z","updated_at":"2021-06-03T12:42:37.000000Z","check_user_id":513753}
