@@ -2,7 +2,9 @@
 
 namespace App\Http\Resources;
 
-use App\Http\Resources\RoleResource;
+use App\Enum\PermissionsEnum;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Resources\PermissionResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -22,7 +24,10 @@ class UserResource extends JsonResource
             'user_email' => $this->user_email,
             'user_phone' => $this->user_phone,
             'balance' => $this->balance,
-            'roles' => RoleResource::collection($this->whenLoaded('roles')),
+            'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
+            'isAdmin' => $this->whenLoaded('permissions', function() {
+                return (bool) $this->permissions->where('slug', PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'])->first();
+            }),
         ];
 
         return $data;
