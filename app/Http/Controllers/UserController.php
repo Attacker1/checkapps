@@ -151,11 +151,33 @@ class UserController extends Controller
      *         required=false,
      *         example="DESC",
      *     ),
+     *     @OA\Parameter(
+     *         description="По какому полю искать пользователя user_fio - ФИО, user_email - email. Если будет использоваться поиск, то этот параметр обязателен",
+     *         in="query",
+     *         name="searchBy",
+     *         required=false,
+     *         example="user_fio",
+     *     ),
+     *     @OA\Parameter(
+     *         description="Поисковый запрос",
+     *         in="query",
+     *         name="s",
+     *         required=false,
+     *         example="Никита",
+     *     ),
      *     @OA\Response(
      *         response=401,
      *         description="Вылетает если запрос не авторизован",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Вылетает если у пользователя не прав для этого метода",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string"),
+     *             @OA\Property(property="code", type="string"),
      *         )
      *     ),
      *     @OA\Response(
@@ -173,10 +195,7 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function all(Request $request) {
-        $paginate = $request->paginate ?? 20;
-        $filter = $request->filter ?? 'desc';
-
-        return response()->json($this->userService->all($paginate, $filter));
+    public function users(Request $request) {
+        return response()->json($this->userService->users($request->paginate, $request->filter, $request->s, $request->searchBy));
     }
 }
