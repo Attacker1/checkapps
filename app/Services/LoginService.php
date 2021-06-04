@@ -7,6 +7,7 @@ use App\Models\Role;
 use App\Models\User;
 use Illuminate\Support\Str;
 use App\Client\JsonRpcClient;
+use App\Enum\RolesEnum;
 use App\Services\AdminService;
 use Illuminate\Support\Carbon;
 use App\Http\Requests\LoginRequest;
@@ -93,11 +94,9 @@ class LoginService
 
     private function registerUser(LoginRequest $request)
     {
-        $role = Role::where('slug', 'user')->first();
         $userData = array_merge(
             [
-                'password' =>  bcrypt(Str::random()),
-                'role_id' => $role->id,
+                'password' => bcrypt(Str::random()),
             ],
             (array) $this->loginResponse
         );
@@ -111,6 +110,9 @@ class LoginService
                     404
                 );
             }
+
+            $role = Role::where('slug', RolesEnum::USER['role_data']['slug'])->first();
+            $createdUser->roles()->attach($role);
 
             $this->currentUser = $createdUser;
 

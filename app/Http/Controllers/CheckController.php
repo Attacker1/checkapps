@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use DebugBar\DebugBar;
+use App\Models\Permission;
 use Illuminate\Http\Request;
+use App\Enum\PermissionsEnum;
 use App\Services\CheckService;
 use App\Services\RecaptchaService;
+use Illuminate\Support\Facades\Gate;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
 use App\Http\Requests\PurchaseListRequest;

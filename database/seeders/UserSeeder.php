@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
 use App\Services\Admin\ModeratorService;
@@ -24,24 +25,57 @@ class UserSeeder extends Seeder
     public function run()
     {
         $moderator = $this->moderatorService->getModerator();
-        $role = Role::where('slug', 'admin')->first();
+        $roles = Role::with('permissions')->get();
+        // $permissions = Permission::all();
+
+        $users = [
+            [
+                'user_data' => [
+                    'user_fio' => $moderator->info->user_fio,
+                    'user_email' => $moderator->info->user_email,
+                    'password' => bcrypt($this->moderatorService->getModeratorCreditnails()['password']),
+                    'user_id' => $moderator->info->user_id,
+                    'user_phone' => $moderator->info->user_phone,
+                    'referer_user_id' => $moderator->info->referer_user_id,
+                    'referer_user_fio' => $moderator->info->referer_user_fio,
+                    'career_id' => $moderator->info->career_id,
+                    'token_id' => $moderator->token_id,
+                ],
+                'roles' => [
+                    'admin',
+                ]
+            ],
+        ];
 
         if(!isset($moderator->error)) {
-            $newUser = new User();
-            $newUser->user_fio = $moderator->info->user_fio;
-            $newUser->user_email = $moderator->info->user_email;
-            $newUser->password = bcrypt($this->moderatorService->getModeratorCreditnails()['password']);
-            $newUser->user_id = $moderator->info->user_id;
-            $newUser->user_phone = $moderator->info->user_phone;
-            $newUser->referer_user_id = $moderator->info->referer_user_id;
-            $newUser->referer_user_fio = $moderator->info->referer_user_fio;
-            $newUser->career_id = $moderator->info->career_id;
-            $newUser->token_id = $moderator->token_id;
-            $newUser->role_id = $role->id;
+           foreach ($users as $user) {
+                $newUser = new User($user['user_data']);
+                $newUser->save();
 
-            $newUser->save();
+                if(isset($user['roles'])) {
+                    foreach ($user['roles'] as $roleSlug) {
+                        $role = $roles->filter(function ($item) use ($roleSlug) {
+                            return $item->slug === $roleSlug;
+                        })->first();
+
+                        if($role) {
+                            $newUser->roles()->attach($role);
+                        }
+                    }
+                }
+           }
         }
 
-        User::factory(200)->create();
+        $fakeUsers = User::factory(50)->create();
+
+        foreach($fakeUsers as $fakeUser) {
+            $role = $roles->filter(function ($item) use ($roleSlug) {
+                return $item->slug === 'user';
+            })->first();
+
+            if($role) {
+                $fakeUser->roles()->attach($role);
+            }
+        }
     }
 }
