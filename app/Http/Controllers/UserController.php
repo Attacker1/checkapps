@@ -151,11 +151,26 @@ class UserController extends Controller
      *         required=false,
      *         example="DESC",
      *     ),
+     *     @OA\Parameter(
+     *         description="Фильтр пользователей по активности DESC - самые активные, ASC - самые неактивные",
+     *         in="query",
+     *         name="searchBy",
+     *         required=false,
+     *         example="DESC",
+     *     ),
      *     @OA\Response(
      *         response=401,
      *         description="Вылетает если запрос не авторизован",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Вылетает если у пользователя не прав для этого метода",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string"),
+     *             @OA\Property(property="code", type="string"),
      *         )
      *     ),
      *     @OA\Response(
@@ -174,11 +189,6 @@ class UserController extends Controller
      * )
      */
     public function users(Request $request) {
-        // $paginate =  ?? 20;
-        // $filter =  ?? 'desc';
-        // $s =  ?? false;
-        // $searchBy =  ?? false;
-
         return response()->json($this->userService->users($request->paginate, $request->filter, $request->s, $request->searchBy));
     }
 }
