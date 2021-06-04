@@ -4,10 +4,9 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Exception;
-use App\Models\User;
 use Illuminate\Http\Request;
 
-class RoleMiddleware
+class PermissionMiddleware
 {
     /**
      * Handle an incoming request.
@@ -16,14 +15,14 @@ class RoleMiddleware
      * @param  \Closure  $next
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle(Request $request, Closure $next, ...$permissions)
     {
         try {
             if (!$request->user()) {
                 throw new Exception('Пользователь не авторизован', 404);
             }
 
-            if(!$request->user()->hasRole($roles)) {
+            if(!$request->user()->hasPermissions($permissions)) {
                 throw new Exception('Отсутствуют права для запрашиваемого метода', 403);
             }
 

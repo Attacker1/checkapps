@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Enum\PermissionsEnum;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\User;
@@ -25,8 +26,7 @@ class UserSeeder extends Seeder
     public function run()
     {
         $moderator = $this->moderatorService->getModerator();
-        $roles = Role::with('permissions')->get();
-        // $permissions = Permission::all();
+        $permissions = Permission::all();
 
         $users = [
             [
@@ -41,8 +41,10 @@ class UserSeeder extends Seeder
                     'career_id' => $moderator->info->career_id,
                     'token_id' => $moderator->token_id,
                 ],
-                'roles' => [
-                    'admin',
+                'permissions' => [
+                    PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'],
+                    PermissionsEnum::CAN_VIEW_USERS['slug'],
+                    PermissionsEnum::CAN_BLOCK_USERS['slug'],
                 ]
             ],
         ];
@@ -52,30 +54,19 @@ class UserSeeder extends Seeder
                 $newUser = new User($user['user_data']);
                 $newUser->save();
 
-                if(isset($user['roles'])) {
-                    foreach ($user['roles'] as $roleSlug) {
-                        $role = $roles->filter(function ($item) use ($roleSlug) {
-                            return $item->slug === $roleSlug;
-                        })->first();
-
-                        if($role) {
-                            $newUser->roles()->attach($role);
-                        }
-                    }
+                if(isset($user['permissions'])) {
+                    $newUser->givePermissionsTo($user['permissions']);
                 }
            }
         }
 
         $fakeUsers = User::factory(50)->create();
+        $userPermissionGroup = [
+            PermissionsEnum::CAN_VERIVY_CHECKS['slug'],
+        ];
 
         foreach($fakeUsers as $fakeUser) {
-            $role = $roles->filter(function ($item) use ($roleSlug) {
-                return $item->slug === 'user';
-            })->first();
-
-            if($role) {
-                $fakeUser->roles()->attach($role);
-            }
+            $fakeUser->givePermissionsTo($userPermissionGroup);
         }
     }
 }
