@@ -80,6 +80,8 @@
         watch: {
             toggle: function (toggleValue) {
                 this.textarea = toggleValue === 'Другое';
+                // console.log((this.comment.length > 1 && this.textarea));
+                this.$emit('inputText', (this.comment.length > 1 && this.textarea));
             },
             comment: function(value) {
                 this.$emit('inputText', value.length > 1);

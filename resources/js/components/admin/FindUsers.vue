@@ -2,7 +2,7 @@
     <div class="find-users">
         <form class="find-users__form">
             <input v-model="text" type="text" class="form_input find-users__input">
-            <IconZoom class="find-users__icon"/>
+            <IconLense class="find-users__icon"/>
         </form>
         <ul class="find-users__suggestions" v-if="users.length !== 0">
             <li class="find-users__suggestion" v-for="(user, index) in users">
@@ -12,12 +12,12 @@
     </div>
 </template>
 <script>
-    import IconZoom from "@/assets/icons/IconZoom";
+    import IconLense from "@/assets/icons/IconLense";
     import UserCard from '@/components/admin/UserCard';
 
     export default {
         name: 'FindUsers',
-        components: {IconZoom, UserCard},
+        components: {IconLense, UserCard},
         data: () => ({
             text: '',
             timer: '',

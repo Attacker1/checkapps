@@ -26,23 +26,25 @@ export default {
     },
 
     actions: {
-        async fetchChecks({commit, state}, data, force= false) {
+        async fetchChecks({commit, state}, force= false) {
 
             commit('common/setLoader', null, {root: true})
 
             try {
                 if ((!state.checks || state.checks.length <= 1) || force) {
+                    await Vue.prototype.$recaptchaLoaded();
+                    const token = await Vue.prototype.$recaptcha('check');
                     const response = await axios.get('purchase-items',{
                         params: {
-                            recaptcha_token: data.recaptcha_token
+                            recaptcha_token: token
                         }
                     });
                     commit('setChecks', response.data)
                     commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
                     commit('setExpiryTime')
                 }
-            } catch (response) {
-                console.log(response.data.error);
+            } catch (res) {
+                Vue.noty.error(res.data.error ? res.data.error : res.data.message);
             }
 
             commit('common/removeLoader', null, {root: true})

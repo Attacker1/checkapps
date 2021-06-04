@@ -10,6 +10,8 @@ import Main from '@/pages/main/Main';
 import History from '@/pages/history/History';
 import Admin from '@/pages/admin/Admin';
 
+import {adminGuard} from '@/guard';
+
 Vue.use(VueRouter);
 
 Vue.router = new VueRouter({
@@ -52,7 +54,8 @@ Vue.router = new VueRouter({
                 {
                     path: '/admin',
                     name: 'Admin',
-                    component: Admin
+                    component: Admin,
+                    beforeEnter: adminGuard
                 },
                 {
                     path: '*',

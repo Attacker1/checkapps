@@ -12,7 +12,6 @@ export default {
             setStorageItem('currentCheck', state, payload ? payload : null);
         },
         resetCurrentCheck: (state) => {
-            console.log('removing current check');
             removeStorageItem('currentCheck', state);
         }
     },
@@ -26,7 +25,7 @@ export default {
             })
 
 
-            if (filteredChecks.length) {
+            if (filteredChecks.length > 0) {
                 commit('checks/setChecks', filteredChecks, {root: true});
                 commit('resetCurrentCheck');
                 commit('setCurrentCheck', filteredChecks[0])
