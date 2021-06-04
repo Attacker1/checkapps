@@ -48,8 +48,7 @@ Route::group(['middleware' => 'auth:api'], static function () {
     /**
      * GROUP
      */
-
-    Route::group(['prefix' => 'admin', 'middleware' =>  "role:$adminRoleSlug,$superAdminRoleSlug"], function() {
+    Route::group(['middleware' =>  "role:$adminRoleSlug,$superAdminRoleSlug"], function() {
         Route::group(['prefix' => 'users'], function() {
             Route::get('/', [UserController::class, 'users']);
         });

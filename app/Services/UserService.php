@@ -7,33 +7,17 @@ use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Enum\UserOrderByEnum;
-use App\Enum\CheckHistoryStatusEnum;
 use App\Enum\UserSearchByEnum;
-use App\Http\Resources\User\UserResource;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Resources\UserResource;
 
 class UserService
 {
     public function user(Request $request)
     {
         $user_id = $request->user()->user_id;
-        $user = User::query()
-            ->where('user_id', $user_id)
-            ->withCount('checkHistory')
-            ->with('roles')
-            ->first()
-            ->only(
-            [
-                'id',
-                'user_id',
-                'user_fio',
-                'user_email',
-                'balance',
-                'check_history_count',
-                'roles',
-            ]);
+        $user = User::query()->where('user_id', $user_id)->withCount('checkHistory')->with('roles')->first();
 
-        return $user;
+        return new UserResource($user);
     }
 
     public function userExists($userEmail)
@@ -96,9 +80,7 @@ class UserService
         $users = $users->paginate($paginate);
 
         $users->getCollection()->transform(function($user) {
-            $user = new UserResource($user);
-
-            return $user;
+            return new UserResource($user);
         });
 
         return $users;

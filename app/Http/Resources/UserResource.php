@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Resources\User;
+namespace App\Http\Resources;
 
+use App\Http\Resources\RoleResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -21,11 +22,8 @@ class UserResource extends JsonResource
             'user_email' => $this->user_email,
             'user_phone' => $this->user_phone,
             'balance' => $this->balance,
+            'roles' => RoleResource::collection($this->whenLoaded('roles')),
         ];
-
-        if($this->check_history_count) {
-            $data['check_history_count'] = $this->check_history_count;
-        }
 
         return $data;
     }
