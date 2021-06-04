@@ -328,6 +328,20 @@
                         "description": "Фильтр пользователей по активности DESC - самые активные, ASC - самые неактивные",
                         "required": false,
                         "example": "DESC"
+                    },
+                    {
+                        "name": "searchBy",
+                        "in": "query",
+                        "description": "По какому полю искать пользователя user_fio - ФИО, user_email - email. Если будет использоваться поиск, то этот параметр обязателен",
+                        "required": false,
+                        "example": "user_fio"
+                    },
+                    {
+                        "name": "s",
+                        "in": "query",
+                        "description": "Поисковый запрос",
+                        "required": false,
+                        "example": "Никита"
                     }
                 ],
                 "responses": {
@@ -338,6 +352,24 @@
                                 "schema": {
                                     "properties": {
                                         "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Вылетает если у пользователя не прав для этого метода",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        },
+                                        "code": {
                                             "type": "string"
                                         }
                                     },

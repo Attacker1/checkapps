@@ -152,11 +152,18 @@ class UserController extends Controller
      *         example="DESC",
      *     ),
      *     @OA\Parameter(
-     *         description="Фильтр пользователей по активности DESC - самые активные, ASC - самые неактивные",
+     *         description="По какому полю искать пользователя user_fio - ФИО, user_email - email. Если будет использоваться поиск, то этот параметр обязателен",
      *         in="query",
      *         name="searchBy",
      *         required=false,
-     *         example="DESC",
+     *         example="user_fio",
+     *     ),
+     *     @OA\Parameter(
+     *         description="Поисковый запрос",
+     *         in="query",
+     *         name="s",
+     *         required=false,
+     *         example="Никита",
      *     ),
      *     @OA\Response(
      *         response=401,
