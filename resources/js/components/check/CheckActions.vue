@@ -1,10 +1,14 @@
 <template>
-    <div class="d-flex justify-center pa-20 mb-25">
+    <div class="d-flex justify-center pa-20 mb-25"
+         v-shortkey.once="['esc']"
+         @shortkey="closeRejectModal()"
+    >
         <Modal class="reject-modal" :class="{active: rejectModal}" v-if="isMobile() ? rejectModal : true"
-               @close="rejectModal = false">
+               @close="rejectModal = false"
+        >
             <div class="container">
                 <div class="reject-modal__close">
-                    <div @click="closeRejectModal">
+                    <div @click="closeRejectModalForce">
                         <IconCross/>
                     </div>
                 </div>
@@ -16,24 +20,25 @@
             <div>
                 <div @click="clickRejected"
                      class="circle circle_lg check-action check-action_dislike"
-                     v-shortkey="['space']" @shortkey="changeRejectedModal()"
+                     v-shortkey.once="['arrowleft', 'shift']"
+                     @shortkey="clickRejected()"
                 >
                     <IconDislike/>
-                    <p class="shortkey text_xs text_grey">Пробел</p>
+                    <p class="shortkey text_sm text_grey">Shift + ←</p>
                 </div>
             </div>
             <div>
-                <div @click.prevent="skipCurrentCheck" ref="skipButton" class="circle circle_lg check-action"
+                <div @click.prevent="skipCurrentCheck" class="circle circle_lg check-action"
                      v-shortkey="['tab']" @shortkey="skipCurrentCheck()">
                     <IconSkip/>
-                    <p class="shortkey text_xs text_grey">Tab</p>
+                    <p class="shortkey text_sm text_grey">Tab</p>
                 </div>
             </div>
             <div>
-                <div @click="sendToApprove" ref="approveButton" class="circle circle_lg check-action check-action_like"
-                     v-shortkey="['enter']" @shortkey="sendToApprove()">
+                <div @click="sendToApprove" class="circle circle_lg check-action check-action_like"
+                     v-shortkey="['arrowright', 'shift']" @shortkey="sendToApprove()">
                     <IconLike/>
-                    <p class="shortkey text_xs text_grey">Enter</p>
+                    <p class="shortkey text_sm text_grey">Shift + →</p>
                 </div>
             </div>
         </div>
@@ -108,14 +113,14 @@
             },
 
             closeRejectModal() {
-                this.rejectModal = false;
-                this.lock = false;
+                if (!this.lock) {
+                    this.rejectModal = false;
+                }
             },
 
-            changeRejectedModal() {
-                if (!this.lock) {
-                    this.rejectModal = !this.rejectModal;
-                }
+            closeRejectModalForce() {
+                this.rejectModal = false;
+                this.lock = false;
             },
 
             isMobile() {

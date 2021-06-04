@@ -1,8 +1,11 @@
 <template>
     <div class="check-image">
         <!--        <img :src="receipt" alt="">-->
-        <viewer :options="options" @inited="inited" ref="viewer">
-            <img :src="receipt" ref="viewerImage" alt="check" class="check">
+        <viewer @inited="inited" ref="viewer">
+            <template slot-scope="scope">
+                <img :src="receipt" ref="viewerImage" alt="check" class="check">
+            </template>
+<!--            <img :src="receipt" ref="viewerImage" alt="check" class="check">-->
         </viewer>
         <zoom-on-hover ref="zoom" :img-normal="receipt" class="check-image__image"></zoom-on-hover>
         <div @click="rotate" class="check-rotate">
@@ -32,12 +35,6 @@
             x: 0,
             y: 0,
             rotation: 0,
-            options: {
-                inline: false, button: true, navbar: false,
-                title: false, toolbar: true, tooltip: false,
-                movable: true, zoomable: true, rotatable: true,
-                scalable: true, transition: false, fullscreen: true, keyboard: false
-            }
         }),
         props: {
             receipt: null,

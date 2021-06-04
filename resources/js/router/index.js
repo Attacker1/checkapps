@@ -10,6 +10,8 @@ import Main from '@/pages/main/Main';
 import History from '@/pages/history/History';
 import Admin from '@/pages/admin/Admin';
 
+import {adminGuard} from '@/guard';
+
 Vue.use(VueRouter);
 
 Vue.router = new VueRouter({
@@ -53,16 +55,7 @@ Vue.router = new VueRouter({
                     path: '/admin',
                     name: 'Admin',
                     component: Admin,
-                    beforeEnter: async (to, from, next) => {
-                        await store.dispatch('auth/fetch', null, {root: true});
-                        let slug = store.getters['auth/user'].role.slug;
-                        if (slug === 'admin') {
-                            next()
-                        }
-                        else {
-                            next({name: 'NotFound'});
-                        }
-                    }
+                    beforeEnter: adminGuard
                 },
                 {
                     path: '*',
