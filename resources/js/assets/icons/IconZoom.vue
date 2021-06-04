@@ -1,22 +1,8 @@
 <template>
-    <svg :width="size" :height="size" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g filter="url(#filter0_bzoom)">
-            <rect width="48" height="48" rx="24" fill="black" fill-opacity="0.24"/>
-            <path fill-rule="evenodd" clip-rule="evenodd"
-                  d="M22 30C17.5817 30 14 26.4183 14 22C14 17.5817 17.5817 14 22 14C26.4183 14 30 17.5817 30 22C30 23.8487 29.3729 25.551 28.3199 26.9056L33.7071 32.2929L32.2929 33.7071L26.9056 28.3199C25.551 29.3729 23.8487 30 22 30ZM28 22C28 25.3137 25.3137 28 22 28C18.6863 28 16 25.3137 16 22C16 18.6863 18.6863 16 22 16C25.3137 16 28 18.6863 28 22Z"
-                  fill="white"/>
-        </g>
-        <defs>
-            <filter id="filter0_bzoom" x="-4" y="-4" width="56" height="56" filterUnits="userSpaceOnUse"
-                    color-interpolation-filters="sRGB">
-                <feFlood flood-opacity="0" result="BackgroundImageFix"/>
-                <feGaussianBlur in="BackgroundImage" stdDeviation="2"/>
-                <feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur"/>
-                <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur" result="shape"/>
-            </filter>
-        </defs>
+    <svg width="24" height="24" class="header__search-lense" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#1A1A1A"
+              d="M22 21L16.16 15.1C17.4717 13.5158 18.1229 11.4872 17.9782 9.43552C17.8336 7.38383 16.9044 5.46667 15.3834 4.08211C13.8624 2.69756 11.8666 1.95199 9.81041 2.00023C7.75419 2.04848 5.79556 2.88682 4.3412 4.34118C2.88683 5.79554 2.04849 7.75418 2.00025 9.81039C1.95201 11.8666 2.69757 13.8624 4.08213 15.3834C5.46668 16.9043 7.38385 17.8336 9.43554 17.9782C11.4872 18.1229 13.5158 17.4717 15.1 16.16L21 22L22 21ZM3.50002 10C3.50002 8.71443 3.88124 7.45772 4.59547 6.3888C5.3097 5.31988 6.32486 4.48676 7.51258 3.99479C8.7003 3.50282 10.0072 3.3741 11.2681 3.6249C12.529 3.8757 13.6872 4.49477 14.5962 5.40381C15.5053 6.31285 16.1243 7.47104 16.3751 8.73192C16.6259 9.99279 16.4972 11.2997 16.0052 12.4874C15.5133 13.6752 14.6801 14.6903 13.6112 15.4046C12.5423 16.1188 11.2856 16.5 10 16.5C8.27693 16.4974 6.62516 15.8117 5.40675 14.5933C4.18833 13.3749 3.50267 11.7231 3.50002 10Z"></path>
     </svg>
-
 </template>
 
 <script>

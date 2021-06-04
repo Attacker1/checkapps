@@ -15,7 +15,7 @@
             <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
                        value="Сумма покупки отличается от указанной"/>
             <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject" value="Другое"/>
-            <textarea @input="$v.comment.$touch" v-if="textarea" class="textarea mb-5" placeholder="Причина отклонения"
+            <textarea @input="$v.comment.$touch" v-if="textarea" class="form_input form_textarea mb-5" placeholder="Причина отклонения"
                       v-model="comment"/>
             <div class="errors" v-if="$v.toggle.$dirty">
                 <div class="error" v-if="!$v.toggle.required">Выберите один их пунктов</div>

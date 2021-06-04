@@ -5,7 +5,7 @@
             <div class="container">
                 <div class="reject-modal__close">
                     <div @click="closeRejectModal">
-                        <IconCross :i-color="isMobile() ? 'white' : 'black'"/>
+                        <IconCross/>
                     </div>
                 </div>
                 <CheckRejectForm @inputText="inputText" @closeRejectForm="rejectModal = false"/>
@@ -192,10 +192,18 @@
             right: 10px;
             cursor: pointer;
 
-            @media screen and (max-width: 1024px) {
+            @media screen and (max-width: 1023px) {
                 position: unset;
                 display: flex;
                 justify-content: flex-end;
+            }
+
+            svg {
+                fill: #000;
+
+                @media screen and (max-width: 1023px) {
+                    fill: #fff;
+                }
             }
         }
     }

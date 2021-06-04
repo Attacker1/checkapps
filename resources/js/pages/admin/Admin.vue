@@ -1,9 +1,11 @@
 <template>
     <div class="admin-panel">
         <div class="admin-panel__wrapper">
+            <h2 class="admin-panel__title">Поиск пользователей</h2>
             <FindUsers/>
         </div>
         <div class="admin-panel__wrapper">
+            <h2 class="admin-panel__title">Список пользователей</h2>
             <UserList/>
         </div>
     </div>

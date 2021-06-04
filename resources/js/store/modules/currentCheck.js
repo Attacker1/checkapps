@@ -1,4 +1,5 @@
 import {getStorageItem, setStorageItem, removeStorageItem} from "@/utils/localStorage";
+import axios from 'axios';
 
 export default {
     namespaced: true,
@@ -8,9 +9,10 @@ export default {
 
     mutations: {
         setCurrentCheck: (state, payload) => {
-            setStorageItem('currentCheck', state, payload);
+            setStorageItem('currentCheck', state, payload ? payload : null);
         },
         resetCurrentCheck: (state) => {
+            console.log('removing current check');
             removeStorageItem('currentCheck', state);
         }
     },
