@@ -2,7 +2,12 @@
     <div class="find-users">
         <form class="find-users__form">
             <input v-model="text" type="text" class="form_input find-users__input">
-            <IconLense class="find-users__icon"/>
+            <select name="select2" class="find-users__select">
+                <option selected="selected">Искать по</option>
+                <option>Email</option>
+                <option>ФИО</option>
+            </select>
+            <button type="submit" @click.prevent="" class="find-users__search">Поиск</button>
         </form>
         <ul class="find-users__suggestions" v-if="users.length !== 0">
             <li class="find-users__suggestion" v-for="(user, index) in users">
@@ -72,10 +77,25 @@
 
         &__form {
             position: relative;
+            display: flex;
+            border: 1px solid #bdbdbd;
+            border-radius: 5px;
+            margin: 0;
         }
 
         &__input {
-            padding-right: 45px;
+            margin-right: 20px;
+            border: none;
+        }
+
+        &__select {
+            height: 52px;
+            padding: 10px 15px;
+            border: none;
+            border-left: 1px solid #bdbdbd;
+            margin-right: 15px;
+            outline: none;
+            font-size: 17px;
         }
 
         &__icon {
@@ -85,6 +105,20 @@
             transform: translateY(-50%);
             cursor: pointer;
             background-color: #fff;
+        }
+
+        &__search {
+            background: #3cb13c;
+            color: #fff;
+            display: inline-block;
+            border: none;
+            outline: none;
+            font-weight: 400;
+            font-size: 19px;
+            padding: 14.5px 41px;
+            text-align: center;
+            cursor: pointer;
+            margin-bottom: 0;
         }
 
         &__suggestions {
