@@ -3,20 +3,21 @@
         <form class="find-users__form">
             <input v-model="text" type="text" class="form_input find-users__input">
             <select name="select2" class="find-users__select">
-                <option selected="selected">Искать по</option>
+<!--                <option selected="selected">Искать по</option>-->
                 <option>Email</option>
                 <option>ФИО</option>
             </select>
             <button type="submit" @click.prevent="" class="find-users__search">Поиск</button>
         </form>
-        <ul class="find-users__suggestions" v-if="users.length !== 0">
+        <!--<ul class="find-users__suggestions" v-if="users.length !== 0">
             <li class="find-users__suggestion" v-for="(user, index) in users">
                 <UserCard :user="user" :key="index"/>
             </li>
-        </ul>
+        </ul>-->
     </div>
 </template>
 <script>
+    import {mapActions} from 'vuex';
     import IconLense from "@/assets/icons/IconLense";
     import UserCard from '@/components/admin/UserCard';
 
@@ -27,31 +28,15 @@
             text: '',
             timer: '',
             timeoutObject: '',
-            users: [
-                /*{
-                    balance: null,
-                    check_history_count: 0,
-                    id: 1,
-                    user_email: "chekapps.com@gmail.com",
-                    user_fio: "chekapps.com@gmail.com",
-                    user_id: 513753,
-                    user_phone: "+79276724306"
-                },
-                {
-                    balance: 23,
-                    check_history_count: 4,
-                    id: 2,
-                    user_email: "chekapps.com@gmail.com",
-                    user_fio: "chekapps.com@gmail.com",
-                    user_id: 513753,
-                    user_phone: "+79276724306"
-                }*/
-            ]
         }),
 
         methods: {
+            ...mapActions({
+                fetchUsers: 'admin/fetchUsers',
+            }),
+
             setTimer() {
-                this.findData = 1000;
+                this.findData = 500;
             },
         },
 
@@ -63,6 +48,16 @@
                     this.timeoutObject = setTimeout(() => {
                         if (this.text.trim() !== '' && this.text.length > 1) {
                             console.log('Ищу юзеров по запросу: ' + this.text.trim());
+                            let params = {
+                                paginate: 10,
+                                page: 1,
+                                s: this.text.trim(),
+                                searchBy: 'user_fio'
+                            }
+                            this.fetchUsers(params);
+                        }
+                        if (this.text.trim() === '') {
+                            this.fetchUsers();
                         }
                     }, this.findData);
                 },
