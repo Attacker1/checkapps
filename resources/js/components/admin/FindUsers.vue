@@ -1,19 +1,15 @@
 <template>
     <div class="find-users">
         <form class="find-users__form">
-            <input v-model="text" type="text" class="form_input find-users__input">
-            <select name="select2" class="find-users__select">
-<!--                <option selected="selected">Искать по</option>-->
-                <option>Email</option>
-                <option>ФИО</option>
-            </select>
-            <button type="submit" @click.prevent="" class="find-users__search">Поиск</button>
+            <div class="find-users__wrapper">
+                <input v-model="text" type="text" class="form_input find-users__input">
+                <select v-model="selectedValue" name="select2" class="find-users__select" @change="onChange">
+                    <option value="1">Email</option>
+                    <option value="2">ФИО</option>
+                </select>
+            </div>
+            <button type="submit" @click.prevent="search" class="find-users__search">Поиск</button>
         </form>
-        <!--<ul class="find-users__suggestions" v-if="users.length !== 0">
-            <li class="find-users__suggestion" v-for="(user, index) in users">
-                <UserCard :user="user" :key="index"/>
-            </li>
-        </ul>-->
     </div>
 </template>
 <script>
@@ -24,10 +20,17 @@
     export default {
         name: 'FindUsers',
         components: {IconLense, UserCard},
+        props: {
+            sortby: {
+                type: Number,
+                default: 1
+            },
+        },
         data: () => ({
-            text: '',
+            text: null,
             timer: '',
             timeoutObject: '',
+            selectedValue: 1
         }),
 
         methods: {
@@ -38,6 +41,28 @@
             setTimer() {
                 this.findData = 500;
             },
+
+            onChange() {
+                this.search();
+            },
+
+            search() {
+                if (this.text !== null) {
+                    if (this.text.trim() !== '' && this.text.length > 0) {
+                        console.log('Ищу юзеров по запросу: ' + this.text.trim());
+                        let params = {
+                            paginate: 10,
+                            page: 1,
+                            s: this.text.trim(),
+                            searchBy: this.selectedValue === 1 ? 'user_email' : 'user_fio',
+                            filter: this.sortby === 1 ? 'DESC' : 'ASC'
+                        }
+                        this.fetchUsers(params);
+                    } else {
+                        this.fetchUsers();
+                    }
+                }
+            }
         },
 
         watch: {
@@ -46,19 +71,7 @@
                     clearInterval(this.timeoutObject);
                     this.setTimer();
                     this.timeoutObject = setTimeout(() => {
-                        if (this.text.trim() !== '' && this.text.length > 1) {
-                            console.log('Ищу юзеров по запросу: ' + this.text.trim());
-                            let params = {
-                                paginate: 10,
-                                page: 1,
-                                s: this.text.trim(),
-                                searchBy: 'user_fio'
-                            }
-                            this.fetchUsers(params);
-                        }
-                        if (this.text.trim() === '') {
-                            this.fetchUsers();
-                        }
+                        this.search();
                     }, this.findData);
                 },
                 immediate: true
@@ -73,9 +86,26 @@
         &__form {
             position: relative;
             display: flex;
+            justify-content: space-between;
             border: 1px solid #bdbdbd;
             border-radius: 5px;
             margin: 0;
+
+            @media screen and (max-width: 767px) {
+                flex-direction: column;
+                border: none;
+            }
+        }
+
+        &__wrapper {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+
+            @media screen and (max-width: 767px) {
+                border: 1px solid #bdbdbd;
+                border-radius: 5px;
+            }
         }
 
         &__input {
@@ -114,6 +144,11 @@
             text-align: center;
             cursor: pointer;
             margin-bottom: 0;
+
+            @media screen and (max-width: 767px) {
+                border-radius: 5px;
+                margin-top: 20px;
+            }
         }
 
         &__suggestions {

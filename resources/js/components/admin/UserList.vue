@@ -3,7 +3,8 @@
         <div class="user-list__wrapper">
             <UserCard v-if="users.data" v-for="user in users.data" :key="user.id" :user="user"/>
         </div>
-        <Pagination @change-page="changePage" v-if="users.data" :links="links"/>
+        <Pagination v-if="users.data && users.data.length > 0" @change-page="changePage" :links="links"/>
+        <h2 v-if="users.data && users.data.length === 0">Не удалось найти пользователей по этому запросу</h2>
     </div>
 </template>
 <script>
@@ -37,7 +38,7 @@
                 resetUsers: 'admin/resetAllUsers',
             }),
 
-            async getUsers() {
+            /*async getUsers() {
                 this.$store.commit('common/setLoader', null, {root: true})
                 try {
                     const response = await axios.get('users', {
@@ -54,7 +55,7 @@
                     console.log(response)
                 }
                 this.$store.commit('common/removeLoader', null, {root: true})
-            },
+            },*/
 
             changePage(val) {
                 if (val.link.url) {
@@ -78,6 +79,14 @@
             this.links = this.users.links;
             this.currentPage = this.users.current_page;
             this.lastPage = this.users.last_page;
+        },
+
+        watch: {
+            'users': function() {
+                this.links = this.users.links;
+                this.currentPage = this.users.current_page;
+                this.lastPage = this.users.last_page;
+            }
         }
     }
 </script>

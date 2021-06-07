@@ -1,11 +1,17 @@
 <template>
     <div class="admin-panel">
         <div class="admin-panel__wrapper">
-            <h2 class="admin-panel__title">Поиск пользователей</h2>
-            <FindUsers/>
+            <h2 class="admin-panel__title admin-panel__title-find">Поиск пользователей</h2>
+            <FindUsers :sortby="sortby" />
         </div>
         <div class="admin-panel__wrapper">
-            <h2 class="admin-panel__title">Список пользователей</h2>
+            <div class="admin-panel__wrapper-top">
+                <h2 class="admin-panel__title">Список пользователей</h2>
+                <select v-model="sortby" class="admin-panel__sortby">
+                    <option value="1">Самые активные</option>
+                    <option value="2">Самые неактивные</option>
+                </select>
+            </div>
             <UserList/>
         </div>
     </div>
@@ -17,13 +23,19 @@
     export default {
         name: 'Admin',
         components: {FindUsers, UserList},
+        data: () => ({
+            sortby: 1,
+        })
     }
 </script>
 <style lang="scss" scoped>
     .admin-panel {
         &__title {
             font-weight: 500;
-            margin-bottom: 16px;
+
+            &-find {
+                margin-bottom: 16px;
+            }
         }
 
         &__wrapper {
@@ -32,6 +44,33 @@
             border-radius: 12px;
             margin-bottom: 24px;
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
+
+            &-top {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+        }
+
+        &__sortby {
+            padding: 10px 30px 10px 15px;
+            border: 1px solid #bdbdbd;
+            outline: none;
+            border-radius: 5px;
+            font-size: 17px;
+            text-align: center;
+            -moz-appearance: none;
+            -webkit-appearance: none;
+            appearance: none;
+            position: relative;
+            background-color: transparent;
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' height='10px' width='15px'%3E%3Ctext x='0' y='10' fill='gray'%3E%E2%96%BE%3C/text%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: 13px 10px;
+            background-position: right 8px center;
+            background-clip: border-box;
+            -webkit-background-clip: border-box;
         }
     }
 </style>

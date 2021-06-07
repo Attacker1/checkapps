@@ -4,7 +4,7 @@
         <p class="user-card__item user-card__email">{{user.user_email}}</p>
         <p class="user-card__item user-card__phone">{{user.user_phone}}</p>
         <p class="user-card__item user-card__balance">Баланс: {{(user.balance ? user.balance.toFixed(2) : 0) | curr}} CFR</p>
-        <p class="user-card__item user-card__count">Количество проверенных чеков: {{user.check_history_count}}</p>
+        <p class="user-card__item user-card__count">Количество проверенных чеков: {{ (user.check_history_count ? user.check_history_count : 0) | curr}}</p>
     </div>
 </template>
 <script>
