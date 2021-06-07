@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enum\CheckHistoryStatusEnum;
 use App\Models\CheckHistory;
 use Laravel\Passport\HasApiTokens;
 use App\Traits\HasPermissions;
@@ -48,5 +49,13 @@ class User extends Authenticatable
     public function scopeByEmail($query, $email)
     {
         return $query->where('user_email', $email);
+    }
+
+    public function rejectedChecks() {
+        return $this->checkHistory()->where('status', CheckHistoryStatusEnum::REJECTED);
+    }
+
+    public function approvedChecks() {
+        return $this->checkHistory()->where('status', CheckHistoryStatusEnum::APPROVED);
     }
 }

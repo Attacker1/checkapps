@@ -202,7 +202,7 @@ class UserController extends Controller
         return response()->json($this->userService->users($request->paginate, $request->filter, $request->s, $request->searchBy));
     }
 
-        /**
+    /**
      * @OA\GET(
      *     path="/api/users/{user_id}",
      *     summary="Позволяет получить определенного пользователя по user_id",
@@ -243,22 +243,15 @@ class UserController extends Controller
      *             @OA\Property(property="user_phone", type="string"),
      *             @OA\Property(property="balance", type="number"),
      *             @OA\Property(property="isAdmin", type="boolean"),
+     *             @OA\Property(property="check_history_count", type="number"),
+     *             @OA\Property(property="rejected_checks_count", type="number"),
+     *             @OA\Property(property="approved_checks_count", type="number"),
      *             @OA\Property(property="permissions", type="array",
      *                 @OA\Items(
      *                     @OA\Property(property="slug", type="string"),
      *                     @OA\Property(property="name", type="string"),
      *                 )
      *             ),
-     *             @OA\Property(property="checkHistory", type="array",
-     *                 @OA\Items(
-     *                     @OA\Property(property="id", type="number"),
-     *                     @OA\Property(property="user_id", type="number"),
-     *                     @OA\Property(property="check_id", type="number"),
-     *                     @OA\Property(property="status", type="string"),
-     *                     @OA\Property(property="reward", type="number"),
-     *                     @OA\Property(property="comment", type="string"),
-     *                 )
-     *             )
      *         )
      *     )
      * )

@@ -497,6 +497,15 @@
                                         "isAdmin": {
                                             "type": "boolean"
                                         },
+                                        "check_history_count": {
+                                            "type": "number"
+                                        },
+                                        "rejected_checks_count": {
+                                            "type": "number"
+                                        },
+                                        "approved_checks_count": {
+                                            "type": "number"
+                                        },
                                         "permissions": {
                                             "type": "array",
                                             "items": {
@@ -505,32 +514,6 @@
                                                         "type": "string"
                                                     },
                                                     "name": {
-                                                        "type": "string"
-                                                    }
-                                                },
-                                                "type": "object"
-                                            }
-                                        },
-                                        "checkHistory": {
-                                            "type": "array",
-                                            "items": {
-                                                "properties": {
-                                                    "id": {
-                                                        "type": "number"
-                                                    },
-                                                    "user_id": {
-                                                        "type": "number"
-                                                    },
-                                                    "check_id": {
-                                                        "type": "number"
-                                                    },
-                                                    "status": {
-                                                        "type": "string"
-                                                    },
-                                                    "reward": {
-                                                        "type": "number"
-                                                    },
-                                                    "comment": {
                                                         "type": "string"
                                                     }
                                                 },

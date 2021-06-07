@@ -15,12 +15,11 @@ class UserService
     public function user($user_id, $loadCheckHistory = false)
     {
         try {
-            $user = User::query()->where('user_id', $user_id)->with('permissions');
+            $user = User::query()->where('user_id', $user_id)->with('permissions')->withCount('checkHistory');
 
             if($loadCheckHistory === true) {
-                $user->with('checkHistory');
-            } else {
-                $user->withCount('checkHistory');
+                $user->withCount('rejectedChecks');
+                $user->withCount('approvedChecks');
             }
 
             $user = $user->first();
@@ -94,7 +93,7 @@ class UserService
             ->withCount('checkHistory')
             ->orderBy('check_history_count', $filter);
 
-        $users = $users->paginate($paginate);
+        $users = $users->paginate($paginate)->withQueryString();
 
         $users->getCollection()->transform(function($user) {
             return new UserResource($user);
