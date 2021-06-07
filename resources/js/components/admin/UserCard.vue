@@ -11,7 +11,7 @@
         </div>
         <div class="user-card__right">
             <div class="user-card__diagram">
-                <Diagram :sucsessCount="50" />
+                <Diagram :successCount="50" />
                 <div class="user-card__right-wrapper">
                     <div class="user-card__right-item">Подтверждено</div>
                     <div class="user-card__right-item">Отклонено</div>
