@@ -11,7 +11,7 @@
         </div>
         <div class="user-card__right">
             <div class="user-card__diagram">
-                <Diagram :successCount="50" />
+                <Diagram :successCount="user.check_history_count ? (user.approved_checks_count * 100 / user.check_history_count) : 100" />
                 <div class="user-card__right-wrapper">
                     <div class="user-card__right-item">Подтверждено</div>
                     <div class="user-card__right-item">Отклонено</div>
