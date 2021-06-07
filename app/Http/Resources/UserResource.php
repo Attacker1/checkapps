@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Enum\PermissionsEnum;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Resources\PermissionResource;
+use App\Http\Resources\CheckHistoryResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserResource extends JsonResource
@@ -28,6 +29,7 @@ class UserResource extends JsonResource
             'isAdmin' => $this->whenLoaded('permissions', function() {
                 return (bool) $this->permissions->where('slug', PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'])->first();
             }),
+            'checkHistory' => CheckHistoryResource::collection($this->whenLoaded('checkHistory')),
         ];
 
         return $data;
