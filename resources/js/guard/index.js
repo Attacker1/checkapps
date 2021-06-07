@@ -2,8 +2,8 @@ import store from '@/store';
 
 export const adminGuard = async (to, from, next) => {
     await store.dispatch('auth/fetch', null, {root: true});
-    let slug = store.getters['auth/user'].role.slug;
-    if (slug === 'admin') {
+    let isAdmin = store.getters['auth/user'].isAdmin;
+    if (isAdmin) {
         next()
     }
     else {

@@ -1,9 +1,10 @@
 <template>
     <div class="user-list">
         <div class="user-list__wrapper">
-            <UserCard v-if="users" v-for="user in users" :key="user.id" :user="user"/>
+            <UserCard v-if="users.data" v-for="user in users.data" :key="user.id" :user="user"/>
         </div>
-        <Pagination @change-page="changePage" v-if="users.length" :links="links"/>
+        <Pagination v-if="users.data && users.data.length > 0" @change-page="changePage" :links="links"/>
+        <h2 v-if="users.data && users.data.length === 0">Не удалось найти пользователей по этому запросу</h2>
     </div>
 </template>
 <script>
@@ -18,12 +19,12 @@
 
         computed: {
             ...mapGetters({
-                loader: 'common/loader'
+                loader: 'common/loader',
+                users: 'admin/users'
             })
         },
 
         data: () => ({
-            users: [],
             links: [],
             currentPage: 1,
             lastPage: {
@@ -32,7 +33,12 @@
         }),
 
         methods: {
-            async getUsers() {
+            ...mapActions({
+                fetchUsers: 'admin/fetchUsers',
+                resetUsers: 'admin/resetAllUsers',
+            }),
+
+            /*async getUsers() {
                 this.$store.commit('common/setLoader', null, {root: true})
                 try {
                     const response = await axios.get('users', {
@@ -49,19 +55,38 @@
                     console.log(response)
                 }
                 this.$store.commit('common/removeLoader', null, {root: true})
-            },
+            },*/
 
             changePage(val) {
                 if (val.link.url) {
                     const url = new URL(val.link.url);
-                    url.searchParams.has('page') ? this.currentPage = url.searchParams.get('page') : ''
-                    this.getUsers();
+                    url.searchParams.has('page') ? this.currentPage = url.searchParams.get('page') : '';
+                    let params = {
+                        paginate: 10,
+                        page: this.currentPage
+                    }
+                    url.searchParams.has('filter') ? params['filter'] = url.searchParams.get('filter') : '';
+                    url.searchParams.has('searchBy') ? params['searchBy'] = url.searchParams.get('searchBy') : '';
+                    url.searchParams.has('s') ? params['s'] = url.searchParams.get('s') : '';
+                    this.fetchUsers(params);
+                    this.links = this.users.links;
                 }
             }
         },
 
         async beforeMount() {
-            await this.getUsers();
+            await this.fetchUsers();
+            this.links = this.users.links;
+            this.currentPage = this.users.current_page;
+            this.lastPage = this.users.last_page;
+        },
+
+        watch: {
+            'users': function() {
+                this.links = this.users.links;
+                this.currentPage = this.users.current_page;
+                this.lastPage = this.users.last_page;
+            }
         }
     }
 </script>
