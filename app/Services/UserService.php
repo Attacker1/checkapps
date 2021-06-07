@@ -3,12 +3,14 @@
 
 namespace App\Services;
 
+use App\Enum\PermissionsEnum;
 use Exception;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Enum\UserOrderByEnum;
 use App\Enum\UserSearchByEnum;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Gate;
 
 class UserService
 {
@@ -74,7 +76,7 @@ class UserService
         }
     }
 
-    public function users($paginate, $filter, $s = null, $searchBy = null) {
+    public function users($paginate, $filter, $s = null, $searchBy = null, $isBanned = null) {
         $approvedFilters = UserOrderByEnum::values();
         $approvedSearchBy = UserSearchByEnum::values();
 
@@ -83,15 +85,19 @@ class UserService
 
         $users = User::query();
 
+        if($isBanned !== null) {
+            $isBanned = $isBanned === 'true' ? 1 : 0;
+
+            $users->where('is_banned', $isBanned);
+        }
+
         if($s && ($searchBy && in_array(strtolower($searchBy), $approvedSearchBy))) {
             $searchBy = strtolower($searchBy);
 
             $users->where($searchBy, 'like', '%'. $s . '%');
         }
 
-        $users
-            ->withCount('checkHistory')
-            ->orderBy('check_history_count', $filter);
+        $users->withCount('checkHistory')->orderBy('check_history_count', $filter);
 
         $users = $users->paginate($paginate)->withQueryString();
 
@@ -100,5 +106,84 @@ class UserService
         });
 
         return $users;
+    }
+
+    public function blockUser($user_id) {
+        try {
+            $canBlock = Gate::check(PermissionsEnum::CAN_BLOCK_USERS['slug']);
+            $currentUserID = auth()->id();
+
+            if($canBlock === false) {
+                throw new Exception('У вас нет прав для блокировки пользователей', 403);
+            }
+
+            $user = User::where('user_id', $user_id)->with('permissions')->first();
+
+            if(!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
+
+            $isUserCanAdmin = $user->permissions->filter(function($permission) {
+                return (bool) $permission->slug === PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'];
+            });
+
+            if($isUserCanAdmin && !Gate::check(PermissionsEnum::CAN_BLOCK_ADMIN['slug'])) {
+                throw new Exception('У вас нет прав для блокировки пользователей с доступом к админ панели', 403);
+            }
+
+            if($currentUserID === $user->id) {
+                throw new Exception('Вы не можете заблокировать сами себя', 403);
+            }
+
+            $user->is_banned = true;
+            $user->save();
+
+            return (object) [
+                'message' => 'Пользователь ' . $user->user_fio . ' успешно заблокирован',
+                'code' => 200,
+            ];
+        } catch (Exception $exception) {
+            return (object) [
+                'error' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+            ];
+        }
+    }
+
+    public function unblockUser($user_id) {
+        try {
+            $canUnblock = Gate::check(PermissionsEnum::CAN_BLOCK_USERS['slug']);
+
+            if($canUnblock === false) {
+                throw new Exception('У вас нет прав для разблокировки пользователей', 403);
+            }
+
+            $user = User::where('user_id', $user_id)->with('permissions')->first();
+
+            if(!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
+
+            $isUserCanAdmin = $user->permissions->filter(function($permission) {
+                return (bool) $permission->slug === PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'];
+            });
+
+            if($isUserCanAdmin && !Gate::check(PermissionsEnum::CAN_BLOCK_ADMIN['slug'])) {
+                throw new Exception('У вас нет прав для разблокировки пользователей с доступом к админ панели', 403);
+            }
+
+            $user->is_banned = false;
+            $user->save();
+
+            return (object) [
+                'message' => 'Пользователь ' . $user->user_fio . ' успешно разблокирован',
+                'code' => 200,
+            ];
+        } catch (Exception $exception) {
+            return (object) [
+                'error' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+            ];
+        }
     }
 }

@@ -129,6 +129,11 @@ class LoginService
 
         try {
             if (!empty($checkUserExist)) {
+
+                if((bool) $checkUserExist->is_banned === true) {
+                    throw new Exception('Пользователь заблокирован', 404);
+                }
+
                 $this->currentUser = $checkUserExist;
 
                 $checkUserExist->token_id = $this->loginResponse->token_id;

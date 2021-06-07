@@ -25,21 +25,22 @@ class UserResource extends JsonResource
             'user_email' => $this->user_email,
             'user_phone' => $this->user_phone,
             'balance' => $this->balance,
+            'is_banned' => $this->is_banned,
             'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
             'isAdmin' => $this->whenLoaded('permissions', function() {
                 return (bool) $this->permissions->where('slug', PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'])->first();
             }),
         ];
 
-        if($this->check_history_count) {
+        if(isset($this->check_history_count)) {
             $data['check_history_count'] = $this->check_history_count;
         }
 
-        if($this->rejected_checks_count) {
+        if(isset($this->rejected_checks_count)) {
             $data['rejected_checks_count'] = $this->rejected_checks_count;
         }
 
-        if($this->approved_checks_count) {
+        if(isset($this->approved_checks_count)) {
             $data['approved_checks_count'] = $this->approved_checks_count;
         }
 
