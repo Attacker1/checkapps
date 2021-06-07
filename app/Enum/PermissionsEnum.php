@@ -3,27 +3,39 @@ namespace App\Enum;
 
 class PermissionsEnum
 {
-    public const VERIFY_CHECKS = [
-        'name' => 'Проверка чеков',
-        'slug' => 'verify_check',
+    public const CAN_VERIVY_CHECKS = [
+        'name' => 'Может проверять чеки',
+        'slug' => 'can_verivy_checks',
     ];
 
-    public const BLOCK_USERS = [
-        'name' => 'Блокировать пользователей',
-        'slug' => 'block_users',
+    public const CAN_VIEW_ADMIN_PAGES = [
+        'name' => 'Может заходить в админ панель',
+        'slug' => 'can_view_admin_pages',
     ];
 
-    public const EDIT_SETTINGS = [
-        'name' => 'Изменение настроек',
-        'slug' => 'edit_settings',
+    public const CAN_VIEW_USERS = [
+        'name' => 'Может просматривать пользователей',
+        'slug' => 'can_view_users',
+    ];
+
+    public const CAN_BLOCK_USERS = [
+        'name' => 'Может блокировать пользователей',
+        'slug' => 'can_block_users',
+    ];
+
+    public const CAN_EDIT_SETTINGS = [
+        'name' => 'Может измененять настройки',
+        'slug' => 'can_edit_settings',
     ];
 
     public static function values(): array
     {
         return [
-            self::VERIFY_CHECKS,
-            self::BLOCK_USERS,
-            self::EDIT_SETTINGS,
+            self::CAN_VERIVY_CHECKS,
+            self::CAN_VIEW_ADMIN_PAGES,
+            self::CAN_VIEW_USERS,
+            self::CAN_BLOCK_USERS,
+            self::CAN_EDIT_SETTINGS,
         ];
     }
 }

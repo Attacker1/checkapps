@@ -3,35 +3,13 @@
 
 namespace App\Traits;
 
-use App\Models\Role;
 use App\Models\Permission;
 
-trait HasRolesAndPermissions
+trait HasPermissions
 {
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'users_roles');
-    }
-
     public function permissions()
     {
         return $this->belongsToMany(Permission::class, 'users_permissions');
-    }
-
-    /**
-     * @param mixed $roles
-     * @return bool
-     */
-    public function hasRole($roles): bool
-    {
-        $roles = is_array($roles) ? $roles : explode(',', $roles);
-
-        foreach ($roles as $role) {
-            if ($this->roles->contains('slug', $role)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
@@ -44,26 +22,19 @@ trait HasRolesAndPermissions
     }
 
     /**
-     * @param $permission
+     * @param mixed $permissions
      * @return bool
      */
-    public function hasPermissionThroughRole(Permission $permission): bool
+    public function hasPermissions($permissions): bool
     {
-        foreach ($permission->roles as $role) {
-            if ($this->roles->contains($role)) {
+        $permissions = is_array($permissions) ? $permissions : explode(',', $permissions);
+
+        foreach ($permissions as $permission) {
+            if ($this->hasPermission($permission)) {
                 return true;
             }
         }
         return false;
-    }
-
-    /**
-     * @param $permission
-     * @return bool
-     */
-    public function hasPermissionTo(Permission $permission): bool
-    {
-        return $this->hasPermissionThroughRole($permission) || $this->hasPermission($permission->slug);
     }
 
     /**
@@ -76,11 +47,12 @@ trait HasRolesAndPermissions
     }
 
     /**
-     * @param mixed ...$permissions
+     * @param mixed $permissions
      * @return $this
      */
-    public function givePermissionsTo(...$permissions)
+    public function givePermissionsTo($permissions)
     {
+        $permissions = is_array($permissions) ? $permissions : explode(',', $permissions);
         $permissions = $this->getAllPermissions($permissions);
 
         if ($permissions === null) {
@@ -107,7 +79,7 @@ trait HasRolesAndPermissions
 
     /**
      * @param mixed ...$permissions
-     * @return HasRolesAndPermissions
+     * @return HasPermissions
      */
     public function refreshPermissions(...$permissions)
     {

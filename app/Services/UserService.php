@@ -15,7 +15,7 @@ class UserService
     public function user(Request $request)
     {
         $user_id = $request->user()->user_id;
-        $user = User::query()->where('user_id', $user_id)->withCount('checkHistory')->with('roles')->first();
+        $user = User::query()->where('user_id', $user_id)->withCount('checkHistory')->with('permissions')->first();
 
         return new UserResource($user);
     }
@@ -74,7 +74,6 @@ class UserService
 
         $users
             ->withCount('checkHistory')
-            ->with('roles')
             ->orderBy('check_history_count', $filter);
 
         $users = $users->paginate($paginate);

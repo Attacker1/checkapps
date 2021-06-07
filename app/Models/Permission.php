@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use App\Models\Role;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Permission extends Model
 {
-    public function roles()
+    public function users()
     {
-        return $this->belongsToMany(Role::class, 'roles_permissions');
+        return $this->belongsToMany(User::class, 'users_permissions');
     }
 }

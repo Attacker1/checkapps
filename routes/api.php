@@ -1,6 +1,6 @@
 <?php
 
-use App\Enum\RolesEnum;
+use App\Enum\PermissionsEnum;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\UserController;
@@ -26,8 +26,7 @@ Route::group(['middleware' => 'guest'], static function () {
 });
 
 Route::group(['middleware' => 'auth:api'], static function () {
-    $adminRoleSlug = RolesEnum::ADMIN['role_data']['slug'];
-    $superAdminRoleSlug = RolesEnum::SUPER_ADMIN['role_data']['slug'];
+    $canViewAdminPages = PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'];
 
     /**
      * GET
@@ -48,7 +47,7 @@ Route::group(['middleware' => 'auth:api'], static function () {
     /**
      * GROUP
      */
-    Route::group(['middleware' =>  "role:$adminRoleSlug,$superAdminRoleSlug"], function() {
+    Route::group(['middleware' =>  "permission:$canViewAdminPages"], function() {
         Route::group(['prefix' => 'users'], function() {
             Route::get('/', [UserController::class, 'users']);
         });
