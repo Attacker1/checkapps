@@ -18,11 +18,14 @@
                 </div>
             </div>
             <div class="user-card__actions">
-                <button class="button user-card__bann">
+                <button v-if="user.is_banned === 0" class="button user-card__button user-card__bann" @click.prevent="block">
                     <IconBann/>
                     Деклассировать
                 </button>
-                <!--                <button class="button ">Оправдать</button>-->
+                <button v-if="user.is_banned === 1" class="button user-card__button user-card__unblock" @click.prevent="unBlock">
+                    <IconUnblock/>
+                    Отпустить грехи
+                </button>
             </div>
         </div>
     </div>
@@ -30,17 +33,34 @@
 <script>
     import Diagram from '../diagram/Diagram';
     import IconBann from '@/assets/icons/IconBann.vue';
+    import IconUnblock from '@/assets/icons/IconUnblock.vue';
+    import {mapActions} from "vuex";
 
 
     export default {
         name: 'UserCard',
-        components: {Diagram, IconBann},
+        components: {Diagram, IconBann, IconUnblock},
         props: {
             user: {
                 type: Object,
                 required: true,
             },
         },
+
+        methods: {
+            ...mapActions({
+                blockUser: 'admin/blockUser',
+                unblockUser: 'admin/unblockUser',
+            }),
+
+            block() {
+                this.blockUser(this.user.user_id)
+            },
+
+            unBlock() {
+                this.unblockUser(this.user.user_id);
+            }
+        }
     }
 </script>
 <style lang="scss" scoped>
@@ -58,7 +78,7 @@
         }
 
         &:hover {
-            .user-card__bann {
+            .user-card__button {
                 opacity: 1;
             }
         }
@@ -173,14 +193,13 @@
             }
         }
 
-        &__bann {
-            background-color: #c00;
+        &__button {
             border-radius: 5px;
             display: flex;
             align-items: center;
-            color: #fff;
             font-size: 20px;
             transition: 0.2s all;
+            min-width: 250px;
             opacity: 0;
 
             @media screen and (max-width: 1023px) {
@@ -190,6 +209,11 @@
             @media screen and (max-width: 480px) {
                 font-size: 16px;
             }
+        }
+
+        &__bann {
+            background-color: #c00;
+            color: #fff;
 
             svg {
                 margin-right: 5px;
@@ -202,6 +226,23 @@
                 svg {
                     background-color: #af0000;
                 }
+            }
+        }
+
+        &__unblock {
+            background-image: linear-gradient(160deg, #a54e07, #b47e11, #fef1a2, #bc881b, #a54e07);
+            background-size: 100% 100%;
+            background-position: center;
+            color: rgb(120, 50, 5);
+            border: 1px solid #a55d07;
+            transition: all 0.2s ease-in-out;
+
+            svg {
+                margin-right: 5px;
+            }
+
+            &:hover {
+                background-size: 150% 150%;
             }
         }
     }
