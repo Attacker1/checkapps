@@ -168,6 +168,13 @@ class UserController extends Controller
      *         required=false,
      *         example="Никита",
      *     ),
+     *     @OA\Parameter(
+     *         description="Искать среди забаненых или незабаненых пользователей, если не указать, то будет искать среди всех. Принимаемые зачения true, false",
+     *         in="query",
+     *         name="isBanned",
+     *         required=false,
+     *         example="true",
+     *     ),
      *     @OA\Response(
      *         response=401,
      *         description="Вылетает если запрос не авторизован",
@@ -199,7 +206,7 @@ class UserController extends Controller
      * )
      */
     public function users(Request $request) {
-        return response()->json($this->userService->users($request->paginate, $request->filter, $request->s, $request->searchBy));
+        return response()->json($this->userService->users($request->paginate, $request->filter, $request->s, $request->searchBy, $request->isBanned));
     }
 
     /**
@@ -258,6 +265,114 @@ class UserController extends Controller
      */
     public function getUser($user_id) {
         $response = $this->userService->user($user_id, true);
+
+        return response()->json($response, isset($response->error) ? $response->code : 200);
+    }
+
+    /**
+     * @OA\GET(
+     *     path="/api/users/{user_id}/block",
+     *     summary="Позволяет заблокировать определенного пользователя по user_id, если есть на это право у текущего пользователя",
+     *     description="Позволяет заблокировать определенного пользователя по user_id, если есть на это право у текущего пользователя",
+     *     operationId="blockUser",
+     *     tags={"Users"},
+     *     security={ {"passport": {} }},
+     *     @OA\Parameter(
+     *         description="user id",
+     *         in="path",
+     *         name="user_id",
+     *         required=true,
+     *         example="513753",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Вылетает если запрос не авторизован",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Вылетает если запрашиваемый пользователь не найден",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string"),
+     *             @OA\Property(property="code", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Вылетает если у пользователя не прав для этого метода",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string"),
+     *             @OA\Property(property="code", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully response",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="code", type="string"),
+     *         )
+     *     )
+     * )
+     */
+    public function blockUser($user_id) {
+        $response = $this->userService->blockUser($user_id);
+
+        return response()->json($response, isset($response->error) ? $response->code : 200);
+    }
+
+    /**
+     * @OA\GET(
+     *     path="/api/users/{user_id}/unblock",
+     *     summary="Позволяет разблокировать определенного пользователя по user_id, если есть на это право у текущего пользователя",
+     *     description="Позволяет разблокировать определенного пользователя по user_id, если есть на это право у текущего пользователя",
+     *     operationId="unblockUser",
+     *     tags={"Users"},
+     *     security={ {"passport": {} }},
+     *     @OA\Parameter(
+     *         description="user id",
+     *         in="path",
+     *         name="user_id",
+     *         required=true,
+     *         example="513753",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Вылетает если запрос не авторизован",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Вылетает если запрашиваемый пользователь не найден",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string"),
+     *             @OA\Property(property="code", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Вылетает если у пользователя не прав для этого метода",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string"),
+     *             @OA\Property(property="code", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully response",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *             @OA\Property(property="code", type="string"),
+     *         )
+     *     )
+     * )
+     */
+    public function unblockUser($user_id) {
+        $response = $this->userService->unblockUser($user_id);
 
         return response()->json($response, isset($response->error) ? $response->code : 200);
     }

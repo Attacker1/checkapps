@@ -28,6 +28,11 @@ class PermissionsEnum
         'slug' => 'can_edit_settings',
     ];
 
+    public const CAN_BLOCK_ADMIN = [
+        'name' => 'Может блокировать пользователей с админ правами',
+        'slug' => 'can_block_admin',
+    ];
+
     public static function values(): array
     {
         return [
@@ -36,6 +41,7 @@ class PermissionsEnum
             self::CAN_VIEW_USERS,
             self::CAN_BLOCK_USERS,
             self::CAN_EDIT_SETTINGS,
+            self::CAN_BLOCK_ADMIN,
         ];
     }
 }

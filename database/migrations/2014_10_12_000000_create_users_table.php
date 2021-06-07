@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->bigInteger('career_id')->nullable();
             $table->string('token_id')->nullable();
             $table->bigInteger('balance')->nullable();
+            $table->boolean('is_banned')->default(false);
             $table->timestamps();
         });
     }
