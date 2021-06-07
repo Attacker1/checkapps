@@ -45,6 +45,7 @@ class UserSeeder extends Seeder
                     PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'],
                     PermissionsEnum::CAN_VIEW_USERS['slug'],
                     PermissionsEnum::CAN_BLOCK_USERS['slug'],
+                    PermissionsEnum::CAN_BLOCK_ADMIN['slug'],
                 ]
             ],
         ];

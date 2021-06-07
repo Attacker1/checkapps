@@ -50,6 +50,9 @@ Route::group(['middleware' => 'auth:api'], static function () {
     Route::group(['middleware' =>  "permission:$canViewAdminPages"], function() {
         Route::group(['prefix' => 'users'], function() {
             Route::get('/', [UserController::class, 'users']);
+            Route::get('/{user_id}', [UserController::class, 'getUser']);
+            Route::get('/{user_id}/block', [UserController::class, 'blockUser']);
+            Route::get('/{user_id}/unblock', [UserController::class, 'unblockUser']);
         });
     });
 });

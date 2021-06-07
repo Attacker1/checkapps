@@ -342,6 +342,13 @@
                         "description": "Поисковый запрос",
                         "required": false,
                         "example": "Никита"
+                    },
+                    {
+                        "name": "isBanned",
+                        "in": "query",
+                        "description": "Искать среди забаненых или незабаненых пользователей, если не указать, то будет искать среди всех",
+                        "required": false,
+                        "example": "true"
                     }
                 ],
                 "responses": {
@@ -404,6 +411,311 @@
                                         },
                                         "check_history_count": {
                                             "type": "number"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{user_id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Позволяет получить определенного пользователя по user_id",
+                "description": "Позволяет получить определенного пользователя по user_id",
+                "operationId": "getUser",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "user id",
+                        "required": true,
+                        "example": "513753"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Вылетает если запрос не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Вылетает если у пользователя не прав для этого метода",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Successfully response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "number"
+                                        },
+                                        "user_id": {
+                                            "type": "number"
+                                        },
+                                        "user_fio": {
+                                            "type": "string"
+                                        },
+                                        "user_email": {
+                                            "type": "string"
+                                        },
+                                        "user_phone": {
+                                            "type": "string"
+                                        },
+                                        "balance": {
+                                            "type": "number"
+                                        },
+                                        "isAdmin": {
+                                            "type": "boolean"
+                                        },
+                                        "check_history_count": {
+                                            "type": "number"
+                                        },
+                                        "rejected_checks_count": {
+                                            "type": "number"
+                                        },
+                                        "approved_checks_count": {
+                                            "type": "number"
+                                        },
+                                        "permissions": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "slug": {
+                                                        "type": "string"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "type": "object"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{user_id}/block": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Позволяет заблокировать определенного пользователя по user_id, если есть на это право у текущего пользователя",
+                "description": "Позволяет заблокировать определенного пользователя по user_id, если есть на это право у текущего пользователя",
+                "operationId": "blockUser",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "user id",
+                        "required": true,
+                        "example": "513753"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Вылетает если запрос не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Вылетает если запрашиваемый пользователь не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Вылетает если у пользователя не прав для этого метода",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Successfully response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "passport": []
+                    }
+                ]
+            }
+        },
+        "/api/users/{user_id}/unblock": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Позволяет разблокировать определенного пользователя по user_id, если есть на это право у текущего пользователя",
+                "description": "Позволяет разблокировать определенного пользователя по user_id, если есть на это право у текущего пользователя",
+                "operationId": "unblockUser",
+                "parameters": [
+                    {
+                        "name": "user_id",
+                        "in": "path",
+                        "description": "user id",
+                        "required": true,
+                        "example": "513753"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Вылетает если запрос не авторизован",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Вылетает если запрашиваемый пользователь не найден",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "Вылетает если у пользователя не прав для этого метода",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "error": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Successfully response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string"
+                                        },
+                                        "code": {
+                                            "type": "string"
                                         }
                                     },
                                     "type": "object"
