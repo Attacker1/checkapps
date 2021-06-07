@@ -7,7 +7,7 @@
         <div class="admin-panel__wrapper">
             <div class="admin-panel__wrapper-top">
                 <h2 class="admin-panel__title">Список пользователей</h2>
-                <select v-model="sortby" class="admin-panel__sortby">
+                <select v-model="sortby" class="admin-panel__sortby" :style="{backgroundImage: 'url(/images/svg/arrow.svg)'}">
                     <option value="1">Самые активные</option>
                     <option value="2">Самые неактивные</option>
                 </select>
@@ -74,7 +74,6 @@
             appearance: none;
             position: relative;
             background-color: transparent;
-            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' height='10px' width='15px'%3E%3Ctext x='0' y='10' fill='gray'%3E%E2%96%BE%3C/text%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-size: 13px 10px;
             background-position: right 8px center;
