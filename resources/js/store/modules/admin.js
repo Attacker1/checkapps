@@ -12,6 +12,11 @@ export default {
             state.users = payload;
         },
 
+        setBlock: (state, payload) => {
+            let us = state.users.data.find(item => item.user_id === payload.id);
+            us.is_banned = payload.isBlocked;
+        },
+
         removeUsers: (state) => {
             state.users = [];
         },
@@ -29,6 +34,24 @@ export default {
                 console.log(response)
             }
             commit('common/removeLoader', null, {root: true})
+        },
+
+        async blockUser({commit}, id) {
+            try {
+                await axios.get(`users/${id}/block`);
+                commit('setBlock', {id: id, isBlocked: 1});
+            } catch (response) {
+                console.log(response)
+            }
+        },
+
+        async unblockUser({commit}, id) {
+            try {
+                await axios.get(`users/${id}/unblock`);
+                commit('setBlock', {id: id, isBlocked: 0});
+            } catch (response) {
+                console.log(response)
+            }
         },
 
         async resetAllUsers({commit}) {

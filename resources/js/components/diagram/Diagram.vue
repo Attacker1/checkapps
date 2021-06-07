@@ -2,7 +2,7 @@
     <div class="diagram">
         <svg class="diagram__chart" width="120" height="120" viewBox="0 0 50 50">
             <circle class="diagram__unit" r="15.9" cx="50%" cy="50%" ></circle>
-            <circle class="diagram__unit" r="15.9" cx="50%" cy="50%" :stroke-dashoffset="-sucsessCount"></circle>
+            <circle class="diagram__unit" r="15.9" cx="50%" cy="50%" :stroke-dashoffset="-successCount"></circle>
         </svg>
     </div>
 </template>
@@ -10,7 +10,7 @@
     export default {
         name: 'Diagram',
         props: {
-            sucsessCount: {
+            successCount: {
                 type: Number,
                 default: 50
             }
