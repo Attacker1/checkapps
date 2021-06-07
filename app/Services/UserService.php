@@ -97,7 +97,7 @@ class UserService
             $users->where($searchBy, 'like', '%'. $s . '%');
         }
 
-        $users->withCount('checkHistory')->orderBy('check_history_count', $filter);
+        $users->withCount(['checkHistory', 'approvedChecks', 'rejectedChecks'])->with(['permissions'])->orderBy('check_history_count', $filter);
 
         $users = $users->paginate($paginate)->withQueryString();
 
