@@ -12,12 +12,29 @@ use App\Http\Resources\UserResource;
 
 class UserService
 {
-    public function user(Request $request)
+    public function user($user_id, $loadCheckHistory = false)
     {
-        $user_id = $request->user()->user_id;
-        $user = User::query()->where('user_id', $user_id)->withCount('checkHistory')->with('permissions')->first();
+        try {
+            $user = User::query()->where('user_id', $user_id)->with('permissions')->withCount('checkHistory');
 
-        return new UserResource($user);
+            if($loadCheckHistory === true) {
+                $user->withCount('rejectedChecks');
+                $user->withCount('approvedChecks');
+            }
+
+            $user = $user->first();
+
+            if(!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
+
+            return new UserResource($user);
+        } catch (Exception $exception) {
+            return (object) [
+                'error' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+            ];
+        }
     }
 
     public function userExists($userEmail)
@@ -76,7 +93,7 @@ class UserService
             ->withCount('checkHistory')
             ->orderBy('check_history_count', $filter);
 
-        $users = $users->paginate($paginate);
+        $users = $users->paginate($paginate)->withQueryString();
 
         $users->getCollection()->transform(function($user) {
             return new UserResource($user);

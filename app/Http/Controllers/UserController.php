@@ -41,7 +41,10 @@ class UserController extends Controller
      */
     public function user(Request $request)
     {
-        return response()->json($this->userService->user($request));
+        $user_id = $request->user()->user_id;
+        $response = $this->userService->user($user_id);
+
+        return response()->json($response, isset($response->error) ? $response->code : 200);
     }
 
     /**
@@ -197,5 +200,65 @@ class UserController extends Controller
      */
     public function users(Request $request) {
         return response()->json($this->userService->users($request->paginate, $request->filter, $request->s, $request->searchBy));
+    }
+
+    /**
+     * @OA\GET(
+     *     path="/api/users/{user_id}",
+     *     summary="Позволяет получить определенного пользователя по user_id",
+     *     description="Позволяет получить определенного пользователя по user_id",
+     *     operationId="getUser",
+     *     tags={"Users"},
+     *     security={ {"passport": {} }},
+     *     @OA\Parameter(
+     *         description="user id",
+     *         in="path",
+     *         name="user_id",
+     *         required=true,
+     *         example="513753",
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Вылетает если запрос не авторизован",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Вылетает если у пользователя не прав для этого метода",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string"),
+     *             @OA\Property(property="code", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successfully response",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="id", type="number"),
+     *             @OA\Property(property="user_id", type="number"),
+     *             @OA\Property(property="user_fio", type="string"),
+     *             @OA\Property(property="user_email", type="string"),
+     *             @OA\Property(property="user_phone", type="string"),
+     *             @OA\Property(property="balance", type="number"),
+     *             @OA\Property(property="isAdmin", type="boolean"),
+     *             @OA\Property(property="check_history_count", type="number"),
+     *             @OA\Property(property="rejected_checks_count", type="number"),
+     *             @OA\Property(property="approved_checks_count", type="number"),
+     *             @OA\Property(property="permissions", type="array",
+     *                 @OA\Items(
+     *                     @OA\Property(property="slug", type="string"),
+     *                     @OA\Property(property="name", type="string"),
+     *                 )
+     *             ),
+     *         )
+     *     )
+     * )
+     */
+    public function getUser($user_id) {
+        $response = $this->userService->user($user_id, true);
+
+        return response()->json($response, isset($response->error) ? $response->code : 200);
     }
 }
