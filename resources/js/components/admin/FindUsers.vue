@@ -22,15 +22,14 @@
         components: {IconLense, UserCard},
         props: {
             sortby: {
-                type: Number,
-                default: 1
+                type: String,
             },
         },
         data: () => ({
-            text: null,
+            text: '',
             timer: '',
             timeoutObject: '',
-            selectedValue: 1
+            selectedValue: '1'
         }),
 
         methods: {
@@ -46,21 +45,17 @@
                 this.search();
             },
 
-            search() {
-                if (this.text !== null) {
-                    if (this.text.trim() !== '' && this.text.length > 0) {
-                        console.log('Ищу юзеров по запросу: ' + this.text.trim());
-                        let params = {
-                            paginate: 10,
-                            page: 1,
-                            s: this.text.trim(),
-                            searchBy: this.selectedValue === 1 ? 'user_email' : 'user_fio',
-                            filter: this.sortby === 1 ? 'DESC' : 'ASC'
-                        }
-                        this.fetchUsers(params);
-                    } else {
-                        this.fetchUsers();
+            search(force = false) {
+                if ((this.text.trim() !== '' && this.text.length > 0) || force) {
+                    // console.log('Ищу юзеров по запросу: ' + this.text.trim());
+                    let params = {
+                        paginate: 10,
+                        page: 1,
+                        s: this.text ? this.text.trim() : '',
+                        searchBy: this.selectedValue === '1' ? 'user_email' : 'user_fio',
+                        filter: this.sortby === '1' ? 'DESC' : 'ASC'
                     }
+                    this.fetchUsers(params);
                 }
             }
         },
@@ -68,13 +63,18 @@
         watch: {
             text: {
                 handler: function () {
+                    console.log('typing');
                     clearInterval(this.timeoutObject);
                     this.setTimer();
                     this.timeoutObject = setTimeout(() => {
-                        this.search();
+                        this.search(true);
                     }, this.findData);
-                },
-                immediate: true
+                }
+            },
+            sortby: {
+                handler: function () {
+                    this.search(true);
+                }
             }
         },
     }

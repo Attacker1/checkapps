@@ -24,7 +24,7 @@
         name: 'Admin',
         components: {FindUsers, UserList},
         data: () => ({
-            sortby: 1,
+            sortby: '1',
         })
     }
 </script>
@@ -45,11 +45,20 @@
             margin-bottom: 24px;
             box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
 
+            @media screen and (max-width: 480px) {
+                padding: 16px;
+            }
+
             &-top {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 margin-bottom: 16px;
+
+                @media screen and (max-width: 480px) {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
             }
         }
 
@@ -71,6 +80,10 @@
             background-position: right 8px center;
             background-clip: border-box;
             -webkit-background-clip: border-box;
+
+            @media screen and (max-width: 480px) {
+                margin-top: 16px;
+            }
         }
     }
 </style>
