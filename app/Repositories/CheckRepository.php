@@ -2,9 +2,11 @@
 
 namespace App\Repositories;
 
-use App\Enum\SettingSlugEnum;
+use App\Models\User;
 use App\Models\Check;
 use App\Models\Setting;
+use App\Enum\CheckStatusEnum;
+use App\Enum\SettingSlugEnum;
 use Illuminate\Support\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 
@@ -31,5 +33,19 @@ class CheckRepository
             ['dt', '<=', $date],
             ['check_user_id', '=', null],
         ])->doesntHave('checkHistory');
+    }
+
+    public function getUniqueToUserChecks(User $user, $limit = 50)
+    {
+        $checkHistories = $user->checkHistory()->get('check_id')->values();
+
+        $checks = Check::whereNotIn('check_id', $checkHistories)->where([
+            ['status', CheckStatusEnum::INCHECK],
+            ['check_user_id', null]
+        ])
+        ->orderByDesc('current_quantity')
+        ->take($limit);
+
+        return $checks;
     }
 }

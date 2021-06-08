@@ -16,6 +16,7 @@ use App\Enum\PermissionsEnum;
 use App\Enum\SettingSlugEnum;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
+use App\Repositories\CheckRepository;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Gate;
@@ -23,6 +24,7 @@ use Illuminate\Support\Facades\Gate;
 class CheckService
 {
     protected $client;
+    protected $checkRepository;
 
     /**
      * CheckService constructor.
@@ -31,6 +33,7 @@ class CheckService
     public function __construct()
     {
         $this->client = new JsonRpcClient();
+        $this->checkRepository = new CheckRepository();
     }
 
     public function getChecksFromApi($params)
@@ -142,18 +145,6 @@ class CheckService
         }
     }
 
-    public function getUniqueChecks(User $user)
-    {
-
-        $checkHistories = $user->checkHistory()->get('check_id')->values();
-
-        return Check::whereNotIn('check_id', $checkHistories)
-            ->where([
-                ['status', CheckStatusEnum::INCHECK],
-                ['check_user_id', null]
-            ])->orderByDesc('current_quantity')->limit(50)->get();
-    }
-
     public function getChecks($request)
     {
         try {
@@ -165,15 +156,14 @@ class CheckService
 
             $user = $request->user();
 
-            /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем */
+            /**
+             * Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем
+             */
             $this->resetUserChecks($user->user_id);
 
-            $checks = $this->getUniqueChecks($user);
+            $checks = $this->checkRepository->getUniqueToUserChecks($user)->get();
 
-            $checks->each(function ($check) use ($user) {
-                $check->check_user_id = $user->user_id;
-                $check->save();
-            });
+            $this->setUserToCheck($user, $checks->pluck('check_id'));
 
             return $checks;
         } catch (Exception $e) {
@@ -285,5 +275,10 @@ class CheckService
     public function resetChecks(Builder $checks)
     {
         $checks->update(['check_user_id' => null]);
+    }
+
+    public function setUserToCheck(User $user, $checks) {
+        $checks = Check::query()->whereIn('check_id', $checks);
+        $checks->update(['check_user_id' => $user->user_id]);
     }
 }
