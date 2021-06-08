@@ -115,7 +115,8 @@
                 margin-left: 16px;
 
                 @media screen and (max-width: 480px) {
-                    margin-left: 10px;
+                    margin-left: 0;
+                    margin-top: 16px;
                 }
             }
 
@@ -155,6 +156,10 @@
 
             @media screen and (max-width: 1023px) {
                 align-items: center;
+            }
+
+            @media screen and (max-width: 480px) {
+                flex-direction: column;
             }
         }
 
