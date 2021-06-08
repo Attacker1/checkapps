@@ -93,6 +93,10 @@
             @media screen and (max-width: 767px) {
                 margin-top: 16px;
             }
+
+            @media screen and (max-width: 500px) {
+                width: 100%;
+            }
         }
     }
 </style>

@@ -13,8 +13,8 @@
             <div class="user-card__diagram">
                 <Diagram :successCount="user.check_history_count ? (user.approved_checks_count * 100 / user.check_history_count) : 100" />
                 <div class="user-card__right-wrapper">
-                    <div class="user-card__right-item">Подтверждено</div>
-                    <div class="user-card__right-item">Отклонено</div>
+                    <div class="user-card__right-item">({{ user.approved_checks_count }})Подтверждено</div>
+                    <div class="user-card__right-item">({{ user.rejected_checks_count }})Отклонено</div>
                 </div>
             </div>
             <div class="user-card__actions">
@@ -112,7 +112,7 @@
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
-                margin-left: 20px;
+                margin-left: 16px;
 
                 @media screen and (max-width: 480px) {
                     margin-left: 10px;
@@ -123,6 +123,7 @@
                 margin-bottom: 10px;
                 position: relative;
                 padding-left: 20px;
+                font-size: 15px;
 
                 @media screen and (max-width: 480px) {
                     font-size: 14px;

@@ -1,29 +1,33 @@
 <template>
     <form class="reject-form card_bg-light card_r-12 card_shadow px-sm-20 px-30 py-25 py-sm-20"
           @submit.prevent="rejectCheck">
-        <h3 class="title text_center mb-30 mb-sm-20">Причина отклонения</h3>
-        <div>
-            <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
-                       value="На фотографии отсутствует дата покупки"/>
-            <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
-                       value="Кэшбэк за перевод с карты на карту/другому человеку не учитывается"/>
-            <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
-                       value="Кэшбэк за товарный чек/приходник не учитывается"/>
-            <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject" value="Низкое качество фотографии"/>
-            <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
-                       value="Дата покупки отличается от указанной"/>
-            <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
-                       value="Сумма покупки отличается от указанной"/>
-            <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject" value="Другое"/>
-            <textarea @input="$v.comment.$touch" v-if="textarea" class="form_input form_textarea mb-5" placeholder="Причина отклонения"
-                      v-model="comment"/>
-            <div class="errors" v-if="$v.toggle.$dirty">
-                <div class="error" v-if="!$v.toggle.required">Выберите один их пунктов</div>
-                <div v-if="textarea && $v.comment.$dirty">
-                    <div class="error" v-if="!$v.comment.minLength">Минимальное количество символов
-                        {{$v.comment.$params.minLength.min}}
+        <div class="reject-form__top">
+            <h3 class="title text_center mb-30 mb-sm-20">Причина отклонения</h3>
+            <div>
+                <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
+                           value="На фотографии отсутствует дата покупки"/>
+                <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
+                           value="Кэшбэк за перевод с карты на карту/другому человеку не учитывается"/>
+                <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
+                           value="Кэшбэк за товарный чек/приходник не учитывается"/>
+                <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
+                           value="Низкое качество фотографии"/>
+                <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
+                           value="Дата покупки отличается от указанной"/>
+                <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject"
+                           value="Сумма покупки отличается от указанной"/>
+                <FormRadio @change="$v.toggle.$touch" v-model="toggle" name="reject" value="Другое"/>
+                <textarea @input="$v.comment.$touch" v-if="textarea" class="form_input form_textarea mb-5"
+                          placeholder="Причина отклонения"
+                          v-model="comment"/>
+                <div class="errors" v-if="$v.toggle.$dirty">
+                    <div class="error" v-if="!$v.toggle.required">Выберите один их пунктов</div>
+                    <div v-if="textarea && $v.comment.$dirty">
+                        <div class="error" v-if="!$v.comment.minLength">Минимальное количество символов
+                            {{$v.comment.$params.minLength.min}}
+                        </div>
+                        <div class="error" v-if="!$v.comment.required">Поле обязательно для заполнения</div>
                     </div>
-                    <div class="error" v-if="!$v.comment.required">Поле обязательно для заполнения</div>
                 </div>
             </div>
         </div>
@@ -83,7 +87,7 @@
                 // console.log((this.comment.length > 1 && this.textarea));
                 this.$emit('inputText', (this.comment.length > 1 && this.textarea));
             },
-            comment: function(value) {
+            comment: function (value) {
                 this.$emit('inputText', value.length > 1);
             }
 
@@ -96,5 +100,18 @@
         font-size: 12px;
         color: $error;
         line-height: 10px;
+    }
+
+    .reject-form {
+        width: 100%;
+        margin: auto;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        @media screen and (min-width: 1024px) {
+            height: 100%;
+            border-radius: 0;
+        }
     }
 </style>
