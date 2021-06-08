@@ -162,6 +162,9 @@ class CheckService
             if ($canVerify === false) {
                 throw new Exception('У вас нет прав для проверки чеков', 403);
             }
+
+            $user = $request->user();
+
             /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем */
             $this->resetUserChecks($user->user_id);
 
