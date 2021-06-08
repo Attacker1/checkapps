@@ -12,11 +12,13 @@ use App\Models\User;
 use App\Models\CheckHistory;
 use App\Client\JsonRpcClient;
 use App\Enum\CheckStatusEnum;
+use App\Enum\PermissionsEnum;
 use App\Enum\SettingSlugEnum;
 use App\Http\Requests\CheckRejectRequest;
 use App\Http\Requests\CheckApproveRequest;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Gate;
 
 class CheckService
 {
@@ -83,9 +85,15 @@ class CheckService
 
     private function addCheckToHistory($request)
     {
-        $hasComment = $request->has('comment');
-
         try {
+            $canVerify = Gate::check(PermissionsEnum::CAN_VERIVY_CHECKS['slug']);
+
+            if ($canVerify === false) {
+                throw new Exception('У вас нет прав для проверки чеков', 403);
+            }
+
+            $hasComment = $request->has('comment');
+
             $user = $request->user();
             if (!$user) {
                 throw new Exception('Пользователь не найден', 404);
@@ -114,7 +122,7 @@ class CheckService
             }
 
             event(new CheckVerified($user, $checkHistory));
-        } catch(QueryException $exception) {
+        } catch (QueryException $exception) {
             if ((int)$exception->getCode() === 23000) {
                 return (object)[
                     'error' => 'Данный чек уже проверен вами, пропустите его',
@@ -132,7 +140,7 @@ class CheckService
                 'code' => $e->getCode()
             ];
         }
-     }
+    }
 
     public function getUniqueChecks(User $user)
     {
@@ -149,10 +157,10 @@ class CheckService
     public function getChecks($request)
     {
         try {
-            $user = $request->user();
+            $canVerify = Gate::check(PermissionsEnum::CAN_VERIVY_CHECKS['slug']);
 
-            if (!$user) {
-                throw new Exception('Пользователь не найден', 404);
+            if ($canVerify === false) {
+                throw new Exception('У вас нет прав для проверки чеков', 403);
             }
             /* Очищаем чеки перед тем, как их раздать, чтобы всегда было занято максимум 50 одним пользователем */
             $this->resetUserChecks($user->user_id);
@@ -259,19 +267,20 @@ class CheckService
                 throw new Exception('Что-то пошло не так', 500);
             }
 
-            return [
+            return  (object) [
                 'message' => 'Чек пропущен',
                 'success' => (bool)true,
             ];
         } catch (Exception $e) {
-            return [
+            return (object) [
                 'code' => $e->getCode(),
                 'error' => $e->getMessage(),
             ];
         }
     }
 
-    public function resetChecks(Builder $checks) {
+    public function resetChecks(Builder $checks)
+    {
         $checks->update(['check_user_id' => null]);
     }
 }
