@@ -43,8 +43,8 @@ export default {
                     commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
                     commit('setExpiryTime')
                 }
-            } catch (res) {
-                Vue.noty.error(res.data.error ? res.data.error : res.data.message);
+            } catch (error) {
+                Vue.noty.error(error.response.data.error);
             }
 
             commit('common/removeLoader', null, {root: true})
