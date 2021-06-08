@@ -18,7 +18,8 @@ export default {
                 .then(res => {
                     if (res.data.success) {
                         Vue.noty.success(res.data.message);
-                        dispatch('currentCheck/removeFromChecks', null, {root: true})
+                        dispatch('currentCheck/removeFromChecks', null, {root: true});
+                        dispatch('auth/fetch', null, {root: true});
                     } else {
                         Vue.noty.error(res.data.message ? res.data.message : res.data.error);
                     }
@@ -40,6 +41,7 @@ export default {
                     if (res.data.success) {
                         Vue.noty.error(res.data.message);
                         dispatch('currentCheck/removeFromChecks', null, {root: true});
+                        dispatch('auth/fetch', null, {root: true});
                     } else {
                         Vue.noty.error(res.data.message ? res.data.message : res.data.error);
                     }
@@ -52,7 +54,7 @@ export default {
         skipCheck({dispatch, commit, rootGetters}) {
             commit('common/setLoader', null, {root: true});
             const currentCheck = rootGetters['currentCheck/currentCheck'];
-            console.log('SkipCheck: ' + currentCheck.check_id);
+            // console.log('SkipCheck: ' + currentCheck.check_id);
             axios.post('skip', {check_id: currentCheck.check_id})
                 .then(res => {
                     const response = res.data;

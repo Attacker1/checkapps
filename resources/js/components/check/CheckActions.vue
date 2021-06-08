@@ -179,16 +179,6 @@
         }
     }
 
-    .reject-form {
-        width: 100%;
-        margin: auto;
-
-        @media screen and (min-width: 1024px) {
-            height: 100%;
-            border-radius: 0;
-        }
-    }
-
     .reject-modal {
         &__close {
             position: absolute;

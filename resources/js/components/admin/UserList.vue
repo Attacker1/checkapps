@@ -4,7 +4,7 @@
             <UserCard v-if="users.data" v-for="user in users.data" :key="user.id" :user="user"/>
         </div>
         <Pagination v-if="users.data && users.data.length > 0" @change-page="changePage" :links="links"/>
-        <h2 v-if="users.data && users.data.length === 0">Не удалось найти пользователей по этому запросу</h2>
+        <h2 v-if="users.data && users.data.length === 0" class="user-list__notfound">Не удалось найти пользователей по этому запросу</h2>
     </div>
 </template>
 <script>
@@ -91,4 +91,10 @@
     }
 </script>
 <style lang="scss" scoped>
+    .user-list {
+        &__notfound {
+            padding: 30px 0 15px 0;
+            text-align: center;
+        }
+    }
 </style>

@@ -34,7 +34,6 @@ export default {
             } else {
                 dispatch('checks/fetchChecks', null, {root: true})
             }
-            dispatch('auth/fetch', null, {root: true});
         },
 
         resetCurrentCheck({commit}) {

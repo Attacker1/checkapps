@@ -30,8 +30,8 @@ export default {
             try {
                 const response = await axios.get('users', {params});
                 commit('setUsers', response.data);
-            } catch (response) {
-                console.log(response)
+            } catch (error) {
+                Vue.noty.error(error.response.data.error);
             }
             commit('common/removeLoader', null, {root: true})
         },
