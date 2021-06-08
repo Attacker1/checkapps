@@ -81,6 +81,10 @@
         &__link {
             margin-left: 50px;
 
+            @media screen and (max-width: 480px) {
+                margin-left: 30px;
+            }
+
             &:first-child {
                 margin-left: 0;
             }
