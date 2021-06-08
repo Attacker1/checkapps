@@ -2,22 +2,22 @@
     <div class="admin-panel">
         <div class="admin-panel__wrapper">
             <h2 class="admin-panel__title admin-panel__title-find">Поиск пользователей</h2>
-            <FindUsers :sortby="sortby" :sortBanned="sortBanned"/>
+            <FindUsers :sortByActive="sortByActive" :sortByStatus="sortByStatus"/>
         </div>
         <div class="admin-panel__wrapper">
             <div class="admin-panel__wrapper-top">
                 <h2 class="admin-panel__title">Список пользователей</h2>
                 <div class="admin-panel__wrapper-right">
-                    <select v-model="sortBanned" class="admin-panel__sortby"
+                    <select v-model="sortByStatus" class="admin-panel__sortby"
                             :style="{backgroundImage: 'url(/images/svg/arrow.svg)'}">
-                        <option value="1">Все</option>
-                        <option value="2">Заблокированные</option>
-                        <option value="3">Не заблокированные</option>
+                        <option value="all">Все</option>
+                        <option value="blocked">Заблокированные</option>
+                        <option value="unblocked">Не заблокированные</option>
                     </select>
-                    <select v-model="sortby" class="admin-panel__sortby"
+                    <select v-model="sortByActive" class="admin-panel__sortby"
                             :style="{backgroundImage: 'url(/images/svg/arrow.svg)'}">
-                        <option value="1">Самые активные</option>
-                        <option value="2">Самые неактивные</option>
+                        <option value="most_active">Самые активные</option>
+                        <option value="most_unactive">Самые неактивные</option>
                     </select>
                 </div>
             </div>
@@ -33,8 +33,8 @@
         name: 'Admin',
         components: {FindUsers, UserList},
         data: () => ({
-            sortby: '1',
-            sortBanned: '1',
+            sortByActive: 'most_active',
+            sortByStatus: 'all',
         })
     }
 </script>

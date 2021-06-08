@@ -3,9 +3,9 @@
         <form class="find-users__form">
             <div class="find-users__wrapper">
                 <input v-model="text" type="text" class="form_input find-users__input">
-                <select v-model="selectedValue" name="select2" class="find-users__select" @change="onChange">
-                    <option value="1">Email</option>
-                    <option value="2">ФИО</option>
+                <select v-model="selectedValue" class="find-users__select" @change="onChange">
+                    <option value="email">Email</option>
+                    <option value="fio">ФИО</option>
                 </select>
             </div>
             <button type="submit" @click.prevent="search" class="find-users__search">Поиск</button>
@@ -21,10 +21,10 @@
         name: 'FindUsers',
         components: {IconLense, UserCard},
         props: {
-            sortby: {
+            sortByActive: {
                 type: String,
             },
-            sortBanned: {
+            sortByStatus: {
                 type: String,
             }
         },
@@ -32,7 +32,7 @@
             text: '',
             timer: '',
             timeoutObject: '',
-            selectedValue: '1'
+            selectedValue: 'email'
         }),
 
         methods: {
@@ -55,16 +55,16 @@
                         paginate: 10,
                         page: 1,
                         s: this.text ? this.text.trim() : '',
-                        searchBy: this.selectedValue === '1' ? 'user_email' : 'user_fio',
-                        filter: this.sortby === '1' ? 'DESC' : 'ASC'
+                        searchBy: this.selectedValue === 'email' ? 'user_email' : 'user_fio',
+                        filter: this.sortByActive === 'most_active' ? 'DESC' : 'ASC'
                     };
-                    switch(this.sortBanned) {
-                        case '1':
+                    switch (this.sortByStatus) {
+                        case 'all':
                             break;
-                        case '2':
+                        case 'blocked':
                             params['isBanned'] = 'true';
                             break;
-                        case '3':
+                        case 'unblocked':
                             params['isBanned'] = 'false';
                             break;
                     }
@@ -76,7 +76,6 @@
         watch: {
             text: {
                 handler: function () {
-                    console.log('typing');
                     clearInterval(this.timeoutObject);
                     this.setTimer();
                     this.timeoutObject = setTimeout(() => {
@@ -85,13 +84,13 @@
                 }
             },
 
-            sortby: {
+            sortByActive: {
                 handler: function () {
                     this.search(true);
                 }
             },
 
-            sortBanned: {
+            sortByStatus: {
                 handler: function () {
                     this.search(true);
                 }
