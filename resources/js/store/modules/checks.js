@@ -20,8 +20,9 @@ export default {
             setStorageItem('expiry', state, now.getTime() + 1000 * 60 * 60)
         },
         removeChecks: (state) => {
-            removeStorageItem('checks', state)
-            removeStorageItem('expiry', state)
+            removeStorageItem('checks', state);
+            removeStorageItem('expiry', state);
+            state.checks = null;
         },
     },
 
@@ -43,8 +44,8 @@ export default {
                     commit('currentCheck/setCurrentCheck', state.checks[0], {root: true})
                     commit('setExpiryTime')
                 }
-            } catch (res) {
-                Vue.noty.error(res.data.error ? res.data.error : res.data.message);
+            } catch (error) {
+                Vue.noty.error(error.response.data.error);
             }
 
             commit('common/removeLoader', null, {root: true})
@@ -56,10 +57,11 @@ export default {
                 dispatch('fetchChecks', {force: true});
             }
         },
-        async resetAllChecks() {
+        async resetAllChecks({commit}) {
             await axios.post('reset-checks')
                 .then(res => console.log(res.data))
-                .catch(err => console.log(err))
+                .catch(err => console.log(err));
+            commit('removeChecks');
         },
     },
     getters: {

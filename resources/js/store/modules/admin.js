@@ -40,8 +40,10 @@ export default {
             try {
                 await axios.get(`users/${id}/block`);
                 commit('setBlock', {id: id, isBlocked: true});
-            } catch (response) {
-                console.log(response)
+                Vue.noty.success('Пользователь заблокирован');
+            } catch (error) {
+                // console.log(Object.keys(response));
+                Vue.noty.error(error.response.data.error);
             }
         },
 
@@ -49,8 +51,9 @@ export default {
             try {
                 await axios.get(`users/${id}/unblock`);
                 commit('setBlock', {id: id, isBlocked: false});
-            } catch (response) {
-                console.log(response)
+                Vue.noty.success('Пользователь разблокирован');
+            } catch (error) {
+                Vue.noty.error(error.response.data.error);
             }
         },
 
