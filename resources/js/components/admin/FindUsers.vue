@@ -24,6 +24,9 @@
             sortby: {
                 type: String,
             },
+            sortBanned: {
+                type: String,
+            }
         },
         data: () => ({
             text: '',
@@ -54,6 +57,16 @@
                         s: this.text ? this.text.trim() : '',
                         searchBy: this.selectedValue === '1' ? 'user_email' : 'user_fio',
                         filter: this.sortby === '1' ? 'DESC' : 'ASC'
+                    };
+                    switch(this.sortBanned) {
+                        case '1':
+                            break;
+                        case '2':
+                            params['isBanned'] = 'true';
+                            break;
+                        case '3':
+                            params['isBanned'] = 'false';
+                            break;
                     }
                     this.fetchUsers(params);
                 }
@@ -71,7 +84,14 @@
                     }, this.findData);
                 }
             },
+
             sortby: {
+                handler: function () {
+                    this.search(true);
+                }
+            },
+
+            sortBanned: {
                 handler: function () {
                     this.search(true);
                 }

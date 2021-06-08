@@ -2,15 +2,24 @@
     <div class="admin-panel">
         <div class="admin-panel__wrapper">
             <h2 class="admin-panel__title admin-panel__title-find">Поиск пользователей</h2>
-            <FindUsers :sortby="sortby" />
+            <FindUsers :sortby="sortby" :sortBanned="sortBanned"/>
         </div>
         <div class="admin-panel__wrapper">
             <div class="admin-panel__wrapper-top">
                 <h2 class="admin-panel__title">Список пользователей</h2>
-                <select v-model="sortby" class="admin-panel__sortby" :style="{backgroundImage: 'url(/images/svg/arrow.svg)'}">
-                    <option value="1">Самые активные</option>
-                    <option value="2">Самые неактивные</option>
-                </select>
+                <div class="admin-panel__wrapper-right">
+                    <select v-model="sortBanned" class="admin-panel__sortby"
+                            :style="{backgroundImage: 'url(/images/svg/arrow.svg)'}">
+                        <option value="1">Все</option>
+                        <option value="2">Заблокированные</option>
+                        <option value="3">Не заблокированные</option>
+                    </select>
+                    <select v-model="sortby" class="admin-panel__sortby"
+                            :style="{backgroundImage: 'url(/images/svg/arrow.svg)'}">
+                        <option value="1">Самые активные</option>
+                        <option value="2">Самые неактивные</option>
+                    </select>
+                </div>
             </div>
             <UserList/>
         </div>
@@ -25,6 +34,7 @@
         components: {FindUsers, UserList},
         data: () => ({
             sortby: '1',
+            sortBanned: '1',
         })
     }
 </script>
@@ -55,7 +65,7 @@
                 align-items: center;
                 margin-bottom: 16px;
 
-                @media screen and (max-width: 480px) {
+                @media screen and (max-width: 767px) {
                     flex-direction: column;
                     align-items: flex-start;
                 }
@@ -80,7 +90,7 @@
             background-clip: border-box;
             -webkit-background-clip: border-box;
 
-            @media screen and (max-width: 480px) {
+            @media screen and (max-width: 767px) {
                 margin-top: 16px;
             }
         }

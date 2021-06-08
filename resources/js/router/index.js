@@ -45,11 +45,13 @@ Vue.router = new VueRouter({
                     path: '/',
                     name: 'Main',
                     component: Main,
+                    beforeEnter: adminGuard
                 },
                 {
                     path: '/history',
                     name: 'History',
-                    component: History
+                    component: History,
+                    beforeEnter: adminGuard
                 },
                 {
                     path: '/admin',
