@@ -51,6 +51,7 @@
 
 <style lang="scss" scoped>
     .check-view {
+        width: 100%;
         position: relative;
         display: grid;
         grid-template-columns: 1fr 1.1fr;

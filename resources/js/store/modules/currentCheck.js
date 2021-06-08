@@ -13,6 +13,7 @@ export default {
         },
         resetCurrentCheck: (state) => {
             removeStorageItem('currentCheck', state);
+            state.currentCheck = null;
         }
     },
 
@@ -34,6 +35,10 @@ export default {
                 dispatch('checks/fetchChecks', null, {root: true})
             }
             dispatch('auth/fetch', null, {root: true});
+        },
+
+        resetCurrentCheck({commit}) {
+            commit('resetCurrentCheck');
         }
     },
 

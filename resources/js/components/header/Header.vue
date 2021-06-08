@@ -38,6 +38,7 @@
         methods: {
             async submitLogout() {
                 await this.$store.dispatch('checks/resetAllChecks');
+                await this.$store.dispatch('currentCheck/resetCurrentCheck');
                 await this.$store.dispatch('auth/logout');
             },
 
