@@ -39,7 +39,7 @@ export default {
         async blockUser({commit}, id) {
             try {
                 await axios.get(`users/${id}/block`);
-                commit('setBlock', {id: id, isBlocked: 1});
+                commit('setBlock', {id: id, isBlocked: true});
             } catch (response) {
                 console.log(response)
             }
@@ -48,7 +48,7 @@ export default {
         async unblockUser({commit}, id) {
             try {
                 await axios.get(`users/${id}/unblock`);
-                commit('setBlock', {id: id, isBlocked: 0});
+                commit('setBlock', {id: id, isBlocked: false});
             } catch (response) {
                 console.log(response)
             }

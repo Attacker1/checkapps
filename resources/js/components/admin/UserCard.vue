@@ -18,13 +18,13 @@
                 </div>
             </div>
             <div class="user-card__actions">
-                <button v-if="user.is_banned === 0" class="button user-card__button user-card__bann" @click.prevent="block">
+                <button v-if="!user.is_banned" class="button user-card__button user-card__bann" @click.prevent="block">
                     <IconBann/>
-                    Деклассировать
+                    Заблокировать
                 </button>
-                <button v-if="user.is_banned === 1" class="button user-card__button user-card__unblock" @click.prevent="unBlock">
+                <button v-if="user.is_banned" class="button user-card__button user-card__unblock" @click.prevent="unBlock">
                     <IconUnblock/>
-                    Отпустить грехи
+                    Разблокировать
                 </button>
             </div>
         </div>
@@ -75,12 +75,6 @@
 
         @media screen and (max-width: 767px) {
             flex-direction: column;
-        }
-
-        &:hover {
-            .user-card__button {
-                opacity: 1;
-            }
         }
 
         &__left {
@@ -197,10 +191,14 @@
             border-radius: 5px;
             display: flex;
             align-items: center;
-            font-size: 20px;
-            transition: 0.2s all;
-            min-width: 250px;
-            opacity: 0;
+            font-size: 16px;
+            transition: 0.2s background-color;
+            min-width: 203px;
+
+            svg {
+                margin-right: 5px;
+                transition: 0.2s fill;
+            }
 
             @media screen and (max-width: 1023px) {
                 opacity: 1;
@@ -212,37 +210,20 @@
         }
 
         &__bann {
-            background-color: #c00;
+            background-color: #ff6243;
             color: #fff;
 
-            svg {
-                margin-right: 5px;
-                transition: 0.2s background-color;
-            }
-
             &:hover {
-                background-color: #af0000;
-
-                svg {
-                    background-color: #af0000;
-                }
+                background-color: #e5563a;
             }
         }
 
         &__unblock {
-            background-image: linear-gradient(160deg, #a54e07, #b47e11, #fef1a2, #bc881b, #a54e07);
-            background-size: 100% 100%;
-            background-position: center;
-            color: rgb(120, 50, 5);
-            border: 1px solid #a55d07;
-            transition: all 0.2s ease-in-out;
-
-            svg {
-                margin-right: 5px;
-            }
+            background-color: deepskyblue;
+            color: #fff;
 
             &:hover {
-                background-size: 150% 150%;
+                background-color: #00abe5;
             }
         }
     }
