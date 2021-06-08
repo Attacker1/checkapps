@@ -11,13 +11,13 @@
                         <p class="text_sm text_grey">{{ user.user_email }}</p>
                     </div>
                 </div>
-                <div class="d-flex flex-column ml-50 header__balance">
+                <div v-if="!user.is_admin" class="d-flex flex-column ml-50 header__balance">
                     <p class="text text_bold">{{ (user.balance ? user.balance : 0) | curr }} CFR</p>
                     <p class="text_sm text_grey">баланс</p>
                 </div>
             </div>
             <div class="header__links">
-                <div @click="goToProfile" class="text_pointer text_decornone logout-link text_grey text_md header__link">История</div>
+                <div v-if="!user.is_admin" @click="goToProfile" class="text_pointer text_decornone logout-link text_grey text_md header__link">История</div>
                 <div @click="submitLogout" class="text_pointer text_decornone logout-link text_grey text_md header__link">Выйти</div>
             </div>
         </div>
@@ -80,6 +80,10 @@
 
         &__link {
             margin-left: 50px;
+
+            @media screen and (max-width: 480px) {
+                margin-left: 30px;
+            }
 
             &:first-child {
                 margin-left: 0;
