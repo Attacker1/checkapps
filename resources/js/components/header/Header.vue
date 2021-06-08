@@ -3,7 +3,7 @@
         <div class="container d-flex align-center justify-between">
             <div class="d-flex align-center">
                 <div class="d-flex align-center">
-                    <div @click="goToProfile" class="header__profile">
+                    <div @click="goToMain" class="header__profile">
                         <IconProfile class="mr-20"/>
                     </div>
                     <div v-if="user" class="user-fio">
@@ -16,8 +16,9 @@
                     <p class="text_sm text_grey">баланс</p>
                 </div>
             </div>
-            <div>
-                <div @click="submitLogout" class="text_pointer text_decornone logout-link text_grey text_md">Выйти</div>
+            <div class="header__links">
+                <div @click="goToProfile" class="text_pointer text_decornone logout-link text_grey text_md header__link">История</div>
+                <div @click="submitLogout" class="text_pointer text_decornone logout-link text_grey text_md header__link">Выйти</div>
             </div>
         </div>
     </header>
@@ -43,8 +44,11 @@
             },
 
             goToProfile() {
-                Vue.router.push({name: 'History'}).catch(err => {
-                });
+                Vue.router.push({name: 'History'}).catch(err => {});
+            },
+
+            goToMain() {
+                Vue.router.push({name: 'Main'}).catch(err => {});
             },
         },
     }
@@ -65,6 +69,19 @@
 
         &__balance {
             @media screen and (max-width: 767px) {
+                margin-left: 0;
+            }
+        }
+
+        &__links {
+            display: flex;
+            align-items: center;
+        }
+
+        &__link {
+            margin-left: 50px;
+
+            &:first-child {
                 margin-left: 0;
             }
         }
