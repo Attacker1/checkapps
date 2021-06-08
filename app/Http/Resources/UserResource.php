@@ -25,9 +25,9 @@ class UserResource extends JsonResource
             'user_email' => $this->user_email,
             'user_phone' => $this->user_phone,
             'balance' => $this->balance,
-            'is_banned' => $this->is_banned,
+            'is_banned' => (bool) $this->is_banned,
             'permissions' => PermissionResource::collection($this->whenLoaded('permissions')),
-            'isAdmin' => $this->whenLoaded('permissions', function() {
+            'isAdmin' => (bool) $this->whenLoaded('permissions', function() {
                 return (bool) $this->permissions->where('slug', PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'])->first();
             }),
         ];
