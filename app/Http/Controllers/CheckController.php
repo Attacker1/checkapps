@@ -29,27 +29,26 @@ class CheckController extends Controller
     public function reject(CheckRejectRequest $request)
     {
         $response = $this->checkService->checkReject($request);
-        return response()->json($response);
+        return response()->json($response, isset($response->code) ? $response->code : 200);
     }
 
     public function approve(CheckApproveRequest $request)
     {
         $response = $this->checkService->checkApprove($request);
-        return response()->json($response);
+        return response()->json($response, isset($response->code) ? $response->code : 200);
     }
 
     public function skipCheck(Request $request)
     {
         $response = $this->checkService->skipCheck($request);
-        return response()->json($response, $response->code ?? 200);
+        return response()->json($response, isset($response->code) ? $response->code : 200);
     }
 
     public function getChecks(Request $request)
     {
         $response = $this->checkService->getChecks($request);
-        $errors = isset($response->error);
 
-        return response()->json($response, $errors ? $response->code : 200);
+        return response()->json($response, isset($response->code) ? $response->code : 200);
     }
 
     public function resetChecks(Request $request)
