@@ -21,14 +21,14 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-         $schedule->command(function () {
-             Log::error('Выполнено по расписанию');
-         })->everyMinute();
+        $schedule->call(function () {
+            Log::error('Выполнено по расписанию: ' . Carbon::now());
+        })->everyMinute();
     }
 
     /**
@@ -38,7 +38,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
         Log::error(Carbon::today());
 
         require base_path('routes/console.php');
