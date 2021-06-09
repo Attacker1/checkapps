@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Events\RequestNewChecks;
 use Illuminate\Console\Command;
+use App\Events\RequestNewChecks;
+use Illuminate\Support\Facades\Log;
 
 class InspectChecks extends Command
 {
@@ -39,5 +40,6 @@ class InspectChecks extends Command
     public function handle()
     {
         event(new RequestNewChecks());
+        Log::info('Команда по проверке количества чеков выполнена');
     }
 }

@@ -108,7 +108,6 @@ class CheckService
                 throw new Exception('Не найдено такой настройки в базе', 404);
             }
 
-
             $result = [
                 'user_id' => $user->user_id,
                 'check_id' => $request->check_id,
@@ -116,7 +115,6 @@ class CheckService
                 'comment' => $hasComment ? $request->comment : null,
                 'reward' => $reward,
             ];
-
 
             $checkHistory = new CheckHistory($result);
             $success = $checkHistory->save();

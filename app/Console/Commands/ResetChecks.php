@@ -2,8 +2,9 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\ClearUserExpiredChecks;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
+use App\Jobs\ClearUserExpiredChecks;
 
 class ResetChecks extends Command
 {
@@ -39,5 +40,6 @@ class ResetChecks extends Command
     public function handle()
     {
         ClearUserExpiredChecks::dispatch($this->option('time'));
+        Log::info('Команда по удалению просроченых чеков выполнена у пользователей');
     }
 }

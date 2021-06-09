@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\RemoveExpiredChecks as JobsRemoveExpiredChecks;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class RemoveExpiredChecks extends Command
 {
@@ -39,5 +40,6 @@ class RemoveExpiredChecks extends Command
     public function handle()
     {
         JobsRemoveExpiredChecks::dispatch();
+         Log::info('Команда по удалению просроченых чеков выполнена');
     }
 }
