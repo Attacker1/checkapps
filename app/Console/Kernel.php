@@ -2,10 +2,11 @@
 
 namespace App\Console;
 
-use Carbon\Carbon;
+use App\Console\Commands\InspectChecks;
+use App\Console\Commands\RemoveExpiredChecks;
+use App\Console\Commands\ResetChecks;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use Illuminate\Support\Facades\Log;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,7 +16,9 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        InspectChecks::class,
+        RemoveExpiredChecks::class,
+        ResetChecks::class,
     ];
 
     /**
@@ -26,9 +29,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->call(function () {
-            Log::error('Выполнено по расписанию: ' . Carbon::now());
-        })->everyMinute();
+        $schedule->command('checks:inspect')->everyMinute();
+        $schedule->command('checks:expired')->everyTwoMinutes();
+        $schedule->command('checks:reset')->everyThreeMinutes();
     }
 
     /**
@@ -39,7 +42,6 @@ class Kernel extends ConsoleKernel
     protected function commands()
     {
         $this->load(__DIR__ . '/Commands');
-        Log::error(Carbon::today());
 
         require base_path('routes/console.php');
     }

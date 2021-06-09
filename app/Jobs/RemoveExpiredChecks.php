@@ -33,9 +33,7 @@ class RemoveExpiredChecks implements ShouldQueue
     public function handle()
     {
         $checkRepository = new CheckRepository();
-        $checks = $checkRepository->getExpiredChecks()->get('check_id')->map(function($item) {
-            return $item->check_id;
-        });
+        $checks = $checkRepository->getExpiredChecks()->get('check_id')->pluck('check_id');
 
         if(!empty($checks)) {
             Check::destroy($checks);
