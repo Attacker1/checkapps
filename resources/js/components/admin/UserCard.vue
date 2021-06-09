@@ -80,6 +80,7 @@
         &__left {
             display: flex;
             flex-direction: column;
+            flex-basis: 50%;
 
             @media screen and (max-width: 1023px) {
                 justify-content: center;
@@ -97,10 +98,8 @@
         &__right {
             margin-left: 20px;
             display: flex;
-
-            @media screen and (max-width: 1023px) {
-                flex-direction: column;
-            }
+            flex-basis: 50%;
+            flex-direction: column;
 
             @media screen and (max-width: 767px) {
                 margin-left: 0;
@@ -153,6 +152,7 @@
 
         &__diagram {
             display: flex;
+            justify-content: center;
 
             @media screen and (max-width: 1023px) {
                 align-items: center;
@@ -182,7 +182,8 @@
         &__actions {
             display: flex;
             align-items: center;
-            margin-left: 20px;
+            justify-content: flex-end;
+            margin-top: 16px;
 
             @media screen and (max-width: 1023px) {
                 margin-left: 0;
@@ -199,11 +200,13 @@
             align-items: center;
             font-size: 16px;
             transition: 0.2s background-color;
-            min-width: 203px;
+            padding: 10px 15px;
 
             svg {
                 margin-right: 5px;
                 transition: 0.2s fill;
+                width: 15px;
+                height: 15px;
             }
 
             @media screen and (max-width: 1023px) {
