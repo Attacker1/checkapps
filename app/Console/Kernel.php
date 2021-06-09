@@ -29,9 +29,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        $schedule->command('checks:inspect')->everyMinute();
-        $schedule->command('checks:expired')->everyTwoMinutes();
-        $schedule->command('checks:reset')->everyThreeMinutes();
+        $schedule->command('queue:work --sleep=3 --tries=3')->everyMinute();
+        $schedule->command('checks:inspect')->withoutOverlapping()->everyTenMinutes();
+        $schedule->command('checks:expired')->withoutOverlapping()->hourly();
+        $schedule->command('checks:reset')->withoutOverlapping()->hourly();
     }
 
     /**
