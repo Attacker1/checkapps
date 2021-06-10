@@ -1,46 +1,64 @@
 .button {
-  background-color: transparent;
-  border: unset;
-  outline: none;
-  border-radius: 12px;
-  padding: 16px 24px;
-  line-height: 22px !important;
-  font-weight: 500;
-  font-family: $font;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    background-color: transparent;
+    border: unset;
+    outline: none;
+    border-radius: 12px;
+    padding: 16px 24px;
+    line-height: 22px !important;
+    font-weight: 500;
+    font-family: $font;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-  &_sm {
-    padding: 8px 16px;
-    font-size: 14px !important;
-    border-radius: 5px;
-  }
-
-  &_primary {
-    background-color: $primary;
-    color: white;
-    transition: box-shadow ease 200ms, background-color ease 200ms, color ease 200ms;
-
-    &:hover {
-      box-shadow: 0 0 18px -7px $primary;
+    &_sm {
+        padding: 8px 16px;
+        font-size: 14px !important;
+        border-radius: 5px;
     }
-  }
 
-  &_disable {
-    background-color: #E0E0E0 !important;
-    color: $grey !important;
-    transition: box-shadow ease 200ms, background-color ease 200ms, coloe ease 200ms;
+    &_primary {
+        background-color: $primary;
+        color: white;
+        transition: box-shadow ease 200ms, background-color ease 200ms, color ease 200ms;
 
-    &:hover {
-      box-shadow: 0 0 18px -7px #E0E0E0 !important;
+        &:hover {
+            box-shadow: 0 0 18px -7px $primary;
+        }
     }
-  }
 
-  &_block {
-    width: 100%;
-  }
+    &_disable {
+        background-color: #E0E0E0 !important;
+        color: $grey !important;
+        transition: box-shadow ease 200ms, background-color ease 200ms, coloe ease 200ms;
+
+        &:hover {
+            box-shadow: 0 0 18px -7px #E0E0E0 !important;
+        }
+    }
+
+    &_block {
+        width: 100%;
+    }
+
+    &_colored {
+        background: #3cb13c;
+        color: #fff;
+        display: inline-block;
+        border: none;
+        outline: none;
+        font-weight: 400;
+        border-radius: 5px;
+        font-size: 19px;
+        padding: 14.5px 41px;
+        text-align: center;
+        cursor: pointer;
+
+        @media screen and (max-width: 767px) {
+            border-radius: 5px;
+        }
+    }
 }
