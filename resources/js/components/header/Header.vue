@@ -3,9 +3,9 @@
         <div class="container d-flex align-center justify-between">
             <div class="d-flex align-center">
                 <div class="d-flex align-center">
-                    <div @click="goToMain" class="header__profile">
+                    <router-link :to="{name: 'Main'}" class="header__profile">
                         <IconProfile class="mr-20"/>
-                    </div>
+                    </router-link>
                     <div v-if="user" class="user-fio">
                         <p class="text text_bold">{{ user.user_fio }}</p>
                         <p class="text_sm text_grey">{{ user.user_email }}</p>
@@ -17,8 +17,9 @@
                 </div>
             </div>
             <div class="header__links">
-                <div v-if="!user.is_admin" @click="goToProfile" class="text_pointer text_decornone logout-link text_grey text_md header__link">История</div>
-                <div @click="submitLogout" class="text_pointer text_decornone logout-link text_grey text_md header__link">Выйти</div>
+                <router-link v-if="!user.is_admin" :to="{name: 'History'}" class="text_pointer text_decornone text_grey text_md header__link">История</router-link>
+                <router-link v-if="user.is_admin" :to="{name: 'Settings'}" class="text_pointer text_decornone text_grey text_md header__link">Настройки</router-link>
+                <div @click="submitLogout" class="text_pointer text_decornone text_grey text_md header__link">Выйти</div>
             </div>
         </div>
     </header>
@@ -41,14 +42,6 @@
                 await this.$store.dispatch('checks/resetAllChecks');
                 await this.$store.dispatch('currentCheck/resetCurrentCheck');
                 await this.$store.dispatch('auth/logout');
-            },
-
-            goToProfile() {
-                Vue.router.push({name: 'History'}).catch(err => {});
-            },
-
-            goToMain() {
-                Vue.router.push({name: 'Main'}).catch(err => {});
             },
         },
     }
@@ -80,6 +73,11 @@
 
         &__link {
             margin-left: 50px;
+            transition: color ease 200ms;
+
+            &:hover {
+                color: $primary;
+            }
 
             @media screen and (max-width: 480px) {
                 margin-left: 30px;
@@ -94,14 +92,6 @@
     .user-fio {
         @media screen and (max-width: 767px) {
             display: none;
-        }
-    }
-
-    .logout-link {
-        transition: color ease 200ms;
-
-        &:hover {
-            color: $primary;
         }
     }
 </style>

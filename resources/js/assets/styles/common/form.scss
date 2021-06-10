@@ -22,4 +22,25 @@
         min-height: 100px;
         resize: none;
     }
+
+    &_label {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+
+        @media screen and (max-width: 767px) {
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            color: gray;
+        }
+    }
+
+    &_placeholder {
+        display: flex;
+        align-items: center;
+
+        @media screen and (max-width: 767px) {
+            margin-bottom: 10px;
+        }
+    }
 }
