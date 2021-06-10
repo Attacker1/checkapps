@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 // use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CheckController;
+use App\Http\Controllers\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,6 +28,7 @@ Route::group(['middleware' => 'guest'], static function () {
 
 Route::group(['middleware' => 'auth:api'], static function () {
     $canViewAdminPages = PermissionsEnum::CAN_VIEW_ADMIN_PAGES['slug'];
+    $canEditSettings = PermissionsEnum::CAN_EDIT_SETTINGS['slug'];
 
     /**
      * GET
@@ -47,12 +49,21 @@ Route::group(['middleware' => 'auth:api'], static function () {
     /**
      * GROUP
      */
-    Route::group(['middleware' =>  "permission:$canViewAdminPages"], function() {
+    Route::group(['middleware' => "permission:$canViewAdminPages"], function() {
         Route::group(['prefix' => 'users'], function() {
             Route::get('/', [UserController::class, 'users']);
             Route::get('/{user_id}', [UserController::class, 'getUser']);
             Route::get('/{user_id}/block', [UserController::class, 'blockUser']);
             Route::get('/{user_id}/unblock', [UserController::class, 'unblockUser']);
+        });
+    });
+
+    Route::group(['middleware' => "permission:$canEditSettings"], function() {
+        Route::group(['prefix' => 'settings'], function() {
+            Route::get('/', [SettingController::class, 'settings']);
+            Route::post('/edit', [SettingController::class, 'edit']);
+            // Route::get('/{user_id}/block', [UserController::class, 'blockUser']);
+            // Route::get('/{user_id}/unblock', [UserController::class, 'unblockUser']);
         });
     });
 });
