@@ -31,11 +31,17 @@ class GetNewChecksFromAPI
     public function handle(RequestNewChecks $event)
     {
         $count = Check::where('current_quantity', 0)->limit(1000)->count();
-        $setting = Setting::settingBySlug(SettingSlugEnum::CHECK_MINIMAL_LIMIT)->first();
-        $setting = $setting ? (int) $setting->value : 1000;
+        $settings = Setting::query()->whereIn('slug', [SettingSlugEnum::CHECK_MINIMAL_LIMIT['slug'], SettingSlugEnum::CHECK_GET_QUANTITY['slug']])->get();
+        $minimalLimit = $settings->first(function($item) {
+            return $item->slug == SettingSlugEnum::CHECK_MINIMAL_LIMIT['slug'];
+        }) ?? 1000;
 
-        if($count < $setting) {
-            ProcessAddingChecks::dispatch(5000);
+        if($count < $minimalLimit) {
+            $getCuantity = $settings->first(function($item) {
+                return $item->slug == SettingSlugEnum::CHECK_GET_QUANTITY['slug'];
+            }) ?? 5000;
+
+            ProcessAddingChecks::dispatch($getCuantity);
         }
     }
 }

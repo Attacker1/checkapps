@@ -34,7 +34,7 @@ class IncreareCheckVerifyQuantity
         $check = $event->check;
         $oldValue = $check->current_quantity;
         $newValue = $oldValue + 1;
-        $maxVerifyQuantity = Setting::settingBySlug(SettingSlugEnum::CHECK_VERIFY_QUANTITY)->first();
+        $maxVerifyQuantity = Setting::settingBySlug(SettingSlugEnum::CHECK_VERIFY_QUANTITY['slug'])->first();
         $maxVerifyQuantity = $maxVerifyQuantity ? (int) $maxVerifyQuantity->value : 5;
 
         $check->current_quantity = $newValue;

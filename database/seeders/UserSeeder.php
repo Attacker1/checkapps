@@ -26,7 +26,6 @@ class UserSeeder extends Seeder
     public function run()
     {
         $moderator = $this->moderatorService->getModerator();
-        $permissions = Permission::all();
 
         $users = [
             [
@@ -46,6 +45,7 @@ class UserSeeder extends Seeder
                     PermissionsEnum::CAN_VIEW_USERS['slug'],
                     PermissionsEnum::CAN_BLOCK_USERS['slug'],
                     PermissionsEnum::CAN_BLOCK_ADMIN['slug'],
+                    PermissionsEnum::CAN_EDIT_SETTINGS['slug'],
                 ]
             ],
         ];
@@ -61,13 +61,13 @@ class UserSeeder extends Seeder
            }
         }
 
-        $fakeUsers = User::factory(50)->create();
-        $userPermissionGroup = [
-            PermissionsEnum::CAN_VERIVY_CHECKS['slug'],
-        ];
+        // $fakeUsers = User::factory(50)->create();
+        // $userPermissionGroup = [
+        //     PermissionsEnum::CAN_VERIVY_CHECKS['slug'],
+        // ];
 
-        foreach($fakeUsers as $fakeUser) {
-            $fakeUser->givePermissionsTo($userPermissionGroup);
-        }
+        // foreach($fakeUsers as $fakeUser) {
+        //     $fakeUser->givePermissionsTo($userPermissionGroup);
+        // }
     }
 }
