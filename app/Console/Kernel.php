@@ -30,8 +30,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        Log::info('Крон работает');
-        $schedule->command('queue:work --sleep=3 --tries=3')->withoutOverlapping()->everyMinute();
         $schedule->command('checks:inspect')->withoutOverlapping()->everyTenMinutes();
         $schedule->command('checks:expired')->withoutOverlapping()->hourly();
         $schedule->command('checks:reset')->withoutOverlapping()->hourly();
