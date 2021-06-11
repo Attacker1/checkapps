@@ -55,13 +55,13 @@ Vue.router = new VueRouter({
                     beforeEnter: adminGuard
                 },
                 {
-                    path: '/admin',
+                    path: 'admin/users',
                     name: 'Admin',
                     component: Admin,
                     beforeEnter: adminGuard
                 },
                 {
-                    path: '/settings',
+                    path: 'admin/settings',
                     name: 'Settings',
                     component: Settings,
                     beforeEnter: adminGuard
