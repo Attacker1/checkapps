@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\UserService;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Requests\ManagePermissionsRequest;
 
 class UserController extends Controller
 {
@@ -205,7 +206,8 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function users(Request $request) {
+    public function users(Request $request)
+    {
         return response()->json($this->userService->users($request->paginate, $request->filter, $request->s, $request->searchBy, $request->isBanned));
     }
 
@@ -263,7 +265,8 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function getUser($user_id) {
+    public function getUser($user_id)
+    {
         $response = $this->userService->user($user_id, true);
 
         return response()->json($response, isset($response->error) ? $response->code : 200);
@@ -317,7 +320,8 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function blockUser($user_id) {
+    public function blockUser($user_id)
+    {
         $response = $this->userService->blockUser($user_id);
 
         return response()->json($response, isset($response->error) ? $response->code : 200);
@@ -371,9 +375,79 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function unblockUser($user_id) {
+    public function unblockUser($user_id)
+    {
         $response = $this->userService->unblockUser($user_id);
 
         return response()->json($response, isset($response->error) ? $response->code : 200);
+    }
+
+    /**
+     * @OA\Post(
+     *     path="/api/users/manage-permissions",
+     *     summary="Позволяет менять разрешения для пользователя",
+     *     description="Позволяет менять разрешения для пользователя",
+     *     operationId="managePermissions",
+     *     tags={"Users"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="Изменить разрешения",
+     *         @OA\JsonContent(
+     *             required={"user_id", "permissions"},
+     *             @OA\Property(property="user_id", type="string", example="793710"),
+     *             @OA\Property(property="permissions", type="[array]", example="['can_verivy_checks', 'can_manage_permission']"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Вылетает если запрос не авторизован",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=403,
+     *         description="Вылетает если у пользователя не прав для этого метода",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="error", type="string"),
+     *             @OA\Property(property="code", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=404,
+     *         description="Не найдено",
+     *         @OA\JsonContent(
+     *           @OA\Property(property="error", type="string"),
+     *           @OA\Property(property="code", type="string"),
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Не указаны необходимые параметры",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="errors", type="object"),
+     *              @OA\Property(property="code", type="string"),
+     *         )
+     *     ),
+     *      @OA\Response(
+     *         response=200,
+     *         description="200 response",
+     *         @OA\JsonContent(
+     *              @OA\Property(property="message", type="string"),
+     *              @OA\Property(property="code", type="string"),
+     *         ),
+     *     ),
+     * )
+     */
+    public function managePermissions(ManagePermissionsRequest $request)
+    {
+        $data = $request->only([
+            'user_id',
+            'permissions',
+        ]);
+
+        $response = $this->userService->managePermissions($data['permissions'], $data['user_id']);
+
+        return response()->json($response, $response->code ?? 200);
     }
 }

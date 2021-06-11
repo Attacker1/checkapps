@@ -78,11 +78,13 @@ trait HasPermissions
     }
 
     /**
-     * @param mixed ...$permissions
+     * @param mixed $permissions
      * @return HasPermissions
      */
-    public function refreshPermissions(...$permissions)
+    public function refreshPermissions($permissions)
     {
+        $permissions = is_array($permissions) ? $permissions : explode(',', $permissions);
+        
         $this->permissions()->detach();
         return $this->givePermissionsTo($permissions);
     }

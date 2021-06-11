@@ -68,7 +68,7 @@ class SettingController extends Controller
      *         @OA\JsonContent(
      *             required={"slug", "value"},
      *             @OA\Property(property="slug", type="string", example="check_expirity_time"),
-     *             @OA\Property(property="email", type="mixed", example="72"),
+     *             @OA\Property(property="value", type="mixed", example="72"),
      *         )
      *     ),
      *     @OA\Response(
