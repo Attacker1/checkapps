@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Services\UserService;
 use Illuminate\Http\Request;
+use App\Services\UserService;
+use App\Http\Requests\ManagePermissionsRequest;
 
 class UserController extends Controller
 {
@@ -375,5 +376,16 @@ class UserController extends Controller
         $response = $this->userService->unblockUser($user_id);
 
         return response()->json($response, isset($response->error) ? $response->code : 200);
+    }
+
+    public function managePermissions(ManagePermissionsRequest $request) {
+        $data = $request->only([
+            'user_id',
+            'permissions',
+        ]);
+
+        $response = $this->userService->managePermissions($data['permissions'], $data['user_id']);
+
+        return response()->json($response, $response->code ?? 200);
     }
 }
