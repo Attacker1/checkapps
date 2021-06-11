@@ -46,19 +46,20 @@ class UserSeeder extends Seeder
                     PermissionsEnum::CAN_BLOCK_USERS['slug'],
                     PermissionsEnum::CAN_BLOCK_ADMIN['slug'],
                     PermissionsEnum::CAN_EDIT_SETTINGS['slug'],
+                    PermissionsEnum::CAN_MANAGE_PERMISSION['slug'],
                 ]
             ],
         ];
 
-        if(!isset($moderator->error)) {
-           foreach ($users as $user) {
+        if (!isset($moderator->error)) {
+            foreach ($users as $user) {
                 $newUser = new User($user['user_data']);
                 $newUser->save();
 
-                if(isset($user['permissions'])) {
+                if (isset($user['permissions'])) {
                     $newUser->givePermissionsTo($user['permissions']);
                 }
-           }
+            }
         }
 
         // $fakeUsers = User::factory(50)->create();

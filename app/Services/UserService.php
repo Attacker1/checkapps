@@ -6,7 +6,6 @@ namespace App\Services;
 use App\Enum\PermissionsEnum;
 use Exception;
 use App\Models\User;
-use Illuminate\Http\Request;
 use App\Enum\UserOrderByEnum;
 use App\Enum\UserSearchByEnum;
 use App\Http\Resources\UserResource;
@@ -103,7 +102,7 @@ class UserService
             'checkHistory',
             'approvedChecks',
             'rejectedChecks'
-        ])->with(['permissions'])->orderBy('check_history_count', $filter);
+        ])->orderBy('check_history_count', $filter);
 
         $users = $users->paginate($paginate)->withQueryString();
 
@@ -190,6 +189,38 @@ class UserService
             ];
         } catch (Exception $exception) {
             return (object)[
+                'error' => $exception->getMessage(),
+                'code' => $exception->getCode(),
+            ];
+        }
+    }
+
+    public function managePermissions (array $permissions, $user_id) {
+        try {
+            $can = Gate::check(PermissionsEnum::CAN_MANAGE_PERMISSION['slug']);
+
+            if(!$can) {
+                throw new Exception('У вас нет прав для запроса разрешений', 403);
+            }
+
+            if($user_id === auth()->id()) {
+                throw new Exception('Вы не можете менять разрешения сами себе', 403);
+            }
+
+            $user = User::byUserId($user_id)->first();
+
+            if(!$user) {
+                throw new Exception('Пользователь не найден', 404);
+            }
+
+            $user->refreshPermissions($permissions);
+
+            return (object) [
+                'message' => 'Права пользователя обновлены',
+                'code' => 200,
+            ];
+        } catch (Exception $exception) {
+            return (object) [
                 'error' => $exception->getMessage(),
                 'code' => $exception->getCode(),
             ];

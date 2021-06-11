@@ -33,6 +33,11 @@ class PermissionsEnum
         'slug' => 'can_block_admin',
     ];
 
+    public const CAN_MANAGE_PERMISSION = [
+        'name' => 'Может управлять разрешениями пользователей',
+        'slug' => 'can_manage_permission',
+    ];
+
     public static function values(): array
     {
         return [
@@ -42,6 +47,7 @@ class PermissionsEnum
             self::CAN_BLOCK_USERS,
             self::CAN_EDIT_SETTINGS,
             self::CAN_BLOCK_ADMIN,
+            self::CAN_MANAGE_PERMISSION,
         ];
     }
 }
