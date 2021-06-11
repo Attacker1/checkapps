@@ -34,12 +34,12 @@ class GetNewChecksFromAPI
         $settings = Setting::query()->whereIn('slug', [SettingSlugEnum::CHECK_MINIMAL_LIMIT['slug'], SettingSlugEnum::CHECK_GET_QUANTITY['slug']])->get();
         $minimalLimit = $settings->first(function($item) {
             return $item->slug == SettingSlugEnum::CHECK_MINIMAL_LIMIT['slug'];
-        }) ?? 1000;
+        })->value ?? 1000;
 
         if($count < $minimalLimit) {
             $getCuantity = $settings->first(function($item) {
                 return $item->slug == SettingSlugEnum::CHECK_GET_QUANTITY['slug'];
-            }) ?? 5000;
+            })->value ?? 5000;
 
             ProcessAddingChecks::dispatch($getCuantity);
         }
