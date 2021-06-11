@@ -1,10 +1,10 @@
 <template>
     <div class="admin-panel">
-        <div class="admin-panel__wrapper">
+        <div class="section-wrapper">
             <h2 class="admin-panel__title admin-panel__title-find">Поиск пользователей</h2>
             <FindUsers :sortByActive="sortByActive" :sortByStatus="sortByStatus"/>
         </div>
-        <div class="admin-panel__wrapper">
+        <div class="section-wrapper">
             <div class="admin-panel__wrapper-top">
                 <h2 class="admin-panel__title">Список пользователей</h2>
                 <div class="admin-panel__wrapper-right">
@@ -49,16 +49,6 @@
         }
 
         &__wrapper {
-            padding: 24px;
-            background-color: #fff;
-            border-radius: 12px;
-            margin-bottom: 24px;
-            box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
-
-            @media screen and (max-width: 480px) {
-                padding: 16px;
-            }
-
             &-top {
                 display: flex;
                 justify-content: space-between;

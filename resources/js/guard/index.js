@@ -13,6 +13,9 @@ export const adminGuard = async (to, from, next) => {
         case 'Admin':
             isAdmin ? next() : next({name: 'NotFound'});
             break;
+        case 'Settings':
+            isAdmin ? next() : next({name: 'NotFound'});
+            break;
     }
     next();
 };

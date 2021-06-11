@@ -1,10 +1,10 @@
 <template>
     <div class="history">
-        <div class="history__wrapper">
+        <div class="section-wrapper">
             <h2 class="history__title">Баланс</h2>
             <div class="title_md history__balance-count">{{ (user.balance ? user.balance : 0) | curr }} CFR</div>
         </div>
-        <div class="history__wrapper">
+        <div class="section-wrapper">
             <h2 class="history__title">История действий</h2>
             <div v-if="checks.length && !loader" class="history__review">
                 <CheckCard v-for="check in checks" :key="check.check_id" :check-data="check"/>
@@ -85,14 +85,6 @@ export default {
     &__title {
         font-weight: 500;
         margin-bottom: 16px;
-    }
-
-    &__wrapper {
-        padding: 24px;
-        background-color: #fff;
-        border-radius: 12px;
-        margin-bottom: 24px;
-        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.04);
     }
 
     &__review {

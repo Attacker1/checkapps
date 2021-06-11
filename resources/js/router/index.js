@@ -9,6 +9,7 @@ import MainLayout from '@/layouts/Main';
 import Main from '@/pages/main/Main';
 import History from '@/pages/history/History';
 import Admin from '@/pages/admin/Admin';
+import Settings from '@/pages/admin/Settings';
 
 import {adminGuard} from '@/guard';
 
@@ -57,6 +58,12 @@ Vue.router = new VueRouter({
                     path: '/admin',
                     name: 'Admin',
                     component: Admin,
+                    beforeEnter: adminGuard
+                },
+                {
+                    path: '/settings',
+                    name: 'Settings',
+                    component: Settings,
                     beforeEnter: adminGuard
                 },
                 {

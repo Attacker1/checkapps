@@ -8,7 +8,7 @@
                     <option value="fio">ФИО</option>
                 </select>
             </div>
-            <button type="submit" @click.prevent="search" class="find-users__search">Поиск</button>
+            <button type="submit" @click.prevent="search" class="button_colored find-users__search">Поиск</button>
         </form>
     </div>
 </template>
@@ -152,20 +152,10 @@
         }
 
         &__search {
-            background: #3cb13c;
-            color: #fff;
-            display: inline-block;
-            border: none;
-            outline: none;
-            font-weight: 400;
-            font-size: 19px;
-            padding: 14.5px 41px;
-            text-align: center;
-            cursor: pointer;
             margin-bottom: 0;
+            border-radius: 0;
 
             @media screen and (max-width: 767px) {
-                border-radius: 5px;
                 margin-top: 20px;
             }
         }
