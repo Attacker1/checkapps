@@ -102,7 +102,7 @@ class CheckService
                 throw new Exception('Пользователь не найден', 404);
             }
 
-            $reward = Setting::settingBySlug(SettingSlugEnum::CHECK_VERIFY_PRICE)->first()->value;
+            $reward = Setting::settingBySlug(SettingSlugEnum::CHECK_VERIFY_PRICE['slug'])->first()->value;
 
             if (!$reward) {
                 throw new Exception('Не найдено такой настройки в базе', 404);
@@ -190,12 +190,8 @@ class CheckService
             }
 
             $addedChecksIDs = [];
-            $setting = Setting::query()->where('slug', SettingSlugEnum::CHECK_VERIFY_QUANTITY)->first();
-            if (!$setting) {
-                $verifyQuantity = 5;
-            } else {
-                $verifyQuantity = $setting->value;
-            }
+            $setting = Setting::settingBySlug(SettingSlugEnum::CHECK_VERIFY_QUANTITY['slug'])->first();
+            $verifyQuantity = $setting ? $setting->value : 1;
 
             foreach ($checks->items as $check) {
                 $addedCheckID = $this->addCheck($check, $verifyQuantity);

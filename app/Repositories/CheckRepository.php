@@ -23,7 +23,7 @@ class CheckRepository
 
     public function getExpiredChecks(): Builder
     {
-        $expirityTime = Setting::settingBySlug(SettingSlugEnum::CHECK_EXPIRITY_TIME)->first();
+        $expirityTime = Setting::settingBySlug(SettingSlugEnum::CHECK_EXPIRITY_TIME['slug'])->first();
         $expirityTime = $expirityTime ? (int) $expirityTime->value : 72;
         $expirityTime = $expirityTime * (60 * 60);
 

@@ -17,36 +17,11 @@ class SettingsSeeder extends Seeder
     public function run()
     {
 
-        $settings = [
-            [
-                'slug' => SettingSlugEnum::CHECK_VERIFY_QUANTITY,
-                'name' => 'Количество проверок чека',
-                'value' => 5,
-            ],
-            [
-                'slug' => SettingSlugEnum::CHECK_VERIFY_PRICE,
-                'name' => 'Вознаграждение за проверку',
-                'value' => 5,
-            ],
-            [
-                'slug' => SettingSlugEnum::CHECK_EXPIRITY_TIME,
-                'name' => 'Срок жизни чека',
-                'value' => 72,
-            ],
-            [
-                'slug' => SettingSlugEnum::CHECK_MINIMAL_LIMIT,
-                'name' => 'Лимит при которм запрашивать новые чеки',
-                'value' => 1000,
-            ],
-        ];
+        $settings = SettingSlugEnum::values();
 
         foreach($settings as $rawSetting) {
-            $setting1 = new Setting([
-                'slug' => $rawSetting['slug'],
-                'name' => $rawSetting['name'],
-                'value' => $rawSetting['value'],
-            ]);
-            $setting1->save();
+            $setting = new Setting($rawSetting);
+            $setting->save();
         }
     }
 }
