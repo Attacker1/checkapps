@@ -7,5 +7,6 @@ import '@/plugins/viewer/index'
 import '@/plugins/zoom-on-hover/index'
 import '@/plugins/shortkey/index'
 import '@/plugins/vue-recaptcha-v3/index'
+import '@/plugins/multiselect/index'
 
 export default {}

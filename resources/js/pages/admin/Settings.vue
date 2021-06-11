@@ -78,6 +78,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
+            align-items: center;
 
             @media screen and (max-width: 767px) {
                 display: flex;
@@ -88,7 +89,9 @@
         }
 
         &__input {
-            margin-bottom: 10px;
+            @media screen and (max-width: 767px) {
+                margin-bottom: 10px;
+            }
         }
     }
 </style>

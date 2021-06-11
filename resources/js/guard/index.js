@@ -1,24 +1,27 @@
 import store from '@/store';
+import Permissions from '@/utils/permissions';
 
 export const adminGuard = async (to, from, next) => {
     await store.dispatch('auth/fetch', null, {root: true});
-    let isAdmin = store.getters['auth/user'].is_admin;
+    let permissions = store.getters['auth/user'].permissions;
+    // console.log(permissions.find(item => item.slug === 'can_verivy_checks') ? 'asd' : 'no');
     switch(to.name) {
         case 'Main':
-            isAdmin ? next({name: 'Admin'}) : next();
+            isHavePermission(permissions, Permissions.verifyChecks) ? next() : next({name: 'Admin'});
             break;
         case 'History':
-            isAdmin ? next({name: 'Admin'}) : next();
+            isHavePermission(permissions, Permissions.verifyChecks) ? next() : next({name: 'Admin'});
             break;
         case 'Admin':
-            isAdmin ? next() : next({name: 'NotFound'});
+            isHavePermission(permissions, Permissions.viewAdminPages) ? next() : next({name: 'NotFound'});
             break;
         case 'Settings':
-            isAdmin ? next() : next({name: 'NotFound'});
+            isHavePermission(permissions, Permissions.editSettings) ? next() : next({name: 'NotFound'});
             break;
     }
     next();
 };
 
-
-
+function isHavePermission (permissions, yourPermission) {
+    return !!permissions.find(item => item.slug === yourPermission);
+}
